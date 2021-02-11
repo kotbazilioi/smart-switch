@@ -402,11 +402,14 @@ void logs_task(void const * argument)
     if (flag_global_save_data==1)
       {
       // save  all data 
-      
+       save_data_flash();
+       flag_global_save_data=0;
+ //       jamp_to_app();
       }
     if (flag_global_load_def==1)
       { // load_def_data
-      
+        load_def_data();
+        flag_global_load_def=0;
       }
     osDelay(100);
   }

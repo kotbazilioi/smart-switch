@@ -380,3 +380,6 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to);
 void Save_CRC_APP (void);
 uint8_t Comp_CRC_APP(void);
 void termIO (void);
+uint8_t save_data_flash(void);
+uint8_t load_def_data(void);
+      

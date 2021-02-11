@@ -58,6 +58,7 @@
 #include "portmacro.h"
 #include "flash_if.h"
 #include "html_page.h"
+#include "base64.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
@@ -67,6 +68,7 @@ void DynWebPageStr(struct netconn *conn);
 /* Private variables ---------------------------------------------------------*/
 u32_t nPageHits = 0;
 char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,0x0a};
+
   uint8_t page_n,page_sost;
 /**
   * @brief serve tcp connection  
@@ -518,10 +520,29 @@ void param_run(post_data_t* post_data,uint8_t index)
     else if (strncmp((char*)post_data->name,"time_circl", sizeof("time_circl")) == 0)
           {
            len_mess=strlen(post_data->data);
+        //
+           
+           if (post_data->data[0]=='-')
+           {
+            post_data->data[0]=post_data->data[1];
+            post_data->data[1]=post_data->data[2];
+            len_mess--;
             if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
             {
+              
+              FW_data.V_NTP_CIRCL=(signed char)port_n-2*port_n;
+            }
+           }
+           else
+           {
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              
               FW_data.V_NTP_CIRCL=(signed char)port_n;
             }
+           
+           }
+           
           }
     else if (strncmp((char*)post_data->name,"time_set", sizeof("time_set")) == 0)
           {
@@ -746,7 +767,10 @@ static void http_server_serve(struct netconn *conn)
    u16_t buflen;
 //f=(char*)malloc(3000);
  char buf_page[5000];
-
+ 
+  uint16_t len_buf_list;
+  uint16_t ct_fpass=0;
+  uint16_t start_key=0;
 
   
   /* Read the data from the port, blocking if nothing yet there. 
@@ -763,77 +787,52 @@ static void http_server_serve(struct netconn *conn)
           {
             ct_logoff_time = 0;            
           }
+        
+        
+        
+     memset((void*)key_http,0,30);
+      
+      for (ct_fpass=0;ct_fpass<1024;ct_fpass++)
+        {
+          if (strncmp((char*)&buf[ct_fpass],"Basic",5) == 0)
+            {
+              start_key=ct_fpass+6;
+              break;
+            }
+        }
+      memcpy((char*)buf_page,(char*)&buf[start_key],16);  
+      unbase64((char*)buf_page,16,&key_http_len,key_http);
+
+
+      sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
+      
+       if ((flag_logon==0)&&(strncmp(key_http,buf_page,key_http_len) == 0))
+            {
+              flag_logon=1;
+              page_n=4;
+            }
+          if (strncmp(key_http,buf_page,key_http_len) != 0)
+          {          
+            len_buf_list=costr_pass((char*)buf_page);
+            netconn_write(conn, (const unsigned char*)(buf_page), (size_t)len_buf_list, NETCONN_NOCOPY);
+            flag_logon=0;
+            // memcpy(key_http,"admin:admin",12); 
+          }   
+      
+      
+  if (flag_logon==1)    
+  {
       /* Is this an HTTP GET command? (only check the first 5 chars, since
       there are other formats for GET, and we're keeping it very simple )*/
       if ((buflen >=5) && (strncmp(buf, "GET /", 5) == 0))
       {        
-        if (strncmp((char const *)buf,"GET /img/netping.gif",17)==0)
-            {
-              page_n=1;
-              page_html_swich(page_n,conn,buf_page);
-            }
-       if (flag_logon==0)
-          { 
-            if (strncmp((char const *)buf,"GET / HTTP/1.1",14)==0)
-            {        
-               page_n=2;
-               page_html_swich(page_n,conn,buf_page);
-            }   
-        else if (strncmp((char const *)buf,"GET /handler.php?login=",23)==0)
-              {
-              flag_logon = pass_compar((char *)buf); 
-              if (flag_logon==1)
-              {
-
-                
-              }
-              else
-              {
-                 page_n=2;
-                 page_html_swich(page_n,conn,buf_page);
-              }
-       
-             }
-       else if (strncmp((char const *)buf,"GET /handler.php?login=",23)==0)
-              {
-                 page_n=2;
-                 page_html_swich(page_n,conn,buf_page);
-              }
-            else
-              if (strncmp((char const *)buf,"GET /index.html",15)==0)
-             {
-               page_n=2;
-               page_html_swich(page_n,conn,buf_page);
-             }
-            else if (strncmp((char const *)buf,"GET /logs.html",14)==0)
-             {
-               page_n=2;
-               page_html_swich(page_n,conn,buf_page);
-             }
-            else if (strncmp((char const *)buf,"GET /settings.html",14)==0)
-              {
-               page_n=2;
-               page_html_swich(page_n,conn,buf_page);
-              }
-            
-           else
-             {
-               page_n=3;
-               page_html_swich(page_n,conn,buf_page);
-
-            }
-         }
-   
-   
-       if (flag_logon==1)
-          { 
             if (strncmp((char const *)buf,"GET /handler.php?login=",23)==0)
               {
                  page_n=4;
                  page_html_swich(page_n,conn,buf_page);
               }
             else
-              if (strncmp((char const *)buf,"GET /index.html",15)==0)
+              if ((strncmp((char const *)buf,"GET /index.html",15)==0)||(strncmp((char const *)buf,"GET / HTTP/1.1",14)==0))
              {
                page_n=4;
                page_sost=1;
@@ -851,18 +850,23 @@ static void http_server_serve(struct netconn *conn)
                page_sost=3;
                page_html_swich(page_n,conn,buf_page);
               }
-            else
+            else if (strncmp((char const *)buf,"GET /img/netping.gif",17)==0)
+            {
+              page_n=1;
+              page_html_swich(page_n,conn,buf_page);
+            }
+            else  
              {
               /* Load Error page */
                page_n=3;
                page_html_swich(page_n,conn,buf_page);
              }
-          }        
+          //}        
       } 
       else
       {
-       if (flag_logon==1)
-          {
+//       if (flag_logon==1)
+//          {
             if ((buflen >=5) && (strncmp(buf, "POST /", 5) == 0))
               {
                 if (strncmp(buf, "POST /", 5) == 0)
@@ -871,8 +875,10 @@ static void http_server_serve(struct netconn *conn)
                         {                        
                        if (page_sost==1)
                          {
-                         page_n=2; // pass
-                         page_html_swich(page_n,conn,buf_page);
+                         page_n=4; // pass
+                         flag_logon=0;
+                         page_html_swich(page_n,conn,buf_page);   
+                         vTaskDelay(10);
                          jamp_to_app();
                          }
                         }         
@@ -882,6 +888,7 @@ static void http_server_serve(struct netconn *conn)
                          {
                             parser_post(buf,buflen,page_sost);
                             page_n=5;
+                            vTaskDelay(20);
                             page_html_swich(page_n,conn,buf_page);
                          }
                          if(page_sost==2)
@@ -893,8 +900,9 @@ static void http_server_serve(struct netconn *conn)
                     
                     }
               }
-          }
+        //  }
       }
+     }
     }
   }
   // free(buf);
@@ -955,7 +963,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 3*1024, WEBSERVER_THREAD_PRIO);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 2*1024, WEBSERVER_THREAD_PRIO);
 }
 
 /**

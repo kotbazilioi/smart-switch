@@ -1199,6 +1199,9 @@
             <group>
                 <name>Core</name>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\base64.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Core\Src\crc16.c</name>
                 </file>
                 <file>

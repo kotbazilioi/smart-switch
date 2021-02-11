@@ -12,15 +12,15 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
-        <stlinkserialNo>0666FF323239524257215932</stlinkserialNo>
-        <stlinkfoundProbes />
-        <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <stlinkResetStyle>0</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
+        <stlinkserialNo>0666FF323239524257215932</stlinkserialNo>
+        <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>815994128</Checksum>
+        <Checksum>2843903950</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -67,33 +67,38 @@
     <struct_types>
         <Fmt0>FW_data_t-V_CRC_APP	4	0</Fmt0>
         <Fmt1>FW_data_t-V_CRC_BOOT	4	0</Fmt1>
-        <Fmt2>RTC_DateTypeDef-Date	3	0</Fmt2>
-        <Fmt3>RTC_DateTypeDef-Month	3	0</Fmt3>
-        <Fmt4>RTC_DateTypeDef-WeekDay	3	0</Fmt4>
-        <Fmt5>RTC_DateTypeDef-Year	3	0</Fmt5>
-        <Fmt6>log_reple_t-day	3	0</Fmt6>
-        <Fmt7>log_reple_t-dweek	3	0</Fmt7>
-        <Fmt8>log_reple_t-month	3	0</Fmt8>
-        <Fmt9>log_reple_t-reple_hours	3	0</Fmt9>
-        <Fmt10>log_reple_t-reple_minuts	3	0</Fmt10>
-        <Fmt11>log_reple_t-reple_seconds	3	0</Fmt11>
-        <Fmt12>log_reple_t-type_event	3	0</Fmt12>
-        <Fmt13>log_reple_t-year	4	0</Fmt13>
-        <Fmt14>logs_t-CRC16	4	0</Fmt14>
+        <Fmt2>FW_data_t-V_CRC_DATA	4	0</Fmt2>
+        <Fmt3>FW_data_t-V_NTP_CIRCL	3	0</Fmt3>
+        <Fmt4>RTC_DateTypeDef-Date	3	0</Fmt4>
+        <Fmt5>RTC_DateTypeDef-Month	3	0</Fmt5>
+        <Fmt6>RTC_DateTypeDef-WeekDay	3	0</Fmt6>
+        <Fmt7>RTC_DateTypeDef-Year	3	0</Fmt7>
+        <Fmt8>heap_t-hsize	4	0</Fmt8>
+        <Fmt9>heap_t-work_size	4	0</Fmt9>
+        <Fmt10>log_reple_t-day	3	0</Fmt10>
+        <Fmt11>log_reple_t-dweek	3	0</Fmt11>
+        <Fmt12>log_reple_t-month	3	0</Fmt12>
+        <Fmt13>log_reple_t-reple_hours	3	0</Fmt13>
+        <Fmt14>log_reple_t-reple_minuts	3	0</Fmt14>
+        <Fmt15>log_reple_t-reple_seconds	3	0</Fmt15>
+        <Fmt16>log_reple_t-type_event	3	0</Fmt16>
+        <Fmt17>log_reple_t-year	4	0</Fmt17>
+        <Fmt18>logs_t-CRC16	4	0</Fmt18>
     </struct_types>
     <array_types>
         <Fmt0>uint8_t[4]	3	0</Fmt0>
     </array_types>
     <watch_formats>
-        <Fmt0>{W}1:crc_in	4	0</Fmt0>
-        <Fmt1>{W}1:ct_char	3	0</Fmt1>
-        <Fmt2>{W}1:ct_pass	3	0</Fmt2>
-        <Fmt3>{W}1:dat	4	0</Fmt3>
-        <Fmt4>{W}1:data[451]	4	0</Fmt4>
-        <Fmt5>{W}1:ip_mass[0]	3	0</Fmt5>
-        <Fmt6>{W}1:ip_mass[2]	3	0</Fmt6>
-        <Fmt7>{W}1:ip_mass[3]	3	0</Fmt7>
-        <Fmt8>{W}1:reple	3	0</Fmt8>
+        <Fmt0>{W}1:crc	4	0</Fmt0>
+        <Fmt1>{W}1:crc_in	4	0</Fmt1>
+        <Fmt2>{W}1:ct_char	3	0</Fmt2>
+        <Fmt3>{W}1:ct_pass	3	0</Fmt3>
+        <Fmt4>{W}1:dat	4	0</Fmt4>
+        <Fmt5>{W}1:data[451]	4	0</Fmt5>
+        <Fmt6>{W}1:ip_mass[0]	3	0</Fmt6>
+        <Fmt7>{W}1:ip_mass[2]	3	0</Fmt7>
+        <Fmt8>{W}1:ip_mass[3]	3	0</Fmt8>
+        <Fmt9>{W}1:reple	3	0</Fmt9>
     </watch_formats>
     <Trace2>
         <Enabled>0</Enabled>
@@ -140,15 +145,24 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
+    <DisassembleMode>
+        <mode>1</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.389.5" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_3.c}.136.5" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.870.13" 0 0 1 "" 0 "" 0</Bp2>
+        <Count>3</Count>
+    </Breakpoints2>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>3</Mode>
@@ -162,14 +176,8 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <DisassembleMode>
-        <mode>1</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Count>0</Count>
-    </Breakpoints2>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
 </settings>

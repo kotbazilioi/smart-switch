@@ -1,110 +1,110 @@
-"E:\ika\development\F107\boot1\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c"
+"E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -MD
 -MF
-E:\ika\development\F107\boot1\test app\pj4\EWARM\pj4\Obj\stm32f1xx_hal_rcc.pbi.dep
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\pj4\Obj\stm32f1xx_hal_rcc.pbi.dep
 -o
 stm32f1xx_hal_rcc.pbi
 -I
-E:\ika\development\F107\boot1\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Src
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Src
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Core/Inc
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Core/Inc
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../LWIP/App
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../LWIP/App
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../LWIP/Target
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../LWIP/Target
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/system
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/system
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/include
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/portable/IAR/ARM_CM3
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/FreeRTOS/Source/portable/IAR/ARM_CM3
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/netif/ppp
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/netif/ppp
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/apps/httpd
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/apps/httpd
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Drivers/CMSIS/Device/ST/STM32F1xx/Include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Drivers/CMSIS/Device/ST/STM32F1xx/Include
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/apps
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/apps
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/priv
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/priv
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/prot
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/lwip/prot
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/netif
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/netif
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/posix
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/posix
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/posix/sys
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/src/include/posix/sys
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/system/arch
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Middlewares/Third_Party/LwIP/system/arch
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM/../Drivers/CMSIS/Include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM/../Drivers/CMSIS/Include
 -I
-E:\ika\development\F107\boot1\test app\pj4\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\arm\inc\c
 -I
-E:\ika\development\F107\boot1\test app\pj4\Core\Inc
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Core\Inc
 -I
-E:\ika\development\F107\boot1\test app\pj4\LWIP\App
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\LWIP\App
 -I
-E:\ika\development\F107\boot1\test app\pj4\LWIP\Target
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\LWIP\Target
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\system
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\system
 -I
-E:\ika\development\F107\boot1\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc
 -I
-E:\ika\development\F107\boot1\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\include
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\portable\IAR\ARM_CM3
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\portable\IAR\ARM_CM3
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\netif\ppp
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\netif\ppp
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\apps\httpd
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\apps\httpd
 -I
-E:\ika\development\F107\boot1\test app\pj4\Drivers\CMSIS\Device\ST\STM32F1xx\Include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\CMSIS\Device\ST\STM32F1xx\Include
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\apps
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\apps
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\priv
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\priv
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\prot
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\prot
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\netif
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\netif
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\posix
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\posix
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\src\include\posix\sys
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\include\posix\sys
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\LwIP\system\arch
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\system\arch
 -I
-E:\ika\development\F107\boot1\test app\pj4\Drivers\CMSIS\Include
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Drivers\CMSIS\Include
 -I
-E:\ika\development\F107\boot1\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang
+E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0

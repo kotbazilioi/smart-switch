@@ -20,6 +20,7 @@ rule browsedata
 
 
 #Build steps
+build base64.pbi : index base64.xcl
 build crc16.pbi : index crc16.xcl
 build flash_if.pbi : index flash_if.xcl
 build freertos.pbi : index freertos.xcl
@@ -133,17 +134,17 @@ build udp.pbi : index udp.xcl
 build upap.pbi : index upap.xcl
 build utils.pbi : index utils.xcl
 build vj.pbi : index vj.xcl
-build pj4_part0.pbi : link crc16.pbi flash_if.pbi freertos.pbi html_page.pbi httpserver-netconn.pbi LOGS.pbi main.pbi stm32f1xx_hal_msp.pbi stm32f1xx_hal_timebase_tim.pbi stm32f1xx_it.pbi lwip.pbi
-build pj4_part1.pbi : link ethernetif.pbi system_stm32f1xx.pbi stm32f1xx_hal.pbi stm32f1xx_hal_cortex.pbi stm32f1xx_hal_dma.pbi stm32f1xx_hal_eth.pbi stm32f1xx_hal_exti.pbi stm32f1xx_hal_flash.pbi stm32f1xx_hal_flash_ex.pbi stm32f1xx_hal_gpio.pbi stm32f1xx_hal_gpio_ex.pbi
-build pj4_part2.pbi : link stm32f1xx_hal_pwr.pbi stm32f1xx_hal_rcc.pbi stm32f1xx_hal_rcc_ex.pbi stm32f1xx_hal_rtc.pbi stm32f1xx_hal_rtc_ex.pbi stm32f1xx_hal_tim.pbi stm32f1xx_hal_tim_ex.pbi cmsis_os.pbi croutine.pbi event_groups.pbi heap_3.pbi
-build pj4_part3.pbi : link list.pbi port.pbi queue.pbi stream_buffer.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi auth.pbi autoip.pbi ccp.pbi
-build pj4_part4.pbi : link chap-md5.pbi chap-new.pbi chap_ms.pbi def.pbi demand.pbi dhcp.pbi dhcp6.pbi dns.pbi eap.pbi ecp.pbi err.pbi
-build pj4_part5.pbi : link etharp.pbi ethernet.pbi ethip6.pbi eui64.pbi fs.pbi fsm.pbi httpd.pbi icmp.pbi icmp6.pbi igmp.pbi inet6.pbi
-build pj4_part6.pbi : link inet_chksum.pbi init.pbi ip.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi ip6.pbi ip6_addr.pbi ip6_frag.pbi ipcp.pbi ipv6cp.pbi
-build pj4_part7.pbi : link lcp.pbi lowpan6.pbi magic.pbi mem.pbi memp.pbi mld6.pbi mppe.pbi mqtt.pbi multilink.pbi nd6.pbi netbuf.pbi
-build pj4_part8.pbi : link netdb.pbi netif.pbi netifapi.pbi pbuf.pbi ppp.pbi pppapi.pbi pppcrypt.pbi pppoe.pbi pppol2tp.pbi pppos.pbi raw.pbi
-build pj4_part9.pbi : link slipif.pbi sockets.pbi stats.pbi sys.pbi sys_arch.pbi tcp.pbi tcp_in.pbi tcp_out.pbi tcpip.pbi timeouts.pbi udp.pbi
-build pj4_part10.pbi : link upap.pbi utils.pbi vj.pbi
+build pj4_part0.pbi : link base64.pbi crc16.pbi flash_if.pbi freertos.pbi html_page.pbi httpserver-netconn.pbi LOGS.pbi main.pbi stm32f1xx_hal_msp.pbi stm32f1xx_hal_timebase_tim.pbi stm32f1xx_it.pbi
+build pj4_part1.pbi : link lwip.pbi ethernetif.pbi system_stm32f1xx.pbi stm32f1xx_hal.pbi stm32f1xx_hal_cortex.pbi stm32f1xx_hal_dma.pbi stm32f1xx_hal_eth.pbi stm32f1xx_hal_exti.pbi stm32f1xx_hal_flash.pbi stm32f1xx_hal_flash_ex.pbi stm32f1xx_hal_gpio.pbi
+build pj4_part2.pbi : link stm32f1xx_hal_gpio_ex.pbi stm32f1xx_hal_pwr.pbi stm32f1xx_hal_rcc.pbi stm32f1xx_hal_rcc_ex.pbi stm32f1xx_hal_rtc.pbi stm32f1xx_hal_rtc_ex.pbi stm32f1xx_hal_tim.pbi stm32f1xx_hal_tim_ex.pbi cmsis_os.pbi croutine.pbi event_groups.pbi
+build pj4_part3.pbi : link heap_3.pbi list.pbi port.pbi queue.pbi stream_buffer.pbi tasks.pbi timers.pbi api_lib.pbi api_msg.pbi auth.pbi autoip.pbi
+build pj4_part4.pbi : link ccp.pbi chap-md5.pbi chap-new.pbi chap_ms.pbi def.pbi demand.pbi dhcp.pbi dhcp6.pbi dns.pbi eap.pbi ecp.pbi
+build pj4_part5.pbi : link err.pbi etharp.pbi ethernet.pbi ethip6.pbi eui64.pbi fs.pbi fsm.pbi httpd.pbi icmp.pbi icmp6.pbi igmp.pbi
+build pj4_part6.pbi : link inet6.pbi inet_chksum.pbi init.pbi ip.pbi ip4.pbi ip4_addr.pbi ip4_frag.pbi ip6.pbi ip6_addr.pbi ip6_frag.pbi ipcp.pbi
+build pj4_part7.pbi : link ipv6cp.pbi lcp.pbi lowpan6.pbi magic.pbi mem.pbi memp.pbi mld6.pbi mppe.pbi mqtt.pbi multilink.pbi nd6.pbi
+build pj4_part8.pbi : link netbuf.pbi netdb.pbi netif.pbi netifapi.pbi pbuf.pbi ppp.pbi pppapi.pbi pppcrypt.pbi pppoe.pbi pppol2tp.pbi pppos.pbi
+build pj4_part9.pbi : link raw.pbi slipif.pbi sockets.pbi stats.pbi sys.pbi sys_arch.pbi tcp.pbi tcp_in.pbi tcp_out.pbi tcpip.pbi timeouts.pbi
+build pj4_part10.pbi : link udp.pbi upap.pbi utils.pbi vj.pbi
 build pj4.pbd : link pj4_part0.pbi pj4_part1.pbi pj4_part2.pbi pj4_part3.pbi pj4_part4.pbi pj4_part5.pbi pj4_part6.pbi pj4_part7.pbi pj4_part8.pbi pj4_part9.pbi pj4_part10.pbi
 build pj4.pbw : browsedata pj4.pbd
 

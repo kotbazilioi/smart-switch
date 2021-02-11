@@ -56,7 +56,7 @@
 /*----- Default Value for MEMP_NUM_NETBUF: 2 ---*/
 #define MEMP_NUM_NETBUF 4
 /*----- Default Value for MEMP_NUM_NETCONN: 4 ---*/
-#define MEMP_NUM_NETCONN 8
+#define MEMP_NUM_NETCONN 4
 /*----- Default Value for MEMP_NUM_TCPIP_MSG_API: 8 ---*/
 #define MEMP_NUM_TCPIP_MSG_API 16
 /*----- Value in opt.h for LWIP_ETHERNET: LWIP_ARP || PPPOE_SUPPORT -*/
@@ -64,9 +64,9 @@
 /*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID | LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
 #define LWIP_DNS_SECURE 7
 /*----- Default Value for TCP_WND: 2880 ---*/
-#define TCP_WND 4*TCP_MSS
+#define TCP_WND 2*TCP_MSS
 /*----- Default Value for TCP_MSS: 536 ---*/
-#define TCP_MSS 1024
+#define TCP_MSS 1200
 /*----- Default Value for TCP_SND_BUF: 1440 ---*/
 #define TCP_SND_BUF TCP_MSS*2
 /*----- Value in opt.h for LWIP_NETIF_LINK_CALLBACK: 0 -----*/

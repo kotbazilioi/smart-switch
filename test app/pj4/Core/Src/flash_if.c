@@ -424,15 +424,19 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     memcpy((uint32_t*)struct_to, (uint32_t *)start_addr, blok*512);
     return status;
 }
-uint8_t load_struct_flash_data (void)
-{
-uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA_BOOT));
 
+      uint8_t save_data_flash(void)
+      {
+       FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),24);     
+       FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
+       FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
+       
+       save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
+      }
       
-   if ((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0))   //(uint16_t)(*(uint32_t*)A_CRC_DATA_BOOT)
-   {
-    
-     FW_data.V_CRC_APP=0;
+      uint8_t load_def_data(void)
+      {
+           FW_data.V_CRC_APP=0;
       
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
@@ -537,7 +541,17 @@ uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA_BOOT));
      
 
      
-return 1;
+        return 1;
+      }
+uint8_t load_struct_flash_data (void)
+{
+uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
+
+      
+   if ((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0))   //(uint16_t)(*(uint32_t*)A_CRC_DATA_BOOT)
+   {
+   return  load_def_data();
+   
   }
  else
     {

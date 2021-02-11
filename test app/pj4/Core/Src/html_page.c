@@ -9,6 +9,14 @@ uint8_t flag_logon=0;
 const char contact_data[]="http://www.netping.ru/";
 const char model_dev[]="UniPing port";
 
+unsigned char key_http[30]="asfasdvas";
+int key_http_len = 10;
+char HTTP401[]={0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x34,0x30,0x31,0x20,0x55,0x6e,0x61,   //HTTP/1.1 401 Una
+0x75,0x74,0x68,0x6f,0x72,0x69,0x7a,0x65,0x64,0x0d,0x0a,0x57,0x57,0x57,0x2d,0x41,   //uthorized..WWW-A
+0x75,0x74,0x68,0x65,0x6e,0x74,0x69,0x63,0x61,0x74,0x65,0x3a,0x20,0x42,0x61,0x73,   //uthenticate: Bas
+0x69,0x63,0x20,0x72,0x65,0x61,0x6c,0x6d,0x3d,0x22}; 
+
+char HTTP401end[]={0x22,0x0d,0x0a,0x0d,0x0a};
 
 static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
   //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
@@ -73,6 +81,17 @@ static const char http_html_style[] =
    "display: inline-block;"
   "</style>"
     "</head>";
+
+uint32_t costr_pass(char* str1)
+{
+uint32_t len_out;
+memset (str1,0, 5000);
+memcpy(str1,(char*)(HTTP401),sizeof(HTTP401));
+strcat(str1,"Name_dev");
+strcat(str1,(char*)HTTP401end);
+len_out=strlen(str1);        
+return len_out;
+}
 uint8_t pass_compar(char* in_buf)
 {
 uint8_t ct_pass;
@@ -1015,7 +1034,7 @@ uint32_t costr_page6(char* str1)
    
    sprintf(str4,"%d",FW_data.V_NTP_CIRCL);
    set_text_input(str3,"time_circl",32,str4);  
-   set_table_string(str2,"Часовой пояс -12...+12 ",str3);  
+   set_table_string(str2,"Часовой пояс UTC:-12...+12 ",str3);  
    strcat(str1,str2);
       
       GET_reple(0,&real_time);  
@@ -1030,11 +1049,16 @@ uint32_t costr_page6(char* str1)
 //   time_run[5]=real_time.reple_seconds
    
    
-   sprintf(str4,"%d\.%d\.%d &ensp\; %d\.%d\.%d",real_time.year,real_time.month,real_time.day,real_time.reple_hours,real_time.reple_minuts,real_time.reple_seconds);  
+   sprintf(str4,"%d\.%d\.%d ",real_time.year,real_time.month,real_time.day);  
    set_text_input(str3,"time_set",32,str4);  
-   set_table_string(str2,"Текущая дата и время",str3);  
+   set_table_string(str2,"Текущая дата:",str3);  
    strcat(str1,str2);
    
+   
+   sprintf(str4,"%d\.%d\.%d ",real_time.reple_hours,real_time.reple_minuts,real_time.reple_seconds);  
+   set_text_input(str3,"time_set",32,str4);  
+   set_table_string(str2,"Текущее время: ",str3);  
+   strcat(str1,str2);
    
 //   set_submit(str3,"save_all","1","Сохранить");
 //   set_table_string(str2,"Сохранить настройки ",str3);  
@@ -1093,7 +1117,7 @@ uint32_t costr_page7(char* str1)
   
   // Table   
    set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
-   strcat(str1,str2);    
+   strcat(str1,str2);   
 
 
      
