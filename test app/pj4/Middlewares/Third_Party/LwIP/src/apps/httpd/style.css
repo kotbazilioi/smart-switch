@@ -1,0 +1,66 @@
+body {
+  background-color: #24945A;
+}
+#page {
+background-color: rgba(0,0,0,0.7);
+  width: 1920px;
+  margin: 0 auto;
+}
+#header {
+  background-blend-mode: ;
+height: 100px;
+}
+#content::before, #content::after {
+  content: "";
+	
+  display: table;
+  
+}
+#content::after {
+  clear: both;
+}
+#content {
+ background-color: rgba(255,255,255,0.7);
+  zoom: 1;
+}
+#article {
+  background-color: rgba(100,100,100,0.3);
+  width: 1420px;
+  height: 1000px;
+  padding: 20px;
+  float: left;
+}
+#sidebar {
+  width: 300px;
+ height: 200px;
+  float: left;
+ 
+}
+#sidebar ul li {
+ color: rgba(100,0,0,.99);
+
+}
+#footer {
+  background-color: #330033;
+  height: 90px;
+  padding: 20px;
+background-color: rgba(255,255,255,0.9);
+}
+#footer p {
+
+ width: 1420px;
+  height: 1000px;
+  padding: 20px;
+
+
+  color: #0ff;
+}
+.butcenter {
+  text-align: center;
+}
+ 
+.butcolor {
+  width: 250px;
+  height: 48px;
+  font-size: 17px;
+}

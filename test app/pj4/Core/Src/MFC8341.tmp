@@ -1,0 +1,874 @@
+#include <string.h>
+#include "html_page.h"
+#include "flash_if.h"
+#include "LOGS.h"
+uint32_t ct_logoff_time;
+uint8_t flag_logon=0;
+
+//const char Name_dev[]="DKST 59";
+const char contact_data[]="http://www.netping.ru/";
+const char model_dev[]="UniPing port";
+
+
+static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
+  //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
+static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"404 error\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\<script\>"
+	  "var xhr\;"
+           "var idTimer1\";"
+	   "function onload(){"
+	   "xhr = new (XMLHttpRequest);"
+	   "}"
+           
+	   "function swich1(){"
+           "xhr.open(\"GET\", \"swich?c=1\", true);"
+	   "xhr.responseType = \"text\";"
+	   "xhr.send(null);"
+	   "}"	
+	  "function swich2(){"
+	  "xhr.open(\"GET\", \"swich?c=2\", true);"
+	  "xhr.responseType = \"text\";"
+	  "xhr.send(null);"
+	  "}"
+	  "function swich3(){"
+	   "xhr.open(\"GET\", \"swich?c=3\", true);"
+	    "xhr.responseType = \"text\";"
+	    "xhr.send(null);"
+	  "}"
+"</script>";
+
+
+static const char http_html_style[] = 
+"<title>NetPing</title>"
+"  <style >"
+"body {"
+    "background: #F6FCF9;" /* Цвет фона */
+    //"color: #fff;" /* Цвет текста */
+   "}"
+"    lf {"
+	"font-family: Courier;" /* Гарнитура шрифта */
+	"src: url(fonts/Courier.ttf);" /* Путь к файлу со шрифтом */
+///////////////	"font-family: Courier, 'Comic Sans MS', cursive;"
+        "text-align: center;"
+          "font-size: 18pt;"
+    "}"
+    "h2 {"
+	"font-size: 16pt;"
+        "text-align: center;"
+    "}"
+      
+     "h3 {"
+       // "text-decoration:  underline 1px solid green;"
+      //  "border-bottom: 2px  solid Seagreen;"/* Параметры линии под текстом */
+        "font-weight: normal;" /* Убираем жирное начертание */
+      //  "padding-bottom: 1px;" /* Расстояние от текста до линии */          
+	"font-size: 10pt;"
+        "text-align: center;"
+      "}"
+        
+
+         
+   "display: inline-block;"
+  "</style>"
+    "</head>";
+uint8_t pass_compar(char* in_buf)
+{
+uint8_t ct_pass;
+uint8_t len_login,len_pass;
+char login_in[32] = {0};
+char pass_in[32]= {0};
+for(ct_pass=23;ct_pass<120;ct_pass++)
+  {
+    if (((char)(*(in_buf+ct_pass)))=='&')
+      {
+       len_login = ct_pass-23;
+      }
+    if (in_buf[ct_pass]==' ')
+      {
+        len_pass=ct_pass-23-len_login-10;
+        ct_pass=120;
+      }
+   
+  }
+ 
+    memcpy(login_in,(char*)(in_buf+23),len_login);
+    memcpy(pass_in,(char*)(in_buf+23+len_login+10),len_pass);
+    if (len_pass==0)len_pass++;
+    if (len_login==0)len_login++;
+    if (((strncmp((char*)FW_data.V_LOGIN,(char*)login_in,len_login))==0)&&((strncmp((char*)FW_data.V_PASSWORD,(char*)pass_in,len_pass))==0))
+    {
+      return 1;
+    }
+return 0;
+}
+
+
+
+uint16_t set_open_block (char* str1,char* name)
+{ 
+
+uint16_t len;
+sprintf(str1,"<%s>",name);
+return len;
+}
+uint16_t reset_open_block (char* str1,char* name)
+{ 
+
+uint16_t len;
+sprintf(str1,"<%s/>",name);
+return len;
+}
+uint16_t set_space (char* str1,uint8_t n)
+{ 
+uint16_t len=6*n;
+ memset (str1,0, len);
+for(;n>0;n--)
+{
+  strcat(str1,"&ensp;");
+}
+return len;
+}
+
+uint16_t set_br (char* str1,uint8_t n)
+{ 
+uint16_t len=4*n;
+ memset (str1,0, len);
+for(;n>0;n--)
+{
+  strcat(str1,"<br>");
+}
+return len;
+}
+
+
+uint16_t set_string_text  (char* str1,char* name,char* style, uint8_t n,uint8_t* dat)
+{ 
+char str3[256];
+char str4[64];
+memset (str3,0, 256);
+
+uint16_t len;
+for(;n>0;n--)
+{
+  strcat(str3,"&ensp;");
+}
+sprintf(str4,"%d.%d.%d.%d",dat[0],dat[1],dat[2],dat[3]);
+sprintf(str1,"<%s> %s %s %s <%s/>",style,name,str3,str4,style);
+
+return len;
+}
+
+
+//<textarea name="NAME_TEXT" placeholder="DATA_DEFAULT" cols="16" rows="1" maxlength="16" required></textarea>
+
+uint16_t set_text_area  (char* str1,char* name, uint8_t n,uint8_t c, uint8_t r,uint8_t* dat)
+{ 
+////char str3[256];
+////char str4[64];
+////memset (str3,0, 256);
+
+
+//sprintf(str4,"%d.%d.%d.%d",dat[0],dat[1],dat[2],dat[3]);
+sprintf(str1,"<textarea name=\"%s\" placeholder=\"%s\" cols=\"%d\" rows=\"%d\" maxlength=\"%d\" required></textarea> ",name,dat,c,r,n);
+
+return 0;
+}
+uint16_t set_text_input (char* str1,char* name, uint8_t n,uint8_t* dat)
+{ 
+////char str3[256];
+////char str4[64];
+////memset (str3,0, 256);
+
+
+//sprintf(str4,"%d.%d.%d.%d",dat[0],dat[1],dat[2],dat[3]);
+sprintf(str1,"<input name=\"%s\"  value=\"%s\" maxlength=\"%d\" >",name,dat,n);
+
+return 0;
+}
+
+//<input type="text"  placeholder=\"%s\" maxlength="число">
+
+////  len=len+set_open_block(str2,"h4");
+////  strcat(str1,str2);
+////  
+////  len=len+sizeof("Драйвер лампы и фона HW2.0 ");
+////  strcat(str1,"Драйвер лампы и фона HW2.0 ");
+////  
+////  len=len+reset_open_block(str2,"h4");
+////  strcat(str1,str2);
+////  
+  
+  
+
+uint16_t set_tab (char* str1,uint8_t n)
+{ 
+uint16_t len=6*n;
+ memset (str1,0, len);
+for(;n>0;n--)
+{
+  strcat(str1,"&ensp;");
+}
+return len;
+}
+
+
+uint16_t set_link (char* str1,char* name,char* link)
+{
+ 
+uint16_t len; 
+sprintf(str1,"<a href=\"%s\" target=\"_self\" rel=\"nofollow\">%s </a>",link,name);
+
+
+return len;
+}
+uint16_t set_button (char* str1,char* name,char* value)
+{ 
+
+//<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
+
+sprintf(str1,"<button type=\"button\" name=\"%s\" formtarget=\"_self\" onclick=\"%s\">%s</button>\n\r",name,value,name);
+
+return 0;
+}
+
+
+ uint16_t set_submit (char* str1,char* name,char* value,char* text)
+{ 
+
+//<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
+
+sprintf(str1,"<button type=\"submit\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>\n\r",name,value,text);
+
+return 0;
+}
+
+//<p style="text-align:center"><input name="Start_boot" required="required" type="checkbox" value="boot" />&ensp; <input type="submit" value="Start frimware update? Start bootloader " /></p>
+//<label><input type="checkbox" name="name"> messeg</label>
+ uint16_t set_checkbox (char* str1,char* name,char* value)
+{ 
+
+//<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
+
+sprintf(str1,"<label><input type=\"checkbox\" name=\"%s\"> %s</label>",name,value);
+
+return 0;
+}
+
+ uint16_t set_checkbox_bot (char* str1,char* name,char* value,char* mess)
+{ 
+
+//<p style="text-align:center"><input name="Start_boot" required="required" type="checkbox" value="boot" />&ensp; <input type="submit" value="Start frimware update? Start bootloader " /></p>
+
+sprintf(str1,"<p style=\"text-align:center\"><input name=\"%s\" required=\"required\" type=\"checkbox\" value=\"%s\" />&ensp; <input type=\"submit\" value=\"%s\" /></p>",name,value,mess);
+
+return 0;
+}
+
+
+
+uint16_t set_intext (char* str1,char* name,char* size,char* value)
+{ 
+///<input type="text" name="IP_addres"  size='15' value="192.168.000.122">&ensp;
+///<input type="text" name=""  size='' value="">&ensp;
+uint16_t len;
+sprintf(str1,"<input type=\"text\" name=\"%s\"  size='%s' value=\"%s\">&ensp;",name,size,value);
+
+return len;
+}
+
+
+uint16_t set_table_string (char* str1,char* name,char* value)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+uint16_t len;
+sprintf(str1,"<tr><td style=\"width: 80%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  \">&ensp;\%s</td><td style=\"width: 20%; font-size: 12pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>",name,value);
+return len;
+
+}
+//uint16_t set_submit (char* str1,char* name,char* value)
+//{
+//
+////<button type="button" name="Save_power" formtarget="_self" oncl ick="Save_Power()" >Save Power </button>    
+//
+//sprintf(str1,"<button type=\"submit\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>\n\r",name,value,name);
+//
+//return 0;
+//}
+
+
+
+uint32_t costr_page2(char* str1)
+{
+  uint32_t len;
+  
+  char str2[1000]={0};
+    char str3[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 4000);
+
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",2,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+  reset_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+  
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+
+  
+  set_link(str2,"Жирнал","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+  
+  
+  
+  set_open_block(str2,"form action='/' method='POST'");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+////  len=len+set_open_block(str2,"h3");
+////  strcat(str1,str2);
+////  
+////  len=len+set_open_block(str2,"br");
+////  strcat(str1,str2);
+////
+////  len=len+sizeof("Интеллектуальная розетка DKST 59 v");
+////  strcat(str1,"Интеллектуальная розетка DKST 59 v");
+////  
+////  len=len+set_space(str2,50);
+////  strcat(str1,str2);
+////  
+////  
+////  
+////    len=len+sizeof("Интеллектуальная розетка DKST 59 v");
+////  strcat(str1,"Интеллектуальная розетка DKST 59 v");
+  
+
+////////  len=len+set_space(str2,6);
+////////  strcat(str1,str2);  
+////////
+////////  len=len+set_open_block(str2,"b>IP addres</b");
+////////  strcat(str1,str2);
+////////
+////////  len=len+set_intext(str2,"IP_addres","15","192.168.000.122");
+////////  strcat(str1,str2);
+////////  
+////////  len=len+set_space(str2,6);
+////////  strcat(str1,str2);  
+////////  
+////////   len=len+set_open_block(str2,"b>MASK addres</b");
+////////  strcat(str1,str2);
+////////
+////////  len=len+set_intext(str2,"MASK_addres","15","255.255.255.000");
+////////  strcat(str1,str2);
+////////
+////////    
+////////  len=len+set_space(str2,6);
+////////  strcat(str1,str2);  
+////////  
+////////   len=len+set_open_block(str2,"b>IP getway</b");
+////////  strcat(str1,str2);
+////////  
+////////  
+////////  len=len+set_intext(str2,"IP_getway","15","192.168.000.001");
+////////  strcat(str1,str2);  
+  
+////  len=len+reset_open_block(str2,"h3");
+////  strcat(str1,str2);
+  
+  set_br(str2,3);
+  strcat(str1,str2);
+  
+  
+
+    
+         
+
+  set_open_block(str2,"b>НАСТРОЙКА</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+////    return len;
+////};
+////
+////
+////uint32_t costr_page3(char* str1)
+////{
+////  uint32_t len;
+////  
+////  char str2[1000]={0};
+//// // len=sizeof(str1)+1;
+////  
+////  memset (str1,0, 3000);
+
+
+ // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;\"><tbody");
+   strcat(str1,str2);    
+
+   set_table_string(str2,"Имя устройства",FW_data.V_Name_dev);
+   strcat(str1,str2);
+   
+   set_table_string(str2,"Место установки устройства",FW_data.V_GEOM_NAME);  
+   strcat(str1,str2);
+   
+   set_table_string(str2,"Контактные данные",FW_data.V_CALL_DATA);  
+   strcat(str1,str2);
+   
+   memset(str3,0,128);
+   sprintf(str3,"ID=%d%d%d%d%d%d%d%d",FW_data.V_ID_MAC[0],FW_data.V_ID_MAC[1],FW_data.V_ID_MAC[2],FW_data.V_ID_MAC[3],FW_data.V_ID_MAC[4],FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+   
+   set_table_string(str2,"Серийный номер",str3);  
+   strcat(str1,str2);
+   
+   memset(str3,0,128);
+   sprintf(str3,"0x%x.0x%x.0x%x.0x%x.0x%x.0x%x",FW_data.V_ID_MAC[0],FW_data.V_ID_MAC[1],FW_data.V_ID_MAC[2],FW_data.V_ID_MAC[3],FW_data.V_ID_MAC[4],FW_data.V_ID_MAC[5]);
+   
+   set_table_string(str2,"МАС адрес",str3);  
+   strcat(str1,str2);
+   
+   set_table_string(str2,"модель устройства ",(char*)model_dev);  
+   strcat(str1,str2);
+   
+   memset(str3,0,128);
+   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[0],FW_data.V_FW1_VER[1]);
+ 
+   set_table_string(str2,"Версия ПО",str3);  
+   strcat(str1,str2);
+   
+   memset(str3,0,128);
+   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[2],FW_data.V_FW1_VER[3]);
+ 
+   set_table_string(str2,"Версия аппаратной платформы",str3);  
+   strcat(str1,str2);
+   
+   
+   
+   signed char time_run[6]={0};  
+   uint8_t ct_time;
+   GET_reple(0,&real_time);  
+   
+
+   
+   time_run[0]=real_time.year-start_time.year;
+   time_run[1]=real_time.month-start_time.month;
+   time_run[2]=real_time.day-start_time.day;
+   time_run[3]=real_time.reple_hours-start_time.reple_hours;
+   time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
+   time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
+   
+   ct_time++;
+      if (time_run[ct_time]<0)
+        {
+          time_run[ct_time-1]--;
+          time_run[ct_time]=time_run[ct_time]+12;          
+        }
+      
+      
+   ct_time++;
+      if (time_run[ct_time]<0)
+        {
+          time_run[ct_time-1]--;
+          time_run[ct_time]=time_run[ct_time]+30;          
+        }
+      
+      
+   ct_time++;
+      if (time_run[ct_time]<0)
+        {
+          time_run[ct_time-1]--;
+          time_run[ct_time]=time_run[ct_time]+24;          
+        }
+      
+      
+      
+   ct_time++;
+      if (time_run[ct_time]<0)
+        {
+          time_run[ct_time-1]--;
+          time_run[ct_time]=time_run[ct_time]+60;          
+        }
+      
+      
+   ct_time++;
+      if (time_run[ct_time]<0)
+        {
+          time_run[ct_time-1]--;
+          time_run[ct_time]=time_run[ct_time]+60;          
+        }
+   
+    memset(str3,0,128);
+   sprintf(str3,"%dг.  %dм. %dд. %dч. %dм. %dс.",time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
+      
+   set_table_string(str2,"Время непрерывной работы",str3);  
+   strcat(str1,str2);
+  
+  
+  reset_open_block(str2,"tbody");
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"table");
+  strcat(str1,str2);
+
+  
+  
+  len=strlen(str1);
+  return len;
+};
+
+
+
+
+uint32_t costr_page4(char* str1)
+{
+  uint32_t len;
+    char str3[128]={0};
+  char str2[1000]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 3000);
+  
+  
+  set_br(str2,3);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>НАСТРОЙКА  СЕТИ</b");
+  strcat(str1,str2);
+  
+   set_br(str2,2);
+  strcat(str1,str2);
+
+ // Table   
+  set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;\"><tbody");
+  strcat(str1,str2);
+    
+   sprintf(str3,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);
+
+   set_table_string(str2,"IP адресс устройства",str3);
+   strcat(str1,str2);
+   
+   sprintf(str3,"%d\.%d\.%d\.%d",FW_data.V_IP_MASK[0],FW_data.V_IP_MASK[1],FW_data.V_IP_MASK[2],FW_data.V_IP_MASK[3]);
+
+   set_table_string(str2,"Маска подсети",str3);  
+   strcat(str1,str2);
+   
+   sprintf(str3,"%d\.%d\.%d\.%d",FW_data.V_IP_GET[0],FW_data.V_IP_GET[1],FW_data.V_IP_GET[2],FW_data.V_IP_GET[3]);
+
+   set_table_string(str2,"Шлюз",str3);  
+   strcat(str1,str2);
+  
+  reset_open_block(str2,"tbody");
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"table");
+  strcat(str1,str2);
+  
+  // End table 
+  
+  
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+  
+  
+  
+  set_open_block(str2,"form action='/' method='POST'");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+   set_br(str2,1);
+  strcat(str1,str2); 
+  
+  set_open_block(str2,"b>Выполнить перезагрузку</b");
+  strcat(str1,str2);
+  
+   set_space(str2,2);
+  strcat(str1,str2); 
+  
+  
+  
+  set_checkbox_bot(str2,"check_res","1","RESET");
+  strcat(str1,str2); 
+////    set_checkbox(str2,"check_res","");
+////  strcat(str1,str2);  
+////  
+////  
+////  set_submit(str2,"RESET","1");
+////  strcat(str1,str2);  
+  
+     set_space(str2,6);
+  strcat(str1,str2); 
+  
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  len=strlen(str1);
+  return len;
+};
+
+
+uint32_t costr_page3(char* str1)
+{
+  uint32_t len;
+  
+  char str2[1000]={0};
+    char str3[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 4000);
+
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",2,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+  reset_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+  
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+  
+  set_link(str2,"Жирнал ","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+////
+////  set_open_block(str2,"form action='/' method='GET'");
+////  strcat(str1,str2);
+ //    len=strlen(str1);
+  
+  
+  
+  set_open_block(str2,"form action='/' method='POST'");
+ strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+
+  set_br(str2,3);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>ОБЩАЯ ИНФОРМАЦИЯ</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+
+  //uint16_t set_text_area  (char* str1,char* name, uint8_t n,uint8_t c, uint8_t r,uint8_t* dat)
+   
+     
+   set_text_input(str3,"name_dev",16,FW_data.V_Name_dev);  
+   set_table_string(str2,"Имя устройства",str3);
+   strcat(str1,str2);
+   
+   set_text_input(str3,"geo_place",32,FW_data.V_GEOM_NAME);  
+   set_table_string(str2,"Место установки устройства",str3);  
+   strcat(str1,str2);
+   
+   set_text_input(str3,"call_data",32,FW_data.V_CALL_DATA);  
+   set_table_string(str2,"Контактные данные",str3);  
+   strcat(str1,str2);
+   
+   set_submit(str3,"save_geo","1","Сохранить");
+   set_table_string(str2,"Сохранить данные секции ",str3);  
+   strcat(str1,str2);
+
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+  
+   set_br(str2,2);
+   strcat(str1,str2);
+  
+  
+  
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+ 
+
+
+  
+  
+  len=strlen(str1);
+  return len;
+};
+
+
+
+uint32_t costr_page5(char* str1)
+{
+  uint32_t len;
+  
+  char str2[1000]={0};
+    char str3[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 4000);
+
+// set_open_block(str2,"form action='/' method='POST'");
+// strcat(str1,str2);
+//  
+//  set_open_block(str2,"ul");
+//  strcat(str1,str2);
+//
+//  set_br(str2,3);
+//  strcat(str1,str2);
+
+  set_open_block(str2,"b>НАСТРОЙКА СЕТИ</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+
+  //uint16_t set_text_area  (char* str1,char* name, uint8_t n,uint8_t c, uint8_t r,uint8_t* dat)
+   
+  // <input type="checkbox" checked="checked" />
+   
+   set_open_block(str3,"input type=\"checkbox\" checked=\"dhcp_check\" /");
+   set_table_string(str2,"Имя устройства",str3);
+   strcat(str1,str2);
+     
+     
+   set_text_input(str3,"name_dev",16,FW_data.V_Name_dev);  
+   set_table_string(str2,"Имя устройства",str3);
+   strcat(str1,str2);
+   
+   set_text_input(str3,"geo_place",32,FW_data.V_GEOM_NAME);  
+   set_table_string(str2,"Место установки устройства",str3);  
+   strcat(str1,str2);
+   
+   set_text_input(str3,"call_data",32,FW_data.V_CALL_DATA);  
+   set_table_string(str2,"Контактные данные",str3);  
+   strcat(str1,str2);
+   
+   set_submit(str3,"save_geo","1","Сохранить");
+   set_table_string(str2,"Сохранить данные секции ",str3);  
+   strcat(str1,str2);
+
+   
+ 
+  reset_open_block(str2,"tbody"); 
+  strcat(str1,str2); 
+  
+  reset_open_block(str2,"table");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  
+  
+  reset_open_block(str2,"form");
+ strcat(str1,str2);
+ 
+ 
+   len=strlen(str1);
+  return len;
+};
+
+ 

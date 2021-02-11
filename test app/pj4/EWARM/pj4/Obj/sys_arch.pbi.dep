@@ -1,0 +1,6 @@
+sys_arch.pbi: \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\system\arch\cpu.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\system\arch\cc.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\arch.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip\debug.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\system\OS\sys_arch.c

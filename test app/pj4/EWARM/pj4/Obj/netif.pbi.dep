@@ -1,0 +1,13 @@
+netif.pbi: \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\src\core\netif.c \
+  E:\ika\development\F107\boot1\test\ app\pj4\Middlewares\Third_Party\LwIP\src\include\lwip/opt.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\LWIP\Target\lwipopts.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Core\Inc\main.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Core\Inc\stm32f1xx_hal_conf.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_rcc.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\STM32F1xx_HAL_Driver\Inc/stm32f1xx_hal_def.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\CMSIS\Device\ST\STM32F1xx\Include\stm32f1xx.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\CMSIS\Device\ST\STM32F1xx\Include/stm32f107xc.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\CMSIS\Include\core_cm3.h \
+  E:\ika\development\F107\boot1\test\ app\pj4\Drivers\CMSIS\Include/cmsis_version.h
