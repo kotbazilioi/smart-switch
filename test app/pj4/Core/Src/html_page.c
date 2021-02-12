@@ -17,7 +17,9 @@ char HTTP401[]={0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x34,0x30,0x31,0x20
 0x69,0x63,0x20,0x72,0x65,0x61,0x6c,0x6d,0x3d,0x22}; 
 
 char HTTP401end[]={0x22,0x0d,0x0a,0x0d,0x0a};
-
+static const char http_logs_hdr[]="<style> textarea { width: 90%;height:200px;resize:none;}</style><center><form action>";
+static const char http_logs_area[]="<p><textarea name=\"comment\" align=\"center\" readonly rows=\"10\" cols=\"2\" align=\"center\" disabled >";
+static const char http_logs_end[] ="</textarea></p>  </center>";
 static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
   //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
 static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"404 error\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\<script\>"
@@ -81,6 +83,115 @@ static const char http_html_style[] =
    "display: inline-block;"
   "</style>"
     "</head>";
+//  RESET,
+//  UPDATE_FW,
+//  SWICH_ON_WEB,
+//  SWICH_OFF_WEB,
+//  SWICH_TOLG_WEB,
+//  SWICH_ON_SNMP,
+//  SWICH_OFF_SNMP,
+//  SWICH_TOLG_SNMP,
+//  SWICH_ON_RASP,
+//  SWICH_OFF_RASP,
+//  SWICH_TOLG_RASP,
+//  SWICH_ON_WATCH,
+//  SWICH_OFF_WATCH,
+//  SWICH_TOLG_WATCH  
+//  POWER_ON
+//  LOAD_DEF_DATA
+
+void swich_mess_event (uint8_t event,char* mess)
+{
+ switch(event) {
+          case 0:
+            {
+              sprintf(mess,"Сброс утройства произведен\n\r");
+            }
+          break;
+          case 1:
+            {
+              sprintf(mess,"Произведен перевод в режим загрузки\n\r");
+            }
+          break;
+          case 2:
+            {
+              sprintf(mess,"Включена нагрузка с веб интерфейса\n\r");
+            }
+          break;
+          case 3:
+            {
+              sprintf(mess,"Выключена нагрузка с веб интерфейса\n\r");
+            }
+          break;
+          case 4:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузка с веб интерфейса\n\r");
+            }
+          break;
+           case 5:
+            {
+              sprintf(mess,"Включена нагрузка с SNMP интерфейса\n\r");
+            }
+          break;
+          case 6:
+            {
+              sprintf(mess,"Выключена нагрузка с SNMP интерфейса\n\r");
+            }
+          break;
+          case 7:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузка с SNMP интерфейса\n\r");
+            }
+          break;
+          case 8:
+            {
+              sprintf(mess,"Включена нагрузка по расписанию\n\r");
+            }
+          break;
+          case 9:
+            {
+              sprintf(mess,"Выключена нагрузка по расписанию\n\r");
+            }
+          break;
+          case 10:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию\n\r");
+            }
+          break;
+          case 11:
+            {
+              sprintf(mess,"Включена нагрузка по сторожу\n\r");
+            }
+          break;
+          case 12:
+            {
+              sprintf(mess,"Выключена нагрузка по сторожу\n\r");
+            }
+          break;
+          case 13:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузки по сторожу\n\r");
+            }
+          break;
+          case 14:
+            {
+              sprintf(mess,"Включением питание утройства\n\r");
+            }
+          break;
+          case 15:
+            {
+              sprintf(mess,"Загружены настройки по умолчанию\n\r");
+            }
+          break;
+          case 16:
+            {
+              sprintf(mess,"Сохранение настроек устройства\n\r");
+            }
+          break;
+        }
+}
+
+
 
 uint32_t costr_pass(char* str1)
 {
@@ -1266,3 +1377,111 @@ uint32_t costr_page7(char* str1)
   return len;
 };
 
+
+
+uint32_t costr_page8(char* str1)
+{
+  uint32_t len;
+  
+  char str2[128]={0};
+    char str3[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 4000);
+
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",0,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+  reset_open_block(str2,"lf");
+  strcat(str1,str2);
+  
+  
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+  
+  set_link(str2,"Журнал ","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+   strcat(str1,http_logs_hdr);
+  
+  
+   set_open_block(str2,"p>ЖУРНАЛ СОБЫТИЙ</p");
+  strcat(str1,str2);
+   
+
+  strcat(str1,http_logs_area);
+  
+  len=strlen(str1);
+  return len;
+}  
+  
+  
+uint32_t costr_page9(char* str1)
+{
+  uint32_t len;
+
+  
+  char str2[1000]={0};
+    char str3[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, 4000);
+  
+  
+
+  
+  
+  
+  
+  strcat(str1,http_logs_end);
+
+
+  
+  reset_open_block(str2,"form");
+ strcat(str1,str2);
+
+  
+  len=strlen(str1);
+  return len;
+};

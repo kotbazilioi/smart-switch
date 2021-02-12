@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <userBookmarks>
     <bookmark>
+        <path>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Core\Src\html_page.c</path>
+        <row>1467</row>
+    </bookmark>
+    <bookmark>
+        <path>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c</path>
+        <row>605</row>
+    </bookmark>
+    <bookmark>
         <path>E:\ika\development\F107\boot1\test app\pj4\Core\Src\flash_if.c</path>
         <row>505</row>
     </bookmark>

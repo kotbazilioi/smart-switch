@@ -59,6 +59,7 @@
 #include "flash_if.h"
 #include "html_page.h"
 #include "base64.h"
+#include "LOGS.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
@@ -590,6 +591,9 @@ void param_run(post_data_t* post_data,uint8_t index)
           {
             if (post_data->data[0]==0x31)
               {
+                form_reple_to_save(SAVE_DATA_SETT);
+               // while(flag_global_save_log==1){vTaskDelay(10);};
+                vTaskDelay(100);
                 flag_global_save_data=1;
               }
           }
@@ -597,11 +601,17 @@ void param_run(post_data_t* post_data,uint8_t index)
           {
            if (post_data->data[0]==0x31)
               {
+                form_reple_to_save(LOAD_DEF_DATA);
+              //  while(flag_global_save_log==1){vTaskDelay(10);};
+                vTaskDelay(100);
                 flag_global_load_def=1;
               }
           }
     else if (strncmp((char*)post_data->name,"load_boot", sizeof("load_boot")) == 0)
           {
+           form_reple_to_save(UPDATE_FW);           
+          // while(flag_global_save_log==1){vTaskDelay(10);};
+           vTaskDelay(100);
            jamp_to_boot();
           }
     else
@@ -724,14 +734,28 @@ post_data_t elem_post_data;
           break;
            case 6:  //logs
             {
-               fs_open(&file, "/img/netping.gif");
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-              fs_close(&file);
-//               len_buf_list=costr_page2((char*)buf_list);
-//               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
-//          
-//               len_buf_list=costr_page4((char*)buf_list);
-//               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+                len_buf_list=costr_page8((char*)buf_list);
+                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+                vTaskDelay(10);
+                 uint16_t ct_mess;
+                for(ct_mess=0;ct_mess<2048;ct_mess++)
+                    {
+                      if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x3a)
+                          {
+                            memset(buf_list,0,4000);
+                            decode_reple(buf_list,&FW_data.V_logs_struct.log_reple[ct_mess]);
+                            netconn_write(conn, (char*)(buf_list), (size_t)strlen(buf_list), NETCONN_NOCOPY);       
+                            vTaskDelay(10);
+                          }
+                      else
+                          {
+                            break;
+                          }
+     
+                    }
+                len_buf_list=costr_page9((char*)buf_list);
+                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+                vTaskDelay(10);
             }
           break;
            case 7:
@@ -805,6 +829,7 @@ static void http_server_serve(struct netconn *conn)
 
 
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
+      key_http_len=strlen(buf_page);
       
        if ((flag_logon==0)&&(strncmp(key_http,buf_page,key_http_len) == 0))
             {
@@ -878,7 +903,11 @@ static void http_server_serve(struct netconn *conn)
                          page_n=4; // pass
                          flag_logon=0;
                          page_html_swich(page_n,conn,buf_page);   
-                         vTaskDelay(10);
+                         form_reple_to_save(RESETL);
+                         
+                         save_reple_log(reple_to_save);
+                         flag_global_save_log=0;
+                         vTaskDelay(100);
                          jamp_to_app();
                          }
                         }         

@@ -142,7 +142,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
-
+  
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 256);
@@ -159,7 +159,7 @@ int main(void)
   /* USER CODE END RTOS_THREADS */
   
   //void GET_reple (uint8_t event,log_reple_t* reple)
-  
+   form_reple_to_save(POWER_ON);
   GET_reple(0,&start_time);
   
   /* Start scheduler */
@@ -399,16 +399,23 @@ void logs_task(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    if (flag_global_save_data==1)
+    if (flag_global_save_log==1)
       {
-      // save  all data 
+        save_reple_log(reple_to_save);
+        flag_global_save_log=0;
+      }
+     if ((flag_global_save_data==1)&&(flag_global_save_log==0))
+      {
+      // save  all data        
        save_data_flash();
        flag_global_save_data=0;
  //       jamp_to_app();
       }
-    if (flag_global_load_def==1)
+     if ((flag_global_load_def==1)&&(flag_global_save_log==0))
       { // load_def_data
+        
         load_def_data();
+      
         flag_global_load_def=0;
       }
     osDelay(100);

@@ -43,6 +43,7 @@ uint8_t flag_app_start=0;
 uint32_t timer_to_app=0;
 uint8_t flag_global_save_data;
 uint8_t flag_global_load_def;
+uint8_t flag_global_save_log;
 log_reple_t start_time;
 log_reple_t real_time;
 file_data_t data_file;
@@ -431,7 +432,8 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
        FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
        FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
        
-       save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
+       save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP);        
+       memcpy((uint8_t *)(&FW_data.V_CRC_APP), (uint8_t *)A_CRC_APP, 2048);
       }
       
       uint8_t load_def_data(void)
@@ -555,7 +557,8 @@ uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
   }
  else
     {
-      memcpy((uint32_t *)(&FW_data.V_CRC_APP), (uint32_t *)A_CRC_APP, 1024);
+      memcpy((uint8_t *)(&FW_data.V_CRC_APP), (uint8_t *)A_CRC_APP, 2048);
+      memcpy((void *)(&FW_data.V_logs_struct.log_reple[0]), (char *)A_LOG, 2000);
       return 0;
     }
 }
