@@ -265,20 +265,31 @@ static void MX_RTC_Init(void)
 
   /** Initialize RTC and set the Time and Date
   */
-  sTime.Hours = 0x10;
-  sTime.Minutes = 0x12;
-  sTime.Seconds = 0x22;
+  
+  
+  
+  HAL_RTC_GetTime (&hrtc,&sTime,RTC_FORMAT_BIN);
+  
+  
+//  sTime.Hours = 0x10;
+//  sTime.Minutes = 0x12;
+//  sTime.Seconds = 0x22;
 
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
+  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
   {
     Error_Handler();
   }
-  DateToUpdate.WeekDay = RTC_WEEKDAY_FRIDAY;
-  DateToUpdate.Month = RTC_MONTH_DECEMBER;
-  DateToUpdate.Date = 0x12;
-  DateToUpdate.Year = 0x20;
-
-  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BCD) != HAL_OK)
+  
+  
+  HAL_RTC_GetDate (&hrtc,&DateToUpdate,RTC_FORMAT_BIN);
+//  DateToUpdate.WeekDay = RTC_WEEKDAY_FRIDAY;
+//  DateToUpdate.Month = RTC_MONTH_DECEMBER;
+//  DateToUpdate.Date = 0x12;
+if (DateToUpdate.Year <20)
+{
+  DateToUpdate.Year = 20;
+}
+  if (HAL_RTC_SetDate(&hrtc, &DateToUpdate, RTC_FORMAT_BIN) != HAL_OK)
   {
     Error_Handler();
   }
@@ -342,7 +353,7 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
-  http_server_netconn_init();
+ // http_server_netconn_init();
   /* Infinite loop */
   for(;;)
   {

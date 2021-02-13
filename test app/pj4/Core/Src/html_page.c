@@ -17,7 +17,7 @@ char HTTP401[]={0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x34,0x30,0x31,0x20
 0x69,0x63,0x20,0x72,0x65,0x61,0x6c,0x6d,0x3d,0x22}; 
 
 char HTTP401end[]={0x22,0x0d,0x0a,0x0d,0x0a};
-static const char http_logs_hdr[]="<style> textarea { width: 90%;height:200px;resize:none;}</style><center><form action>";
+static const char http_logs_hdr[]="<style> textarea { width: 90%;height:400px;resize:none;}</style><center><form action>";
 static const char http_logs_area[]="<p><textarea name=\"comment\" align=\"center\" readonly rows=\"10\" cols=\"2\" align=\"center\" disabled >";
 static const char http_logs_end[] ="</textarea></p>  </center>";
 static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
@@ -1160,13 +1160,13 @@ uint32_t costr_page6(char* str1)
 //   time_run[5]=real_time.reple_seconds
    
    
-   sprintf(str4,"%d\.%d\.%d ",real_time.year,real_time.month,real_time.day);  
-   set_text_input(str3,"time_set",32,str4);  
+   sprintf(str4,"%d\.%d\.%d",real_time.day,real_time.month,real_time.year);  
+   set_text_input(str3,"dey_set",32,str4);  
    set_table_string(str2,"Текущая дата:",str3);  
    strcat(str1,str2);
    
    
-   sprintf(str4,"%d\.%d\.%d ",real_time.reple_hours,real_time.reple_minuts,real_time.reple_seconds);  
+   sprintf(str4,"%d\.%d\.%d",real_time.reple_hours,real_time.reple_minuts,real_time.reple_seconds);  
    set_text_input(str3,"time_set",32,str4);  
    set_table_string(str2,"Текущее время: ",str3);  
    strcat(str1,str2);

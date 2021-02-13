@@ -59,21 +59,12 @@ uint8_t GATEWAY_ADDRESS[4];
   */
 void MX_LWIP_Init(void)
 {
-  /* IP addresses initialization */
-////     FW_data.V_IP_CONFIG[0]=192;
-////     FW_data.V_IP_CONFIG[1]=168;
-////     FW_data.V_IP_CONFIG[2]=0;
-////     FW_data.V_IP_CONFIG[3]=10;
-////     
-////     FW_data.V_IP_MASK[0]=255;
-////     FW_data.V_IP_MASK[1]=255;
-////     FW_data.V_IP_MASK[2]=255;
-////     FW_data.V_IP_MASK[3]=0;
-////     
-////     FW_data.V_IP_GET[0]=192;
-////     FW_data.V_IP_GET[1]=168;
-////     FW_data.V_IP_GET[2]=0;
-////     FW_data.V_IP_GET[3]=100; 
+  /* Initilialize the LwIP stack with RTOS */
+  tcpip_init( NULL, NULL );
+  
+  
+if (FW_data.V_DHCP!=1)
+{
      
   IP_ADDRESS[0] =  FW_data.V_IP_CONFIG[0];
   IP_ADDRESS[1] =  FW_data.V_IP_CONFIG[1];
@@ -87,36 +78,41 @@ void MX_LWIP_Init(void)
   GATEWAY_ADDRESS[1] = FW_data.V_IP_GET[1];
   GATEWAY_ADDRESS[2] = FW_data.V_IP_GET[2];
   GATEWAY_ADDRESS[3] = FW_data.V_IP_GET[3];
-
-  ////  IP_ADDRESS[0] = 192;
-////  IP_ADDRESS[1] = 168;
-////  IP_ADDRESS[2] = 0;
-////  IP_ADDRESS[3] = 10;
-////  NETMASK_ADDRESS[0] = 255;
-////  NETMASK_ADDRESS[1] = 255;
-////  NETMASK_ADDRESS[2] = 255;
-////  NETMASK_ADDRESS[3] = 0;
-////  GATEWAY_ADDRESS[0] = 192;
-////  GATEWAY_ADDRESS[1] = 168;
-////  GATEWAY_ADDRESS[2] = 0;
-////  GATEWAY_ADDRESS[3] = 1;
-/* USER CODE BEGIN IP_ADDRESSES */
-/* USER CODE END IP_ADDRESSES */
-
-  /* Initilialize the LwIP stack with RTOS */
-  tcpip_init( NULL, NULL );
-
-  /* IP addresses initialization without DHCP (IPv4) */
+   /* IP addresses initialization without DHCP (IPv4) */
   IP4_ADDR(&ipaddr, IP_ADDRESS[0], IP_ADDRESS[1], IP_ADDRESS[2], IP_ADDRESS[3]);
   IP4_ADDR(&netmask, NETMASK_ADDRESS[0], NETMASK_ADDRESS[1] , NETMASK_ADDRESS[2], NETMASK_ADDRESS[3]);
   IP4_ADDR(&gw, GATEWAY_ADDRESS[0], GATEWAY_ADDRESS[1], GATEWAY_ADDRESS[2], GATEWAY_ADDRESS[3]);
+  
+}
+else
+{
+//  ip_addr_set_zero_ip4(&ipaddr);
+//  ip_addr_set_zero_ip4(&netmask);
+//  ip_addr_set_zero_ip4(&gw);
+////// uint8_t LWIP_DHCP =1;
+//  
+          
+//		osDelay (1000);
+//		dhcp_start (&gnetif);
+
+   ipaddr.addr = 0;
+  netmask.addr = 0;
+  gw.addr = 0;               
+                
+}
+
+
+ 
 
   /* add the network interface (IPv4/IPv6) with RTOS */
   netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
 
   /* Registers the default network interface */
   netif_set_default(&gnetif);
+  
 
+  
+  
   if (netif_is_link_up(&gnetif))
   {
     /* When the netif is fully configured this function must be called */
@@ -142,11 +138,26 @@ void MX_LWIP_Init(void)
   osThreadDef(LinkThr, ethernetif_set_link, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE * 8);
   osThreadCreate (osThread(LinkThr), &link_arg);
 /* USER CODE END OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
+       dhcp_release (&gnetif);
+               dhcp_stop (&gnetif);
+  dhcp_start(&gnetif);
+    // add status callback for future status updates
+ // set_status_callback(&gnetif, ethernet_status_callback);
 
+  // did the network change?
+ // ethernet_link_status_updated(&gnetif);
+
+  //add name; just because
+//  char host_name[] = "STM32_Infinity";
+//  set_hostname(&gnetif, host_name);
+  
+  
 /* USER CODE BEGIN 3 */
 
 /* USER CODE END 3 */
 }
+
+
 
 #ifdef USE_OBSOLETE_USER_CODE_SECTION_4
 /* Kept to help code migration. (See new 4_1, 4_2... sections) */

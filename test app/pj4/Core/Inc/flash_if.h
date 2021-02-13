@@ -348,7 +348,7 @@ char V_CALL_DATA[16];
 uint8_t V_IP_SNMP[4];
 signed char V_NTP_CIRCL;
 uint8_t V_TYPE_OUT;
-uint8_t V_resv[1655];
+uint8_t V_resv[1669];
 
 ////#define A_RESV 0x800413B
 logs_t V_logs_struct;

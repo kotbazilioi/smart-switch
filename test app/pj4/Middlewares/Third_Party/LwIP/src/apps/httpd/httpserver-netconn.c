@@ -76,6 +76,86 @@ char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x
   * @param conn: pointer on connection structure 
   * @retval None
   */
+    uint8_t scanf_time (char* data,uint16_t* ip_mass,uint8_t len_ip)
+  {
+     signed int  ct_char=0;
+     uint16_t mul_k=1;
+    ip_mass[2]=0;
+    for(ct_char=len_ip-1;ct_char>=0;ct_char--)
+      {
+        if (data[ct_char]!='.')
+          {
+            ip_mass[2]=(data[ct_char]-0x30)*mul_k+ip_mass[2];
+            mul_k=mul_k*10;  
+            if (mul_k>10000)
+            {// break;
+              return 1;
+            }
+          }
+        else
+          {
+          break;
+          }
+      }
+    ct_char--;
+    mul_k=1;
+    ip_mass[1]=0;
+    for(;ct_char>=0;ct_char--)
+      {
+        if (data[ct_char]!='.')
+          {
+            ip_mass[1]=(data[ct_char]-0x30)*mul_k+ip_mass[1];
+            mul_k=mul_k*10;  
+            if (mul_k>100)
+            { 
+              //break;
+            return 1;
+            }
+          }
+        else
+          {
+          break;
+          }
+      }
+//    ct_char--;
+//     mul_k=1;
+//     for(;ct_char>=0;ct_char--)
+//      {
+//        if (data[ct_char]!='.')
+//          {
+//            ip_mass[0]=(data[ct_char]-0x30)*mul_k+ip_mass[0];
+//            mul_k=mul_k*10;  
+//            if (mul_k>1000)
+//            { //break;
+//            return 1;
+//            }
+//          }
+//        else
+//          {
+//          break;
+//          }
+//      }
+     ip_mass[0]=0;
+     ct_char--;
+      mul_k=1;
+     for(;ct_char>=0;ct_char--)
+      {
+        if ((data[ct_char]!='.')||(ct_char!=0)||(data[ct_char]!='+')||(data[ct_char]!='&'))
+          {
+            ip_mass[0]=(data[ct_char]-0x30)*mul_k+ip_mass[0];
+            mul_k=mul_k*10;  
+            if (mul_k>100)
+            {// break;
+            return 1;
+            }
+          }
+        else
+          {
+          break;
+          }
+      }
+    return 0;
+  }
   uint8_t scanf_ip (char* data,uint8_t* ip_mass,uint8_t len_ip)
   {
      signed int  ct_char=0;
@@ -377,13 +457,15 @@ typedef struct post_data_t
  {
    char name[32];
    char data[32];
+ 
    uint8_t len_par;
  }post_data_t;
 void param_run(post_data_t* post_data,uint8_t index)
 {
   uint8_t IP_buf[4];
   uint16_t port_n;
-        uint8_t ct_temp0;
+  uint16_t data_mass[3];
+  uint8_t ct_temp0;
   uint8_t len_mess=0;
   if (index==3)
   {
@@ -430,6 +512,17 @@ void param_run(post_data_t* post_data,uint8_t index)
               }
             memcpy((char*)FW_data.V_CALL_DATA, (char*)post_data->data,len_mess );
           }
+      else if (strncmp((char*)post_data->name,"dhcp_flag", sizeof("dhcp_flag")) == 0)
+          {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            if (post_data->data[0]==0x31)
+            {
+              FW_data.V_DHCP=1;
+            }
+          
+          }
+    
     else if (strncmp((char*)post_data->name,"ip_addr", sizeof("ip_addr")) == 0)
           {
            // FW_data.V_Name_dev
@@ -545,12 +638,39 @@ void param_run(post_data_t* post_data,uint8_t index)
            }
            
           }
-    else if (strncmp((char*)post_data->name,"time_set", sizeof("time_set")) == 0)
+    else if (strncmp((char*)post_data->name,"time_set", sizeof("dey_set")) == 0)
+          {
+     
+            len_mess=strlen(post_data->data);
+            if (scanf_time ((char*) post_data->data,data_mass,len_mess)==0)
+            {
+              //hrtc HAL_StatusTypeDef HAL_RTC_SetTime(RTC_HandleTypeDef *hrtc, RTC_TimeTypeDef *sTime, uint32_t Format)
+              times.Hours=data_mass[0];
+              times.Minutes=data_mass[1];
+              times.Seconds=data_mass[2]; 
+              HAL_RTC_SetTime(&hrtc,&times,RTC_FORMAT_BIN);
+              
+              
+              //memcpy((uint8_t*)FW_data., (char*)IP_buf,3 );
+            }
+//            len_mess=strlen(post_data->data);
+          //  memcpy((char*)FW_data.V_PASSWORD, (char*)post_data->data,len_mess );
+          }
+       else if (strncmp((char*)post_data->name,"dey_set", sizeof("time_set")) == 0)
           {
            // FW_data.V_Name_dev
             len_mess=strlen(post_data->data);
           //  memcpy((char*)FW_data.V_PASSWORD, (char*)post_data->data,len_mess );
+              if (scanf_time ((char*) post_data->data,data_mass,len_mess)==0)
+            {
+             dates.Year=data_mass[2]-2000;
+             dates.Month=data_mass[1]; 
+             dates.Date=data_mass[0];
+             HAL_RTC_SetDate(&hrtc,&dates,RTC_FORMAT_BIN);
+           //  RTC_DateUpdate(&hrtc,)
+            }
           }
+    
     else if (strncmp((char*)post_data->name,"mess_on", sizeof("mess_on")) == 0)
           {
            // FW_data.V_Name_dev
@@ -716,15 +836,15 @@ post_data_t elem_post_data;
 ////              fs_close(&file);
                len_buf_list=costr_page3((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-               vTaskDelay(10);
+               vTaskDelay(5);
                
                len_buf_list=costr_page5((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
-                vTaskDelay(10);
+                vTaskDelay(5);
                
                len_buf_list=costr_page6((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-                vTaskDelay(10);
+                vTaskDelay(5);
                
                len_buf_list=costr_page7((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
@@ -740,7 +860,7 @@ post_data_t elem_post_data;
                  uint16_t ct_mess;
                 for(ct_mess=0;ct_mess<2048;ct_mess++)
                     {
-                      if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x3a)
+                      if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x7a)
                           {
                             memset(buf_list,0,4000);
                             decode_reple(buf_list,&FW_data.V_logs_struct.log_reple[ct_mess]);

@@ -402,7 +402,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
   if (N_sector==1)
     {
     blok=1;
-    start_addr=A_CRC_APP+0x800;
+    start_addr=0x8004800;
     
     }
     else
@@ -420,9 +420,9 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     pEraseInit.NbPages = blok;
     status = HAL_FLASHEx_Erase(&pEraseInit, &PageError);
     status=HAL_FLASH_Lock();
-    status= FLASH_If_Write( (uint32_t)start_addr,(uint32_t*)struct_to,blok*512);
+    status= FLASH_If_Write( (uint32_t)start_addr,struct_to,blok*512);
         
-    memcpy((uint32_t*)struct_to, (uint32_t *)start_addr, blok*512);
+    memcpy((uint8_t*)struct_to, (uint8_t *)start_addr, blok*512);
     return status;
 }
 
@@ -432,7 +432,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
        FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
        FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
        
-       save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP);        
+       save_data_blok(0,(uint32_t*)&FW_data.V_CRC_APP);        
        memcpy((uint8_t *)(&FW_data.V_CRC_APP), (uint8_t *)A_CRC_APP, 2048);
       }
       
@@ -462,7 +462,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_FW1_LEN=0;
      FW_data.V_BOOT_VER = BOOT_VER_FW;
      FW_data.V_CRC_DATA = 0;
-     FW_data.V_DHCP = 0;
+     FW_data.V_DHCP = 1;
       memset((uint8_t*)&FW_data.V_LOGIN,0,16);
      memcpy((uint32_t*)&FW_data.V_LOGIN, (uint32_t *)"admin", 5);
       memset((uint8_t*)&FW_data.V_PASSWORD,0,16);
