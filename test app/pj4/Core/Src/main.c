@@ -69,6 +69,7 @@ RTC_HandleTypeDef hrtc;
 osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
 osThreadId logs_task_nameHandle;
+uint8_t flag_set_ip=0;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -80,6 +81,7 @@ static void MX_RTC_Init(void);
 void StartDefaultTask(void const * argument);
 void Task_HAL1(void const * argument);
 void logs_task(void const * argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -353,11 +355,27 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
- // http_server_netconn_init();
+  http_server_netconn_init();
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
+    if ((gnetif.ip_addr.addr!=0)&&(flag_set_ip!=1))
+      {
+       FW_data.V_IP_CONFIG[0]=gnetif.ip_addr.addr&0x000000ff;
+       FW_data.V_IP_CONFIG[1]=(gnetif.ip_addr.addr&0x0000ff00)>>8;
+       FW_data.V_IP_CONFIG[2]=(gnetif.ip_addr.addr&0x00ff0000)>>16;
+       FW_data.V_IP_CONFIG[3]=(gnetif.ip_addr.addr&0xff000000)>>24;
+       FW_data.V_IP_MASK[0]=(gnetif.netmask.addr&0x000000ff);
+       FW_data.V_IP_MASK[1]=(gnetif.netmask.addr&0x0000ff00)>>8;
+       FW_data.V_IP_MASK[2]=(gnetif.netmask.addr&0x00ff0000)>>16;
+       FW_data.V_IP_MASK[3]=(gnetif.netmask.addr&0xff000000)>>24;
+       FW_data.V_IP_GET[0]=(gnetif.gw.addr&0x000000ff);
+       FW_data.V_IP_GET[1]=(gnetif.gw.addr&0x0000ff00)>>8;
+       FW_data.V_IP_GET[2]=(gnetif.gw.addr&0x00ff0000)>>16;
+       FW_data.V_IP_GET[3]=(gnetif.gw.addr&0xff000000)>>24;
+       flag_set_ip=1;
+      }
   }
   /* USER CODE END 5 */
 }

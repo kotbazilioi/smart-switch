@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -29,7 +29,6 @@
 #include <string.h>
 #include "cmsis_os.h"
 #include "lwip/tcpip.h"
-#include "flash_if.h"
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
 
@@ -222,21 +221,12 @@ static void low_level_init(struct netif *netif)
   heth.Init.Speed = ETH_SPEED_100M;
   heth.Init.DuplexMode = ETH_MODE_FULLDUPLEX;
   heth.Init.PhyAddress = LAN8742A_PHY_ADDRESS;
-  
-//////  hetho.Init.MACAddr[0] =   (uint16_t)idBase0[0];
-//////  hetho.Init.MACAddr[1] =   ((uint16_t)idBase0[0])>>8;
-//////  hetho.Init.MACAddr[2] =   (uint16_t)idBase1[0];
-//////  hetho.Init.MACAddr[3] =   ((uint16_t)idBase1[0])>>8;
-//////  hetho.Init.MACAddr[4] =   (uint16_t)idBase2[0];
-//////  hetho.Init.MACAddr[5] =   ((uint16_t)idBase2[0])>>8;
-  
-  
-  MACAddr[0] = (uint16_t)idBase0[0];
-  MACAddr[1] = ((uint16_t)idBase0[0])>>8;
-  MACAddr[2] = (uint16_t)idBase1[0];
-  MACAddr[3] = ((uint16_t)idBase1[0])>>8;
-  MACAddr[4] = (uint16_t)idBase2[0];
-  MACAddr[5] = ((uint16_t)idBase2[0])>>8;
+  MACAddr[0] = 0x00;
+  MACAddr[1] = 0x80;
+  MACAddr[2] = 0xE1;
+  MACAddr[3] = 0x12;
+  MACAddr[4] = 0x34;
+  MACAddr[5] = 0x56;
   heth.Init.MACAddr = &MACAddr[0];
   heth.Init.RxMode = ETH_RXINTERRUPT_MODE;
   heth.Init.ChecksumMode = ETH_CHECKSUM_BY_HARDWARE;

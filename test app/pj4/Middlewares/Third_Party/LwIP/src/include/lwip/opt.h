@@ -250,10 +250,10 @@
 
 /**
  * MEM_SIZE: the size of the heap memory. If the application will send
- * a lot of data that needs to be copied, this should be set high. 1600
+ * a lot of data that needs to be copied, this should be set high.
  */
 #if !defined MEM_SIZE || defined __DOXYGEN__
-#define MEM_SIZE                        1024
+#define MEM_SIZE                        1600
 #endif
 
 /**

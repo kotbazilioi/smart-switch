@@ -102,17 +102,12 @@ else
 }
 
 
- 
-
-  /* add the network interface (IPv4/IPv6) with RTOS */
+   /* add the network interface (IPv4/IPv6) with RTOS */
   netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, &ethernetif_init, &tcpip_input);
 
   /* Registers the default network interface */
   netif_set_default(&gnetif);
-  
 
-  
-  
   if (netif_is_link_up(&gnetif))
   {
     /* When the netif is fully configured this function must be called */
@@ -135,22 +130,12 @@ else
   link_arg.semaphore = Netif_LinkSemaphore;
   /* Create the Ethernet link handler thread */
 /* USER CODE BEGIN OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
-  osThreadDef(LinkThr, ethernetif_set_link, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE * 8);
+  osThreadDef(LinkThr, ethernetif_set_link, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE * 2);
   osThreadCreate (osThread(LinkThr), &link_arg);
 /* USER CODE END OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
-       dhcp_release (&gnetif);
-               dhcp_stop (&gnetif);
+
+  /* Start DHCP negotiation for a network interface (IPv4) */
   dhcp_start(&gnetif);
-    // add status callback for future status updates
- // set_status_callback(&gnetif, ethernet_status_callback);
-
-  // did the network change?
- // ethernet_link_status_updated(&gnetif);
-
-  //add name; just because
-//  char host_name[] = "STM32_Infinity";
-//  set_hostname(&gnetif, host_name);
-  
   
 /* USER CODE BEGIN 3 */
 
