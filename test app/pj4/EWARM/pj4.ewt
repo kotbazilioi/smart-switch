@@ -1198,6 +1198,12 @@
             <name>User</name>
             <group>
                 <name>Core</name>
+                <group>
+                    <name>SNMP</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_init.c</name>
+                    </file>
+                </group>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\base64.c</name>
                 </file>

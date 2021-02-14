@@ -462,7 +462,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_FW1_LEN=0;
      FW_data.V_BOOT_VER = BOOT_VER_FW;
      FW_data.V_CRC_DATA = 0;
-     FW_data.V_DHCP = 1;
+     FW_data.V_DHCP = 0;
       memset((uint8_t*)&FW_data.V_LOGIN,0,16);
      memcpy((uint32_t*)&FW_data.V_LOGIN, (uint32_t *)"admin", 5);
       memset((uint8_t*)&FW_data.V_PASSWORD,0,16);

@@ -373,6 +373,8 @@
                     <state>$PROJ_DIR$/../Middlewares/Third_Party/LwIP/system/arch</state>
                     <state>$PROJ_DIR$/../Drivers/CMSIS/Include</state>
                     <state>$PROJ_DIR$\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang</state>
+                    <state>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_v3</state>
+                    <state>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\snmp</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1096,6 +1098,12 @@
             <name>User</name>
             <group>
                 <name>Core</name>
+                <group>
+                    <name>SNMP</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_init.c</name>
+                    </file>
+                </group>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\base64.c</name>
                 </file>

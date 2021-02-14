@@ -649,7 +649,7 @@ uint32_t costr_page4(char* str1)
     set_open_block(str2,"h2");
   strcat(str1,str2);
   
-  set_br(str2,3);
+  set_br(str2,1);
   strcat(str1,str2);
   
   set_open_block(str2,"b>НАСТРОЙКА  СЕТИ</b");
@@ -660,8 +660,8 @@ uint32_t costr_page4(char* str1)
   strcat(str1,str2);
     
     
-   set_br(str2,2);
-  strcat(str1,str2);
+//   set_br(str2,1);
+//  strcat(str1,str2);
 
     set_open_block(str2,"h3");
   strcat(str1,str2);
@@ -707,9 +707,69 @@ uint32_t costr_page4(char* str1)
   
   
   
+  set_open_block(str2,"form action='/table1' method='POST'");
+  strcat(str1,str2);
   
   
-  set_open_block(str2,"form action='/' method='POST'");
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+ 
+  set_open_block(str2,"b>УПРАВЛЕНИЯ НАГРУЗКОЙ</b");
+  strcat(str1,str2);
+  
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+//  set_br(str2,1);
+//  strcat(str1,str2);
+  
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);   
+   
+   set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"0\"checked");
+   set_table_string(str2,"Включить ключ",str3);  
+   strcat(str1,str2);
+
+   set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"1\"");
+   set_table_string(str2,"Выключить ключ",str3);  
+   strcat(str1,str2);
+   
+      set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"2\"");
+   set_table_string(str2,"Выдать импульс",str3);  
+   strcat(str1,str2);   
+  
+ 
+   
+   set_submit(str3,"out_swich","1","Переключить");
+   set_table_string(str2,"Переключение выхода",str3);  
+   strcat(str1,str2);
+   
+
+   
+//   set_submit(str3,"load_def","1","Загрузить");
+//   set_table_string(str2,"Загрузить исходные настройки",str3);  
+//   strcat(str1,str2);
+   
+
+  reset_open_block(str2,"tbody"); 
+  strcat(str1,str2); 
+  
+  reset_open_block(str2,"table");
+  strcat(str1,str2);
+  
+  
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"form action='/reset' method='POST'");
   strcat(str1,str2);
   
   set_open_block(str2,"ul");
