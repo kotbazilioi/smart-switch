@@ -26,6 +26,8 @@
 #endif /* MDK ARM Compiler */
 #include "ethernetif.h"
 #include "flash_if.h"
+#include "dns.h"
+    
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -61,7 +63,7 @@ void MX_LWIP_Init(void)
 {
   /* Initilialize the LwIP stack with RTOS */
   tcpip_init( NULL, NULL );
-  
+    ip4_addr_t ipdns;
   
 if (FW_data.V_DHCP!=1)
 {
@@ -133,7 +135,8 @@ else
   osThreadDef(LinkThr, ethernetif_set_link, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE * 2);
   osThreadCreate (osThread(LinkThr), &link_arg);
 /* USER CODE END OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
-
+       IP4_ADDR(&ipdns, FW_data.V_IP_DNS[0], FW_data.V_IP_DNS[1], FW_data.V_IP_DNS[2], FW_data.V_IP_DNS[3]);
+       dns_setserver (0,&ipdns);
   /* Start DHCP negotiation for a network interface (IPv4) */
   dhcp_start(&gnetif);
   

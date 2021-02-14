@@ -29,6 +29,7 @@
 #include <string.h>
 #include "cmsis_os.h"
 #include "lwip/tcpip.h"
+#include "flash_if.h"
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
 
@@ -208,6 +209,7 @@ void HAL_ETH_RxCpltCallback(ETH_HandleTypeDef *heth)
  * @param netif the already initialized lwip network interface structure
  *        for this ethernetif
  */
+   uint8_t MACAddr[6] ;
 static void low_level_init(struct netif *netif)
 {
   uint32_t regvalue = 0;
@@ -215,18 +217,27 @@ static void low_level_init(struct netif *netif)
 
 /* Init ETH */
 
-   uint8_t MACAddr[6] ;
+
   heth.Instance = ETH;
   heth.Init.AutoNegotiation = ETH_AUTONEGOTIATION_ENABLE;
   heth.Init.Speed = ETH_SPEED_100M;
   heth.Init.DuplexMode = ETH_MODE_FULLDUPLEX;
   heth.Init.PhyAddress = LAN8742A_PHY_ADDRESS;
-  MACAddr[0] = 0x00;
-  MACAddr[1] = 0x80;
-  MACAddr[2] = 0xE1;
-  MACAddr[3] = 0x12;
-  MACAddr[4] = 0x34;
-  MACAddr[5] = 0x56;
+//  MACAddr[0] = 0x00;
+//  MACAddr[1] = 0x80;
+//  MACAddr[2] = 0xE1;
+//  MACAddr[3] = 0x12;
+//  MACAddr[4] = 0x34;
+//  MACAddr[5] = 0x56;
+  
+  MACAddr[0] = 00;//(uint16_t)idBase0[0];
+  MACAddr[1] = ((uint16_t)idBase0[0])>>8;
+  MACAddr[2] = (uint16_t)idBase1[0];
+  MACAddr[3] = ((uint16_t)idBase1[0])>>8;
+  MACAddr[4] = (uint16_t)idBase2[0];
+  MACAddr[5] = ((uint16_t)idBase2[0])>>8;
+  
+  
   heth.Init.MACAddr = &MACAddr[0];
   heth.Init.RxMode = ETH_RXINTERRUPT_MODE;
   heth.Init.ChecksumMode = ETH_CHECKSUM_BY_HARDWARE;

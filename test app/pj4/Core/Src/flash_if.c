@@ -467,10 +467,10 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      memcpy((uint32_t*)&FW_data.V_LOGIN, (uint32_t *)"admin", 5);
       memset((uint8_t*)&FW_data.V_PASSWORD,0,16);
      memcpy((uint32_t*)&FW_data.V_PASSWORD, (uint32_t *)"admin", 5);
-     FW_data.V_IP_DNS[0]=0;
+     FW_data.V_IP_DNS[0]=10;
      FW_data.V_IP_DNS[1]=0;
      FW_data.V_IP_DNS[2]=0;
-     FW_data.V_IP_DNS[3]=0;
+     FW_data.V_IP_DNS[3]=18;
      FW_data.V_WEB_PORT = 80;
      FW_data.V_PORT_SNMP = 162;
      FW_data.V_HTTP_IP = 81;
@@ -512,7 +512,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      memcpy((uint32_t*)&FW_data.V_PASSWORD_SMTP, (uint32_t *)"admin", 5);
      memcpy((uint32_t*)&FW_data.V_GEOM_NAME, (uint32_t *)"Moscow office", 13);    
      
-    FW_data.V_ID_MAC[0] =   (uint16_t)idBase0[0];
+    FW_data.V_ID_MAC[0] =   00;//(uint16_t)idBase0[0];
     FW_data.V_ID_MAC[1] =   ((uint16_t)idBase0[0])>>8;
     FW_data.V_ID_MAC[2] =   (uint16_t)idBase1[0];
     FW_data.V_ID_MAC[3] =   ((uint16_t)idBase1[0])>>8;

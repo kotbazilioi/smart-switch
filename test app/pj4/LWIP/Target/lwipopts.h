@@ -51,6 +51,15 @@
 #define LWIP_DHCP 1
 /*----- Default Value for LWIP_DNS: 0 ---*/
 #define LWIP_DNS 1
+   
+#define DNS_TABLE_SIZE           2  // number of table entries, default 4
+#define DNS_MAX_NAME_LENGTH     32  // max. name length, default 256
+#define DNS_MAX_SERVERS          1  // number of DNS servers, default 2
+#define DNS_DOES_NAME_CHECK      1  // compare received name with given,def 0 
+#define DNS_MSG_SIZE           512
+#define DNS_USES_STATIC_BUF      1     // 0, 1 or 2, default 1
+   
+#define LWIP_UDP 1
 /*----- Default Value for MEMP_NUM_TCP_PCB: 5 ---*/
 #define MEMP_NUM_TCP_PCB 8
 /*----- Value in opt.h for MEM_ALIGNMENT: 1 -----*/

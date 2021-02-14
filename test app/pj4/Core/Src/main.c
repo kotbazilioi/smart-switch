@@ -27,6 +27,7 @@
 #include "heap_3.h"
 #include "httpserver-netconn.h"
 #include "lwip.h"
+#include "dns.h"
 #include "LOGS.h"
 #include "html_page.h"
 #include <stdio.h>
@@ -70,6 +71,8 @@ osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
 osThreadId logs_task_nameHandle;
 uint8_t flag_set_ip=0;
+uint16_t ct_dns_time=0;
+uint8_t status_dns=0;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -342,7 +345,20 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
-
+void smtp_serverFound (const char * name, struct ip_addr * ipaddr, void * arg) 
+{ 
+//  if ((ipaddr) && (ipaddr-> addr)) 
+//  { 
+//    smtp.serverIP.addr = ipaddr-> addr; 
+//    smtp.state = SMTP_NAME_RESOLVED; 
+//    ???? (smtp_connect () == ERR_OK) 
+//      ???????; 
+//    smtp.lastError = SMTP_CONNECT_FAILED; 
+//  } 
+//  ??? 
+//    smtp.lastError = SMTP_UNKNOWN_HOST; 
+//  smtp.state = SMTP_IDLE; 
+}
 /* USER CODE BEGIN Header_StartDefaultTask */
 /**
   * @brief  Function implementing the defaultTask thread.
@@ -352,6 +368,7 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
+
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
@@ -360,6 +377,15 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     osDelay(1);
+   if (ct_dns_time>DNS_TMR_INTERVAL) 
+    {
+    dns_tmr();
+    ct_dns_time=0;
+    }
+   else
+   {
+   ct_dns_time++;
+   }
     if ((gnetif.ip_addr.addr!=0)&&(flag_set_ip!=1))
       {
        FW_data.V_IP_CONFIG[0]=gnetif.ip_addr.addr&0x000000ff;
@@ -375,6 +401,13 @@ void StartDefaultTask(void const * argument)
        FW_data.V_IP_GET[2]=(gnetif.gw.addr&0x00ff0000)>>16;
        FW_data.V_IP_GET[3]=(gnetif.gw.addr&0xff000000)>>24;
        flag_set_ip=1;
+
+     //  struct ip_addr resolved;
+
+      
+ status_dns=dns_gethostbyname("www.netsmartswich.com", (ip_addr_t*)&(gnetif.ip_addr.addr), (dns_found_callback) smtp_serverFound, NULL);
+//        {}
+ 
       }
   }
   /* USER CODE END 5 */
