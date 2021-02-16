@@ -63,6 +63,7 @@ void MX_LWIP_Init(void)
 {
   /* Initilialize the LwIP stack with RTOS */
   tcpip_init( NULL, NULL );
+  
     ip4_addr_t ipdns;
   
 if (FW_data.V_DHCP!=1)

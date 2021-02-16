@@ -358,6 +358,10 @@ void smtp_serverFound (const char * name, struct ip_addr * ipaddr, void * arg)
 //  ??? 
 //    smtp.lastError = SMTP_UNKNOWN_HOST; 
 //  smtp.state = SMTP_IDLE; 
+//  while (1)
+//  {
+//      osDelay(10);
+//  }
 }
 /* USER CODE BEGIN Header_StartDefaultTask */
 /**
@@ -368,18 +372,21 @@ void smtp_serverFound (const char * name, struct ip_addr * ipaddr, void * arg)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-
+ip4_addr_t ipdns1;
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
+   //   udpecho_init();
   http_server_netconn_init();
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
-   if (ct_dns_time>DNS_TMR_INTERVAL) 
+   if (ct_dns_time<DNS_TMR_INTERVAL) 
     {
+    
     dns_tmr();
+   
     ct_dns_time=0;
     }
    else
@@ -403,12 +410,21 @@ void StartDefaultTask(void const * argument)
        flag_set_ip=1;
 
      //  struct ip_addr resolved;
-
+//   if (flag_set_ip==1)
+//      {
+//      status_dns= dns_gethostbyname("www.netsmartswich.com", (ip_addr_t*)&(gnetif.ip_addr.addr), (dns_found_callback) smtp_serverFound, NULL);
+//      }
       
- status_dns=dns_gethostbyname("www.netsmartswich.com", (ip_addr_t*)&(gnetif.ip_addr.addr), (dns_found_callback) smtp_serverFound, NULL);
+     
 //        {}
- 
+       snmp_init();
       }
+//    ipdns1=*(dns_getserver (0));
+//   FW_data.V_IP_DNS[0]=(ipdns1.addr&0x000000ff);
+//       FW_data.V_IP_DNS[1]=(ipdns1.addr&0x0000ff00)>>8;
+//       FW_data.V_IP_DNS[2]=(ipdns1.addr&0x00ff0000)>>16;
+//       FW_data.V_IP_DNS[3]=(ipdns1.addr&0xff000000)>>24;
+//   
   }
   /* USER CODE END 5 */
 }

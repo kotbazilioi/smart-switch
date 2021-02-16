@@ -51,6 +51,11 @@
 #define LWIP_DHCP 1
 /*----- Default Value for LWIP_DNS: 0 ---*/
 #define LWIP_DNS 1
+
+#define LWIP_DNS 1
+
+
+#define LWIP_SNMP  1
    
 #define DNS_TABLE_SIZE           2  // number of table entries, default 4
 #define DNS_MAX_NAME_LENGTH     32  // max. name length, default 256
@@ -75,11 +80,11 @@
 /*----- Value in opt.h for LWIP_DNS_SECURE: (LWIP_DNS_SECURE_RAND_XID | LWIP_DNS_SECURE_NO_MULTIPLE_OUTSTANDING | LWIP_DNS_SECURE_RAND_SRC_PORT) -*/
 #define LWIP_DNS_SECURE 7
 /*----- Default Value for TCP_WND: 2880 ---*/
-#define TCP_WND 4096
+#define TCP_WND TCP_MSS*4//4096
 /*----- Default Value for TCP_MSS: 536 ---*/
-#define TCP_MSS 720
+#define TCP_MSS 1224//720
 /*----- Default Value for TCP_SND_BUF: 1440 ---*/
-#define TCP_SND_BUF 1840
+#define TCP_SND_BUF TCP_MSS*2//1840
 /*----- Value in opt.h for LWIP_NETIF_LINK_CALLBACK: 0 -----*/
 #define LWIP_NETIF_LINK_CALLBACK 1
 /*----- Value in opt.h for TCPIP_THREAD_STACKSIZE: 0 -----*/
@@ -109,7 +114,8 @@
 /*----- Value in opt.h for HTTPD_USE_CUSTOM_FSDATA: 0 -----*/
 #define HTTPD_USE_CUSTOM_FSDATA 1
 /*----- Value in opt.h for LWIP_STATS: 1 -----*/
-#define LWIP_STATS 0
+#define LWIP_STATS 1
+#define MIB2_STATS 1                     
 /*----- Value in opt.h for CHECKSUM_GEN_IP: 1 -----*/
 #define CHECKSUM_GEN_IP 0
 /*----- Value in opt.h for CHECKSUM_GEN_UDP: 1 -----*/

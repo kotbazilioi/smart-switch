@@ -1,4 +1,15 @@
+/**
+ * @file
+ * IANA assigned numbers (RFC 1700 and successors)
+ *
+ * @defgroup iana IANA assigned numbers
+ * @ingroup infrastructure
+ */
+
 /*
+ * Copyright (c) 2017 Dirk Ziegelmeier.
+ * All rights reserved.
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
@@ -27,55 +38,60 @@
  *
  */
 
-#include "lwip/netif.h"
-#include "private_mib.h"
-#include "lwip/apps/snmp.h"
-#include "lwip/apps/snmp_mib2.h"
-#include "lwip/apps/snmpv3.h"
-#include "lwip/apps/snmp_snmpv2_framework.h"
-#include "lwip/apps/snmp_snmpv2_usm.h"
-//#include "snmpv3_dummy.h"
-//#include "lwip/src/snmp/snmp_private_mib/private_mib.h"
-#include "snmp_init.h"
+#ifndef LWIP_HDR_PROT_IANA_H
+#define LWIP_HDR_PROT_IANA_H
 
-#if LWIP_SNMP
-static const struct snmp_mib *mibs[] = {
-  &mib2,
-  &mib_private
-#if LWIP_SNMP_V3
-  , &snmpframeworkmib
-  , &snmpusmmib
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+/**
+ * @ingroup iana
+ * Hardware types
+ */
+enum lwip_iana_hwtype {
+  /** Ethernet */
+  LWIP_IANA_HWTYPE_ETHERNET = 1
 };
-#endif /* LWIP_SNMP */
 
-void
-snmp_init(void)
-{
-#if LWIP_SNMP
-  s32_t req_nr;
-  lwip_privmib_init();
-#if SNMP_LWIP_MIB2
-#if SNMP_USE_NETCONN
-  snmp_threadsync_init(&snmp_mib2_lwip_locks, snmp_mib2_lwip_synchronizer);
-#endif /* SNMP_USE_NETCONN */
-  snmp_mib2_set_syscontact_readonly((const u8_t*)"root", NULL);
-  snmp_mib2_set_syslocation_readonly((const u8_t*)"lwIP development PC", NULL);
-  snmp_mib2_set_sysdescr((const u8_t*)"lwIP example", NULL);
-#endif /* SNMP_LWIP_MIB2 */
+/**
+ * @ingroup iana
+ * Port numbers
+ * https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
+ */
+enum lwip_iana_port_number {
+  /** SMTP */
+  LWIP_IANA_PORT_SMTP        = 25,
+  /** DHCP server */
+  LWIP_IANA_PORT_DHCP_SERVER = 67,
+  /** DHCP client */
+  LWIP_IANA_PORT_DHCP_CLIENT = 68,
+  /** TFTP */
+  LWIP_IANA_PORT_TFTP        = 69,
+  /** HTTP */
+  LWIP_IANA_PORT_HTTP        = 80,
+  /** SNTP */
+  LWIP_IANA_PORT_SNTP        = 123,
+  /** NETBIOS */
+  LWIP_IANA_PORT_NETBIOS     = 137,
+  /** SNMP */
+  LWIP_IANA_PORT_SNMP        = 161,
+  /** SNMP traps */
+  LWIP_IANA_PORT_SNMP_TRAP   = 162,
+  /** HTTPS */
+  LWIP_IANA_PORT_HTTPS       = 443,
+  /** SMTPS */
+  LWIP_IANA_PORT_SMTPS       = 465,
+  /** MQTT */
+  LWIP_IANA_PORT_MQTT        = 1883,
+  /** MDNS */
+  LWIP_IANA_PORT_MDNS        = 5353,
+  /** Secure MQTT */
+  LWIP_IANA_PORT_SECURE_MQTT = 8883
+};
 
-#if LWIP_SNMP_V3
-  snmpv3_dummy_init();
+#ifdef __cplusplus
+}
 #endif
 
-  snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
-  snmp_init();
-
-  snmp_trap_dst_ip_set(0, &netif_default->gw);
-  snmp_trap_dst_enable(0, 1);
-
-  //snmp_send_inform_generic(SNMP_GENTRAP_COLDSTART, NULL, &req_nr);
-  snmp_send_trap_generic(SNMP_GENTRAP_COLDSTART);
-
-#endif /* LWIP_SNMP */
-}
+#endif /* LWIP_HDR_PROT_IANA_H */

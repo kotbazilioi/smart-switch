@@ -83,7 +83,8 @@ static const char http_html_style[] =
    "display: inline-block;"
   "</style>"
     "</head>";
-//  RESET,
+//  NO_RUN,
+//  RESETL,
 //  UPDATE_FW,
 //  SWICH_ON_WEB,
 //  SWICH_OFF_WEB,
@@ -96,94 +97,119 @@ static const char http_html_style[] =
 //  SWICH_TOLG_RASP,
 //  SWICH_ON_WATCH,
 //  SWICH_OFF_WATCH,
-//  SWICH_TOLG_WATCH  
-//  POWER_ON
-//  LOAD_DEF_DATA
+//  SWICH_TOLG_WATCH,  
+//  SWICH_ON_HTTP,
+//  SWICH_OFF_HTTP,
+//  SWICH_TOLG_HTTP,
+//  POWER_ON,
+//  LOAD_DEF_DATA, 
+//  SAVE_DATA_SETT  
 
 void swich_mess_event (uint8_t event,char* mess)
 {
  switch(event) {
-          case 0:
+          case NO_RUN:
+            {
+              
+            }
+          break;
+          
+          case RESETL:
             {
               sprintf(mess,"Сброс утройства произведен\n\r");
             }
           break;
-          case 1:
+          case UPDATE_FW:
             {
               sprintf(mess,"Произведен перевод в режим загрузки\n\r");
             }
           break;
-          case 2:
+          case SWICH_ON_WEB:
             {
               sprintf(mess,"Включена нагрузка с веб интерфейса\n\r");
             }
           break;
-          case 3:
+          case SWICH_OFF_WEB:
             {
               sprintf(mess,"Выключена нагрузка с веб интерфейса\n\r");
             }
           break;
-          case 4:
+          case SWICH_TOLG_WEB:
             {
               sprintf(mess,"Произведен импульсный сброс нагрузка с веб интерфейса\n\r");
             }
           break;
-           case 5:
+           case SWICH_ON_SNMP:
             {
               sprintf(mess,"Включена нагрузка с SNMP интерфейса\n\r");
             }
           break;
-          case 6:
+          case SWICH_OFF_SNMP:
             {
               sprintf(mess,"Выключена нагрузка с SNMP интерфейса\n\r");
             }
           break;
-          case 7:
+          case SWICH_TOLG_SNMP:
             {
               sprintf(mess,"Произведен импульсный сброс нагрузка с SNMP интерфейса\n\r");
             }
           break;
-          case 8:
+          case SWICH_ON_RASP:
             {
               sprintf(mess,"Включена нагрузка по расписанию\n\r");
             }
           break;
-          case 9:
+          case SWICH_OFF_RASP:
             {
               sprintf(mess,"Выключена нагрузка по расписанию\n\r");
             }
           break;
-          case 10:
+          case SWICH_TOLG_RASP:
             {
               sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию\n\r");
             }
           break;
-          case 11:
+          case SWICH_ON_WATCH:
             {
               sprintf(mess,"Включена нагрузка по сторожу\n\r");
             }
           break;
-          case 12:
+          case SWICH_OFF_WATCH:
             {
               sprintf(mess,"Выключена нагрузка по сторожу\n\r");
             }
           break;
-          case 13:
+          case SWICH_TOLG_WATCH:
             {
               sprintf(mess,"Произведен импульсный сброс нагрузки по сторожу\n\r");
             }
           break;
-          case 14:
+          case SWICH_ON_HTTP:
+            {
+              sprintf(mess,"Включена нагрузка по HTTP API\n\r");
+            }
+          break;
+          case SWICH_OFF_HTTP:
+            {
+              sprintf(mess,"Выключена нагрузка по HTTP API\n\r");
+            }
+          break;
+          case SWICH_TOLG_HTTP:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузки по HTTP API\n\r");
+            }
+          break;         
+          case POWER_ON:
             {
               sprintf(mess,"Включением питание утройства\n\r");
             }
           break;
-          case 15:
+          case LOAD_DEF_DATA:
             {
               sprintf(mess,"Загружены настройки по умолчанию\n\r");
             }
           break;
-          case 16:
+          case SAVE_DATA_SETT:
             {
               sprintf(mess,"Сохранение настроек устройства\n\r");
             }
@@ -247,7 +273,7 @@ uint16_t reset_open_block (char* str1,char* name)
 { 
 
 uint16_t len;
-sprintf(str1,"<%s/>",name);
+sprintf(str1,"</%s>",name);
 return len;
 }
 uint16_t set_space (char* str1,uint8_t n)
@@ -364,35 +390,35 @@ return 0;
 }
 
 
- uint16_t set_submit (char* str1,char* name,char* value,char* text)
+ uint16_t set_submit (char* str1,char* name,char* value,char* text,char* id)
 { 
 
 //<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
 
-sprintf(str1,"<button type=\"submit\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>\n\r",name,value,text);
-
+//sprintf(str1,"<button type=\"submit\" form=\"%s\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>",id,name,value,text);
+sprintf(str1,"<button type=\"submit\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>",name,value,text);
 return 0;
 }
 
 //<p style="text-align:center"><input name="Start_boot" required="required" type="checkbox" value="boot" />&ensp; <input type="submit" value="Start frimware update? Start bootloader " /></p>
 //<label><input type="checkbox" name="name"> messeg</label>
- uint16_t set_checkbox (char* str1,char* name,char* value)
+ uint16_t set_checkbox (char* str1,char* name,char* value,char* id)
 { 
 
 //<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
 
-sprintf(str1,"<label><input type=\"checkbox\" name=\"%s\"> %s</label>",name,value);
+sprintf(str1,"<label><input type=\"checkbox\" name=\"%s\" form=\"%s\" value=\"%s\"> </label>",name,id,value);
 
 return 0;
 }
 
- uint16_t set_checkbox_bot (char* str1,char* name,char* value,char* mess)
+ uint16_t set_checkbox_bot (char* str1,char* name,char* value,char* mess,char* id)
 { 
 
 //<p style="text-align:center"><input name="Start_boot" required="required" type="checkbox" value="boot" />&ensp; <input type="submit" value="Start frimware update? Start bootloader " /></p>
 
-sprintf(str1,"<p style=\"text-align:center\"><input name=\"%s\" required=\"required\" type=\"checkbox\" value=\"%s\" />&ensp; <input type=\"submit\" value=\"%s\" /></p>",name,value,mess);
-
+//sprintf(str1,"<p style=\"text-align:center\"><input name=\"%s\" required=\"required\" form=\"%s\"  type=\"checkbox\" value=\"%s\" />&ensp; <input type=\"submit\" value=\"%s\" form=\"%s\" /></p>",name,id,value,mess,id);
+sprintf(str1,"<p style=\"text-align:center\"><input name=\"%s\" required=\"required\"    type=\"checkbox\" value=\"%s\" />&ensp; <input type=\"submit\" value=\"%s\"  /></p>",name,value,mess);
 return 0;
 }
 
@@ -503,6 +529,8 @@ uint32_t costr_page2(char* str1)
   set_open_block(str2,"ul");
   strcat(str1,str2);
   
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
   
   set_br(str2,3);
   strcat(str1,str2);
@@ -510,6 +538,10 @@ uint32_t costr_page2(char* str1)
 
   set_open_block(str2,"b>ОБЩАЯ ИНФОРМАЦИЯ</b");
   strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
   
   set_br(str2,2);
   strcat(str1,str2);
@@ -646,7 +678,9 @@ uint32_t costr_page4(char* str1)
  // len=sizeof(str1)+1;
   
   memset (str1,0, 5000);
-    set_open_block(str2,"h2");
+  
+  
+  set_open_block(str2,"h2");
   strcat(str1,str2);
   
   set_br(str2,1);
@@ -707,8 +741,12 @@ uint32_t costr_page4(char* str1)
   
   
   
-  set_open_block(str2,"form action='/table1' method='POST'");
-  strcat(str1,str2);
+  
+  
+  
+  
+  
+ 
   
   
   set_br(str2,1);
@@ -724,16 +762,28 @@ uint32_t costr_page4(char* str1)
   
   reset_open_block(str2,"h2");
   strcat(str1,str2);
+
+//    set_br(str2,1);
+//  strcat(str1,str2);
+  
+    set_open_block(str2,"h3");
+  strcat(str1,str2);
   
   
+   set_open_block(str2,"form id=\"osf\" action='/' method='POST'");
+  strcat(str1,str2);
 //  set_br(str2,1);
 //  strcat(str1,str2);
   
   // Table   
-   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
-   strcat(str1,str2);   
+    
+ 
+  
+  
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 78%; border: 1px solid #ffffff;margin: 0 8% 0 12%;\"><tbody");
+   strcat(str1,str2);      
    
-   set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"0\"checked");
+   set_open_block(str3,"input name=\"output_set\"  type=\"radio\" value=\"0\"checked");
    set_table_string(str2,"Включить ключ",str3);  
    strcat(str1,str2);
 
@@ -741,22 +791,24 @@ uint32_t costr_page4(char* str1)
    set_table_string(str2,"Выключить ключ",str3);  
    strcat(str1,str2);
    
-      set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"2\"");
+   set_open_block(str3,"input name=\"output_set\"  type=\"radio\" value=\"2\"");
    set_table_string(str2,"Выдать импульс",str3);  
    strcat(str1,str2);   
   
  
    
-   set_submit(str3,"out_swich","1","Переключить");
+   set_submit(str3,"out_swich","1","Переключить","osf");
    set_table_string(str2,"Переключение выхода",str3);  
    strcat(str1,str2);
    
-
+    reset_open_block(str2,"h3");
+   strcat(str1,str2);
    
 //   set_submit(str3,"load_def","1","Загрузить");
 //   set_table_string(str2,"Загрузить исходные настройки",str3);  
 //   strcat(str1,str2);
-   
+
+  
 
   reset_open_block(str2,"tbody"); 
   strcat(str1,str2); 
@@ -764,29 +816,37 @@ uint32_t costr_page4(char* str1)
   reset_open_block(str2,"table");
   strcat(str1,str2);
   
-  
   reset_open_block(str2,"form");
   strcat(str1,str2);
+
   
   
-  set_open_block(str2,"form action='/reset' method='POST'");
+  
+  
+  set_open_block(str2,"form id=\"rsf\" action='/' method='POST'");
   strcat(str1,str2);
   
   set_open_block(str2,"ul");
   strcat(str1,str2);
   
    set_br(str2,2);
-  strcat(str1,str2); 
+  strcat(str1,str2);
+  
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
   
   set_open_block(str2,"b>Выполнить перезагрузку</b");
   strcat(str1,str2);
   
-   set_space(str2,2);
-  strcat(str1,str2); 
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
   
+//   set_space(str2,2);
+//  strcat(str1,str2); 
   
+
   
-  set_checkbox_bot(str2,"check_res","1","RESET");
+  set_checkbox_bot(str2,"check_res","1","RESET","rsf");
   strcat(str1,str2); 
 ////    set_checkbox(str2,"check_res","");
 ////  strcat(str1,str2);  
@@ -801,8 +861,12 @@ uint32_t costr_page4(char* str1)
   reset_open_block(str2,"ul");
   strcat(str1,str2);
   
-  reset_open_block(str2,"form");
+    reset_open_block(str2,"form");
   strcat(str1,str2);
+  
+  
+  
+  
   
   len=strlen(str1);
   return len;
@@ -878,12 +942,15 @@ uint32_t costr_page3(char* str1)
   
   
   
-  set_open_block(str2,"form action='/' method='POST'");
+  set_open_block(str2,"form id=\"sets\" action='/' method='POST'");
  strcat(str1,str2);
   
 //  set_open_block(str2,"ul");
 //  strcat(str1,str2);
-
+ set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
   set_br(str2,2);
   strcat(str1,str2);
 
@@ -891,6 +958,9 @@ uint32_t costr_page3(char* str1)
   strcat(str1,str2);
   
   set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
   strcat(str1,str2);
   
   set_open_block(str2,"h3");
@@ -927,9 +997,9 @@ uint32_t costr_page3(char* str1)
    reset_open_block(str2,"table");
    strcat(str1,str2);
    
-
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+//
+//  reset_open_block(str2,"form");
+//  strcat(str1,str2);
   
   
   
@@ -942,8 +1012,8 @@ uint32_t costr_page3(char* str1)
   
 
   
-  reset_open_block(str2,"form");
- strcat(str1,str2);
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
 
   
   len=strlen(str1);
@@ -963,8 +1033,8 @@ uint32_t costr_page5(char* str1)
   
   memset (str1,0, 4000);
 
-  set_open_block(str2,"form action='/' method='POST'");
-  strcat(str1,str2);
+//  set_open_block(str2,"form action='/' method='POST'");
+//  strcat(str1,str2);
   
   
   set_br(str2,1);
@@ -1045,8 +1115,8 @@ uint32_t costr_page5(char* str1)
   reset_open_block(str2,"table");
   strcat(str1,str2);
   
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+//  reset_open_block(str2,"form");
+//  strcat(str1,str2);
    
   len=strlen(str1);
   return len;
@@ -1063,8 +1133,8 @@ uint32_t costr_page6(char* str1)
   
   memset (str1,0, 4000);
 
-  set_open_block(str2,"form action='/' method='POST'");
-  strcat(str1,str2);
+//  set_open_block(str2,"form action='/' method='POST'");
+//  strcat(str1,str2);
   
   
   set_br(str2,1);
@@ -1107,22 +1177,22 @@ uint32_t costr_page6(char* str1)
   reset_open_block(str2,"table");
   strcat(str1,str2);
   
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+//  reset_open_block(str2,"form");
+//  strcat(str1,str2);
   
   
   
-  
-  
-  set_open_block(str2,"form action='/' method='POST'");
-  strcat(str1,str2);
+//  
+//  
+//  set_open_block(str2,"form action='/' method='POST'");
+//  strcat(str1,str2);
   
   
   set_br(str2,1);
   strcat(str1,str2);
   
   
-    reset_open_block(str2,"h2");
+ set_open_block(str2,"h2");
   strcat(str1,str2);
  
   set_open_block(str2,"b>SNMP TRAP</b");
@@ -1163,12 +1233,12 @@ uint32_t costr_page6(char* str1)
   reset_open_block(str2,"table");
   strcat(str1,str2);
   
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+//  reset_open_block(str2,"form");
+//  strcat(str1,str2);
   
   
-  set_open_block(str2,"form action='/' method='POST'");
-  strcat(str1,str2);
+//  set_open_block(str2,"form action='/' method='POST'");
+//  strcat(str1,str2);
   
   
   set_br(str2,1);
@@ -1242,9 +1312,9 @@ uint32_t costr_page6(char* str1)
   
   reset_open_block(str2,"table");
   strcat(str1,str2);
-  
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+//  
+//  reset_open_block(str2,"form");
+//  strcat(str1,str2);
   
   
   
@@ -1264,8 +1334,8 @@ uint32_t costr_page7(char* str1)
   
   memset (str1,0, 4000);
 
-  set_open_block(str2,"form action='/' method='POST'");
-  strcat(str1,str2);
+//  set_open_block(str2,"form id="" method='POST'");
+//  strcat(str1,str2);
   
   
   set_br(str2,1);
@@ -1369,18 +1439,42 @@ uint32_t costr_page7(char* str1)
    strcat(str1,str2);
    }
    
-   set_submit(str3,"save_all","1","Сохранить");
+   set_submit(str3,"save_all","1","Сохранить","sets");
    set_table_string(str2,"Сохранить настройки ",str3);  
    strcat(str1,str2);
    
-    set_submit(str3,"load_def","1","Загрузить");
+   
+    reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+  
+  
+  
+  
+    set_open_block(str2,"form id=\"load_dat\" action='/' method='POST'");
+  strcat(str1,str2);
+   
+    set_submit(str3,"load_def","1","Загрузить","load_dat");
    set_table_string(str2,"Загрузить исходные настройки ",str3);  
    strcat(str1,str2);
    
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
    
-   set_submit(str3,"load_boot","1","Загрузка ПО");
+    
+  
+  
+  
+  set_open_block(str2,"form id=\"boots\" action='/' method='POST'");
+  strcat(str1,str2);
+  
+   set_submit(str3,"load_boot","1","Загрузка ПО","boots");
    set_table_string(str2,"Перевести устройство в режим обновления ПО",str3);  
    strcat(str1,str2);
+   
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
    
 //   set_submit(str3,"load_def","1","Загрузить");
 //   set_table_string(str2,"Загрузить исходные настройки",str3);  
@@ -1394,8 +1488,7 @@ uint32_t costr_page7(char* str1)
   strcat(str1,str2);
   
   
-  reset_open_block(str2,"form");
-  strcat(str1,str2);
+ 
 //  
 //  set_open_block(str2,"dev");
 //  strcat(str1,str2);

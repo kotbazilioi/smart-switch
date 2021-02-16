@@ -286,7 +286,7 @@
                 <option>
                     <name>CCAllowList</name>
                     <version>1</version>
-                    <state>11111110</state>
+                    <state>01111110</state>
                 </option>
                 <option>
                     <name>CCDebugInfo</name>
@@ -375,6 +375,7 @@
                     <state>$PROJ_DIR$\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang</state>
                     <state>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_v3</state>
                     <state>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\snmp</state>
+                    <state>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_private_mib</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1101,7 +1102,76 @@
                 <group>
                     <name>SNMP</name>
                     <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_private_mib\lwip_prvmib.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_asn1.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_core.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_init.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_icmp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_interfaces.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_ip.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_snmp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_system.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_tcp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_mib2_udp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_msg.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_netconn.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_pbuf_stream.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_raw.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_scalar.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_snmpv2_framework.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_snmpv2_usm.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_table.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_threadsync.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmp_traps.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmpv3.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\snmp\snmpv3_mbedtls.c</name>
                     </file>
                 </group>
                 <file>
@@ -1136,6 +1206,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\stm32f1xx_it.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\udpecho\udpecho.c</name>
                 </file>
             </group>
             <group>

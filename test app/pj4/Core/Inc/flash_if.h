@@ -112,6 +112,7 @@
 
 
 enum logs_events_t {
+  NO_RUN,
   RESETL,
   UPDATE_FW,
   SWICH_ON_WEB,
@@ -126,6 +127,9 @@ enum logs_events_t {
   SWICH_ON_WATCH,
   SWICH_OFF_WATCH,
   SWICH_TOLG_WATCH,  
+  SWICH_ON_HTTP,
+  SWICH_OFF_HTTP,
+  SWICH_TOLG_HTTP,
   POWER_ON,
   LOAD_DEF_DATA, 
   SAVE_DATA_SETT  
@@ -374,6 +378,7 @@ extern log_reple_t real_time;
 extern uint8_t flag_global_save_data;
 extern uint8_t flag_global_save_log;
 extern uint8_t flag_global_load_def;
+extern uint8_t flag_global_swich_out;
 #endif  /* __FLASH_IF_H */
 typedef  void (*pFunction)(void);
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
