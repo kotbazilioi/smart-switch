@@ -42,7 +42,7 @@
 #define LWIP_HDR_APPS_HTTPD_OPTS_H
 
 #include "lwip/opt.h"
-
+#include "flash_if.h"
 /**
  * @defgroup httpd_opts Options
  * @ingroup httpd
@@ -128,9 +128,9 @@
 #endif
 
 /** The server port for HTTPD to use */
-#if !defined HTTPD_SERVER_PORT || defined __DOXYGEN__
-#define HTTPD_SERVER_PORT                   80
-#endif
+//#if !defined HTTPD_SERVER_PORT || defined __DOXYGEN__
+//#define HTTPD_SERVER_PORT                   80
+//#endif
 
 /** Maximum retries before the connection is aborted/closed.
  * - number of times pcb->poll is called -> default is 4*500ms = 2s;
@@ -212,14 +212,14 @@
  * Set to 0 to disable checking default filenames on non-root directories.
  */
 #if !defined LWIP_HTTPD_MAX_REQUEST_URI_LEN || defined __DOXYGEN__
-#define LWIP_HTTPD_MAX_REQUEST_URI_LEN      63
+#define LWIP_HTTPD_MAX_REQUEST_URI_LEN      256
 #endif
 
 /** Maximum length of the filename to send as response to a POST request,
  * filled in by the application when a POST is finished.
  */
 #if !defined LWIP_HTTPD_POST_MAX_RESPONSE_URI_LEN || defined __DOXYGEN__
-#define LWIP_HTTPD_POST_MAX_RESPONSE_URI_LEN 63
+#define LWIP_HTTPD_POST_MAX_RESPONSE_URI_LEN 256
 #endif
 
 /** Set this to 0 to not send the SSI tag (default is on, so the tag will

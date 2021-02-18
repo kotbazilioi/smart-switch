@@ -48,6 +48,7 @@ uint8_t flag_global_swich_out;
 log_reple_t start_time;
 log_reple_t real_time;
 file_data_t data_file;
+uint16_t HTTPD_SERVER_PORT;
 //FW_data_t *FW_data = (FW_data_t*)(A_CRC_APP);
 FW_data_t FW_data;
 
@@ -473,6 +474,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_IP_DNS[2]=0;
      FW_data.V_IP_DNS[3]=18;
      FW_data.V_WEB_PORT = 80;
+     HTTPD_SERVER_PORT =FW_data.V_WEB_PORT;
      FW_data.V_PORT_SNMP = 162;
      FW_data.V_HTTP_IP = 81;
      memset((uint8_t*)&FW_data.V_ON_MESS,0,32);

@@ -8,7 +8,9 @@ uint8_t flag_logon=0;
 //const char Name_dev[]="DKST 59";
 const char contact_data[]="http://www.netping.ru/";
 const char model_dev[]="UniPing port";
-
+char str2[512]={0};
+char str3[128]={0};
+char str4[128]={0};
 unsigned char key_http[30]="asfasdvas";
 int key_http_len = 10;
 char HTTP401[]={0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x34,0x30,0x31,0x20,0x55,0x6e,0x61,   //HTTP/1.1 401 Una
@@ -459,12 +461,14 @@ uint32_t costr_page2(char* str1)
 {
   uint32_t len;
   
-  char str2[1000]={0};
-    char str3[128]={0};
- // len=sizeof(str1)+1;
-  
-  memset (str1,0, 5000);
 
+ // len=sizeof(str1)+1;
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+  
+  
   strcat(str1,http_html_start_constr);
   
 
@@ -561,6 +565,23 @@ uint32_t costr_page2(char* str1)
    
    set_table_string(str2,"Контактные данные",FW_data.V_CALL_DATA);  
    strcat(str1,str2);
+   
+   
+     len=strlen(str1);
+  return len;
+};
+   
+   
+uint32_t costr_page2_1(char* str1)
+{
+  uint32_t len;
+  
+
+ // len=sizeof(str1)+1;
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
    
    memset(str3,0,128);
    sprintf(str3,"SN:%d %d %d",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
@@ -669,15 +690,18 @@ uint32_t costr_page2(char* str1)
 
 
 
-
+    //char str3[128]={0};
 uint32_t costr_page4(char* str1)
 {
   uint32_t len;
-    char str3[128]={0};
-  char str2[1000]={0};
+
+  //char str2[1000]={0};
  // len=sizeof(str1)+1;
   
-  memset (str1,0, 5000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
   
   
   set_open_block(str2,"h2");
@@ -877,11 +901,10 @@ uint32_t costr_page3(char* str1)
 {
   uint32_t len;
   
-  char str2[1000]={0};
-    char str3[128]={0};
- // len=sizeof(str1)+1;
-  
-  memset (str1,0, 4000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
 
   strcat(str1,http_html_start_constr);
   
@@ -1026,12 +1049,10 @@ uint32_t costr_page5(char* str1)
 {
   uint32_t len;
   
-  char str2[1000]={0};
-  char str3[128]={0};
-  char str4[128]={0};
- // len=sizeof(str1)+1;
-  
-  memset (str1,0, 4000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
 
 //  set_open_block(str2,"form action='/' method='POST'");
 //  strcat(str1,str2);
@@ -1126,12 +1147,15 @@ uint32_t costr_page6(char* str1)
 {
   uint32_t len;
   
-  char str2[1000]={0};
-    char str3[128]={0};
-     char str4[128]={0};
+//  char str2[1000]={0};
+//    char str3[128]={0};
+//     char str4[128]={0};
  // len=sizeof(str1)+1;
   
-  memset (str1,0, 4000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
 
 //  set_open_block(str2,"form action='/' method='POST'");
 //  strcat(str1,str2);
@@ -1226,6 +1250,27 @@ uint32_t costr_page6(char* str1)
 //   strcat(str1,str2);
 
    
+     len=strlen(str1);
+  return len;
+};
+   
+   
+   uint32_t costr_page6_1(char* str1)
+{
+  uint32_t len;
+  
+//  char str2[1000]={0};
+//    char str3[128]={0};
+//     char str4[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+  
+  
+  
  
   reset_open_block(str2,"tbody"); 
   strcat(str1,str2); 
@@ -1326,13 +1371,16 @@ uint32_t costr_page6(char* str1)
 uint32_t costr_page7(char* str1)
 {
   uint32_t len;
-  
-  char str2[1000]={0};
-  char str3[128]={0};
-  char str4[128]={0};
+//  
+//  char str2[1000]={0};
+//  char str3[128]={0};
+//  char str4[128]={0};
  // len=sizeof(str1)+1;
   
-  memset (str1,0, 4000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
 
 //  set_open_block(str2,"form id="" method='POST'");
 //  strcat(str1,str2);
@@ -1412,6 +1460,29 @@ uint32_t costr_page7(char* str1)
    strcat(str1,str2);
    
    }
+   
+     
+  len=strlen(str1);
+  return len;
+};
+
+   
+   uint32_t costr_page7_1 (char* str1)
+{
+  uint32_t len;
+//  
+//  char str2[1000]={0};
+//  char str3[128]={0};
+//  char str4[128]={0};
+ // len=sizeof(str1)+1;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+  
+  
+  
    
  if (FW_data.V_TYPE_OUT ==2)
    {
@@ -1536,11 +1607,14 @@ uint32_t costr_page8(char* str1)
 {
   uint32_t len;
   
-  char str2[128]={0};
-    char str3[128]={0};
+//  char str2[128]={0};
+//    char str3[128]={0};
  // len=sizeof(str1)+1;
   
-  memset (str1,0, 4000);
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
 
   strcat(str1,http_html_start_constr);
   
@@ -1615,12 +1689,14 @@ uint32_t costr_page9(char* str1)
   uint32_t len;
 
   
-  char str2[1000]={0};
-    char str3[128]={0};
+//  char str2[1000]={0};
+//    char str3[128]={0};
  // len=sizeof(str1)+1;
   
-  memset (str1,0, 4000);
-  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
   
 
   

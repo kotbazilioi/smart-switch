@@ -103,16 +103,6 @@ extern "C" {
 /**
  * @}
  */
-#if LWIP_SINGLE_NETIF
-#define NETIF_FOREACH(netif) if (((netif) = netif_default) != NULL)
-#else /* LWIP_SINGLE_NETIF */
-/** The list of network interfaces. */
-extern struct netif *netif_list;
-#define NETIF_FOREACH(netif) for ((netif) = netif_list; (netif) != NULL; (netif) = (netif)->next)
-#endif /* LWIP_SINGLE_NETIF */
-/** The default network interface. */
-extern struct netif *netif_default;
-
 
 enum lwip_internal_netif_client_data_index
 {

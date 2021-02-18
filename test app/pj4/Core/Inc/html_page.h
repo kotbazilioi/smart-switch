@@ -1,5 +1,7 @@
 #include <stdint.h>
-
+uint32_t costr_page2_1(char* str1);
+uint32_t costr_page6_1 (char* str1);
+uint32_t costr_page7_1 (char* str1);
 uint8_t pass_compar(char* in_buf);
 uint32_t costr_pass(char* str1);
 uint32_t costr_page1(char* str1);

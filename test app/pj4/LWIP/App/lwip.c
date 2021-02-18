@@ -27,6 +27,7 @@
 #include "ethernetif.h"
 #include "flash_if.h"
 #include "dns.h"
+#include "snmp_ex.h"
     
 /* USER CODE BEGIN 0 */
 

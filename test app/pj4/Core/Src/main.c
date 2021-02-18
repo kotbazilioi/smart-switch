@@ -24,7 +24,7 @@
 #include "lwip/netif.h"
 #include "lwip/tcpip.h"
 #include "flash_if.h"
-#include "heap_3.h"
+//#include "heap_5.h"
 #include "httpserver-netconn.h"
 #include "lwip.h"
 #include "dns.h"
@@ -37,6 +37,7 @@
 #define logoff_time 200*10
 /* USER CODE END Includes */
 
+#pragma segment="HEAP"
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
@@ -73,6 +74,7 @@ osThreadId logs_task_nameHandle;
 uint8_t flag_set_ip=0;
 uint16_t ct_dns_time=0;
 uint8_t status_dns=0;
+HeapRegion_t pxHeapRegions_f107;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -101,9 +103,17 @@ void logs_task(void const * argument);
 int main(void)
 {
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET;
+  
+//void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions )
 
+  pxHeapRegions_f107.pucStartAddress=(uint8_t*)(__segment_begin( "HEAP"));
+  pxHeapRegions_f107.xSizeInBytes= (size_t)((unsigned char *)__segment_end( "HEAP") - (unsigned char *)__segment_begin( "HEAP")); 
+ 
+//  pxHeapRegions_f107->pucStartAddress = (uint8_t*)(__segment_begin( "HEAP"));
+//  pxHeapRegions_f107->xSizeInBytes = (size_t)((unsigned char *)__segment_end( "HEAP") - (unsigned char *)__segment_begin( "HEAP")); 
+  vPortDefineHeapRegions(&pxHeapRegions_f107);
   /* USER CODE BEGIN 1 */
- init_system_heap();
+// init_system_heap();
   /* USER CODE END 1 */
  FLASH_If_Init();
   /* USER CODE END 2 */
@@ -376,7 +386,7 @@ ip4_addr_t ipdns1;
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
-   //   udpecho_init();
+    //  udpecho_init();
   http_server_netconn_init();
   /* Infinite loop */
   for(;;)
@@ -417,7 +427,7 @@ ip4_addr_t ipdns1;
       
      
 //        {}
-       snmp_init();
+       snmp_ex_init();
       }
 //    ipdns1=*(dns_getserver (0));
 //   FW_data.V_IP_DNS[0]=(ipdns1.addr&0x000000ff);

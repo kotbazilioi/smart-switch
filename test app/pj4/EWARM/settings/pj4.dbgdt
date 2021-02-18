@@ -1048,7 +1048,7 @@
                     <item>dns_query</item>
                     <item>qry</item>
                     <item>ct_dns_time</item>
-                    <item></item>
+                    <item />
                 </expressions>
                 <col-names>
                     <item>Expression</item>

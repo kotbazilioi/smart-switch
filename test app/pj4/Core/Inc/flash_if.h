@@ -379,6 +379,7 @@ extern uint8_t flag_global_save_data;
 extern uint8_t flag_global_save_log;
 extern uint8_t flag_global_load_def;
 extern uint8_t flag_global_swich_out;
+extern uint16_t HTTPD_SERVER_PORT;
 #endif  /* __FLASH_IF_H */
 typedef  void (*pFunction)(void);
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

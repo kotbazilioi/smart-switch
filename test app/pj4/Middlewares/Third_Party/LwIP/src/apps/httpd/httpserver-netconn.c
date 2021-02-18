@@ -887,6 +887,10 @@ post_data_t elem_post_data;
                len_buf_list=costr_page2((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
                  vTaskDelay(10);
+                  len_buf_list=costr_page2_1((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+                 vTaskDelay(10);
+                 
                len_buf_list=costr_page4((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
             }
@@ -907,8 +911,16 @@ post_data_t elem_post_data;
                len_buf_list=costr_page6((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
                 vTaskDelay(5);
+               len_buf_list=costr_page6_1((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+                vTaskDelay(5);
                
                len_buf_list=costr_page7((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+               
+               
+                   vTaskDelay(5);
+               len_buf_list=costr_page7_1((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
 //               len_buf_list=costr_page4((char*)buf_list);
 //               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
@@ -924,7 +936,7 @@ post_data_t elem_post_data;
                     {
                       if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x7a)
                           {
-                            memset(buf_list,0,4000);
+                            memset(buf_list,0,sizeof(buf_list));
                             decode_reple(buf_list,&FW_data.V_logs_struct.log_reple[ct_mess]);
                             netconn_write(conn, (char*)(buf_list), (size_t)strlen(buf_list), NETCONN_NOCOPY);       
                             vTaskDelay(10);
@@ -971,8 +983,9 @@ static void http_server_serve(struct netconn *conn)
   err_t recv_err;
   char* buf;
    u16_t buflen;
+   char* buf_page=(char*)pvPortMalloc(3000);
 //f=(char*)malloc(3000);
- char buf_page[5000];
+// char buf_page[3000];
  
   uint16_t len_buf_list;
   uint16_t ct_fpass=0;
@@ -1126,7 +1139,7 @@ static void http_server_serve(struct netconn *conn)
      }
     }
   }
-  // free(buf);
+   vPortFree(buf_page);
   /* Close the connection (server closes in HTTP) */
   netconn_close(conn);
   
@@ -1184,7 +1197,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 2*1024, WEBSERVER_THREAD_PRIO);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 1*1024, WEBSERVER_THREAD_PRIO);
 }
 
 /**
