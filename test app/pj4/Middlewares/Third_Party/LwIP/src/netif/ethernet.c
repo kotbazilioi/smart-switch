@@ -90,7 +90,7 @@ ethernet_input(struct pbuf *p, struct netif *netif)
     /* a packet with only an ethernet header (or less) is not valid for us */
     ETHARP_STATS_INC(etharp.proterr);
     ETHARP_STATS_INC(etharp.drop);
-    MIB2_STATS_NETIF_INC(netif, ifinerrors);
+ //   MIB2_STATS_NETIF_INC(netif, ifinerrors);
     goto free_and_return;
   }
 
@@ -233,7 +233,7 @@ ethernet_input(struct pbuf *p, struct netif *netif)
 #endif
       ETHARP_STATS_INC(etharp.proterr);
       ETHARP_STATS_INC(etharp.drop);
-      MIB2_STATS_NETIF_INC(netif, ifinunknownprotos);
+      //MIB2_STATS_NETIF_INC(netif, ifinunknownprotos);
       goto free_and_return;
   }
 

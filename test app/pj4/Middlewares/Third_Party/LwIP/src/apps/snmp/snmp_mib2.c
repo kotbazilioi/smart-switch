@@ -78,39 +78,39 @@ struct snmp_threadsync_instance snmp_mib2_lwip_locks;
 /* lwIP has no EGP, thus may not implement it. (egp .1.3.6.1.2.1.8) */
 
 /* --- mib-2 .1.3.6.1.2.1 ----------------------------------------------------- */
-extern const struct snmp_scalar_array_node snmp_mib2_snmp_root;
-extern const struct snmp_tree_node snmp_mib2_udp_root;
-extern const struct snmp_tree_node snmp_mib2_tcp_root;
-extern const struct snmp_scalar_array_node snmp_mib2_icmp_root;
-extern const struct snmp_tree_node snmp_mib2_interface_root;
+//extern const struct snmp_scalar_array_node snmp_mib2_snmp_root;
+//extern const struct snmp_tree_node snmp_mib2_udp_root;
+//extern const struct snmp_tree_node snmp_mib2_tcp_root;
+//extern const struct snmp_scalar_array_node snmp_mib2_icmp_root;
+//extern const struct snmp_tree_node snmp_mib2_interface_root;
 extern const struct snmp_scalar_array_node snmp_mib2_system_node;
-extern const struct snmp_tree_node snmp_mib2_at_root;
-extern const struct snmp_tree_node snmp_mib2_ip_root;
+//extern const struct snmp_tree_node snmp_mib2_at_root;
+//extern const struct snmp_tree_node snmp_mib2_ip_root;
 
 static const struct snmp_node* const mib2_nodes[] = {
   &snmp_mib2_system_node.node.node,
-  &snmp_mib2_interface_root.node,
-#if LWIP_ARP && LWIP_IPV4
-  &snmp_mib2_at_root.node,
-#endif /* LWIP_ARP && LWIP_IPV4 */
-#if LWIP_IPV4
-  &snmp_mib2_ip_root.node,
-#endif /* LWIP_IPV4 */
-#if LWIP_ICMP
-  &snmp_mib2_icmp_root.node.node,
-#endif /* LWIP_ICMP */
-#if LWIP_TCP
-  &snmp_mib2_tcp_root.node,
-#endif /* LWIP_TCP */
-#if LWIP_UDP
-  &snmp_mib2_udp_root.node,
-#endif /* LWIP_UDP */
-  &snmp_mib2_snmp_root.node.node
+//  &snmp_mib2_interface_root.node,
+//#if LWIP_ARP && LWIP_IPV4
+//  &snmp_mib2_at_root.node,
+//#endif /* LWIP_ARP && LWIP_IPV4 */
+//#if LWIP_IPV4
+//  &snmp_mib2_ip_root.node,
+//#endif /* LWIP_IPV4 */
+//#if LWIP_ICMP
+//  &snmp_mib2_icmp_root.node.node,
+//#endif /* LWIP_ICMP */
+//#if LWIP_TCP
+//  &snmp_mib2_tcp_root.node,
+//#endif /* LWIP_TCP */
+//#if LWIP_UDP
+//  &snmp_mib2_udp_root.node,
+//#endif /* LWIP_UDP */
+//  &snmp_mib2_snmp_root.node.node
 };
 
 static const struct snmp_tree_node mib2_root = SNMP_CREATE_TREE_NODE(1, mib2_nodes);
 
-static const u32_t  mib2_base_oid_arr[] = { 1,3,6,1,2,1 };
-const struct snmp_mib mib2 = SNMP_MIB_CREATE(mib2_base_oid_arr, &mib2_root.node);
+static const u32_t  mib2_base_oid_arr[] = { 1,3,6,1,4,1,2021 };
+const struct snmp_mib mib2_1 = SNMP_MIB_CREATE(mib2_base_oid_arr, &mib2_root.node);
 
 #endif /* LWIP_SNMP && SNMP_LWIP_MIB2 */

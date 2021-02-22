@@ -16,7 +16,8 @@ extern "C" {
 
 /* export MIB */
 extern const struct snmp_mib mib_private;
-
+//extern const struct mib_array_node mib_private;
+//extern const struct mib_array_node mib_private;
 void lwip_privmib_init(void);
 
 #ifdef __cplusplus

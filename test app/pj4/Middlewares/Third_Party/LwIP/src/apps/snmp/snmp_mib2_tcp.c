@@ -82,16 +82,16 @@ tcp_get_value(struct snmp_node_instance* instance, void* value)
     *sint_ptr = MEMP_NUM_TCP_PCB;
     return sizeof(*sint_ptr);
   case 5: /* tcpActiveOpens */
-    *uint_ptr = STATS_GET(mib2.tcpactiveopens);
+ //   *uint_ptr = STATS_GET(mib2.tcpactiveopens);
     return sizeof(*uint_ptr);
   case 6: /* tcpPassiveOpens */
-    *uint_ptr = STATS_GET(mib2.tcppassiveopens);
+  //  *uint_ptr = STATS_GET(mib2.tcppassiveopens);
     return sizeof(*uint_ptr);
   case 7: /* tcpAttemptFails */
-    *uint_ptr = STATS_GET(mib2.tcpattemptfails);
+  //  *uint_ptr = STATS_GET(mib2.tcpattemptfails);
     return sizeof(*uint_ptr);
   case 8: /* tcpEstabResets */
-    *uint_ptr = STATS_GET(mib2.tcpestabresets);
+  //  *uint_ptr = STATS_GET(mib2.tcpestabresets);
     return sizeof(*uint_ptr);
   case 9: /* tcpCurrEstab */
     {
@@ -108,19 +108,19 @@ tcp_get_value(struct snmp_node_instance* instance, void* value)
     }
     return sizeof(*uint_ptr);
   case 10: /* tcpInSegs */
-    *uint_ptr = STATS_GET(mib2.tcpinsegs);
+ //   *uint_ptr = STATS_GET(mib2.tcpinsegs);
     return sizeof(*uint_ptr);
   case 11: /* tcpOutSegs */
-    *uint_ptr = STATS_GET(mib2.tcpoutsegs);
+  //  *uint_ptr = STATS_GET(mib2.tcpoutsegs);
     return sizeof(*uint_ptr);
   case 12: /* tcpRetransSegs */
-    *uint_ptr = STATS_GET(mib2.tcpretranssegs);
+  //  *uint_ptr = STATS_GET(mib2.tcpretranssegs);
     return sizeof(*uint_ptr);
   case 14: /* tcpInErrs */
-    *uint_ptr = STATS_GET(mib2.tcpinerrs);
+  //  *uint_ptr = STATS_GET(mib2.tcpinerrs);
     return sizeof(*uint_ptr);
   case 15: /* tcpOutRsts */
-    *uint_ptr = STATS_GET(mib2.tcpoutrsts);
+  //  *uint_ptr = STATS_GET(mib2.tcpoutrsts);
     return sizeof(*uint_ptr);
   case 17: /* tcpHCInSegs */
     memset(value, 0, 2*sizeof(u32_t)); /* not supported */

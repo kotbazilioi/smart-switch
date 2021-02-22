@@ -39,6 +39,13 @@
 //#include "ViewRSA.h"
 #include "private_mib.h"
 
+#define SNMP_SYSNAME_TYPE "SmartSwich"
+
+#define SNMP_SYSLOCATION_TYPE "netping.ru"
+
+#define SNMP_SYSCONTACT_TYPE "netping"
+#define SNMP_SNMPENABLEAUTHTRAPS_TYPE 1
+#define SNMP_TESTPOINTNAME_TYPE "test_name_discr"
 /*------------------------------------------------------------------------------
  Локальные макроопределения
 ------------------------------------------------------------------------------*/
@@ -47,18 +54,18 @@
  Переопределения переменных и структур с локальной областью видимости
 ------------------------------------------------------------------------------*/
 // структура канала частотного плана
-typedef __packed struct
-{
-  point_fr_map     Channel;     // канал общий
-  point_fr_map_dig DigChannel;  // канал цифровой
-} tCH_PLAN_CHANNEL;
+//typedef __packed struct
+//{
+//  point_fr_map     Channel;     // канал общий
+//  point_fr_map_dig DigChannel;  // канал цифровой
+//} tCH_PLAN_CHANNEL;
 
 // структура частотного плана
-typedef __packed struct
-{
-  head_fr_map      ChPlanHead;                // заголовок
-  tCH_PLAN_CHANNEL ChPlanChannel[MAX_NUM_CH]; // каналы
-} tCH_PLAN;
+//typedef __packed struct
+//{
+//  head_fr_map      ChPlanHead;                // заголовок
+//  tCH_PLAN_CHANNEL ChPlanChannel[MAX_NUM_CH]; // каналы
+//} tCH_PLAN;
 
 /*------------------------------------------------------------------------------
  Объявление глобальных переменных с локальной областью видимости
@@ -70,34 +77,34 @@ u8_t snmpenableauthentraps_ciu = 2;
 
 
 /* переменные с ошибками канала */
-union
-{
-	struct
-	{
-		CHAR szSnmp_Level[12];				// 110.0(>100)
-		CHAR szSnmp_VAR[12];					// 110.0(>80)
-		CHAR szSnmp_CNR[10];					// 32.3(<43)
-		CHAR szSnmp_MER[10];					// 32.2(<35)
-		CHAR szSnmp_preBER[16];				// 1.0e-04(>1e-08)
-		CHAR szSnmp_postBER[16];			// 1.0e-04(>1e-08)
-	};
-	struct
-	{
-		DWORD dwSnmp_BandErrorType;      // код ошибки по полосам
-		CHAR szSnmp_BandErrorVal[12];    // 110.0(>20)
-	};
-};
+//union
+//{
+//	struct
+//	{
+//		CHAR szSnmp_Level[12];				// 110.0(>100)
+//		CHAR szSnmp_VAR[12];					// 110.0(>80)
+//		CHAR szSnmp_CNR[10];					// 32.3(<43)
+//		CHAR szSnmp_MER[10];					// 32.2(<35)
+//		CHAR szSnmp_preBER[16];				// 1.0e-04(>1e-08)
+//		CHAR szSnmp_postBER[16];			// 1.0e-04(>1e-08)
+//	};
+//	struct
+//	{
+//		DWORD dwSnmp_BandErrorType;      // код ошибки по полосам
+//		CHAR szSnmp_BandErrorVal[12];    // 110.0(>20)
+//	};
+//};
 
-const CHAR* szTemperatureStatus = NULL;
-const CHAR* szHardwareStatus = NULL;
-const CHAR* szBandErrorType = NULL;
+//const CHAR* szTemperatureStatus = NULL;
+//const CHAR* szHardwareStatus = NULL;
+//const CHAR* szBandErrorType = NULL;
 
 extern u8_t* syscontact_len_ptr;
 extern u8_t* sysname_len_ptr;
 extern u8_t* syslocation_len_ptr;
 extern u8_t* snmpenableauthentraps_ptr;
 
-tU8 SnmpChannels;  // количество каналов канального плана записанных по SNMP
+//tU8 SnmpChannels;  // количество каналов канального плана записанных по SNMP
 
 /*------------------------------------------------------------------------------
  Объявление локальных функций
@@ -114,8 +121,8 @@ static void Control_get_object_def (u8_t ident_len, s32_t *ident, struct obj_def
 static void Control_get_value (struct obj_def *od, u16_t len, void *value);
 static u8_t Control_set_test (struct obj_def *od, u16_t len, void *value);
 static void Control_set_value (struct obj_def *od, u16_t len, void *value);
-tBOOL SnmpCheckChPlanPoint (tCHAR* pChPlanPoint, tU16 Length);
-void SnmpWriteChPlanPoint (tCHAR* pChPlanPoint, tU16 Length);
+//tBOOL SnmpCheckChPlanPoint (tCHAR* pChPlanPoint, tU16 Length);
+//void SnmpWriteChPlanPoint (tCHAR* pChPlanPoint, tU16 Length);
 void SnmpWriteChPlan (void);
 // Функции для узла Measurements
   // число каналов, температура
@@ -662,13 +669,13 @@ const struct mib_array_node planar =
 
 // узел ENTERPRISES -------------------------------------------------------
 
-const s32_t enterprises_ids[1] = { PLANAR_ENTERPRISE_ID };
-
-struct mib_node* const enterprises_nodes[1] = 
-{
-  (struct mib_node* const)&planar
-};
-
+//const s32_t enterprises_ids[1] = { PLANAR_ENTERPRISE_ID };
+//
+//struct mib_node* const enterprises_nodes[1] = 
+//{
+//  (struct mib_node* const)&planar
+//};
+//
 const struct mib_array_node enterprises = 
 {
   &noleafs_get_object_def,
@@ -676,9 +683,9 @@ const struct mib_array_node enterprises =
   &noleafs_set_test,
   &noleafs_set_value,
   MIB_NODE_AR,
-  1,
-  enterprises_ids,
-  enterprises_nodes
+  1//,
+//  enterprises_ids,
+//  enterprises_nodes
 };
 
 // узел PRIVATE -----------------------------------------------------------
@@ -720,9 +727,9 @@ const struct mib_array_node mib_private =
 static void Identification_get_object_def (u8_t ident_len, s32_t *ident, struct obj_def *od)
 {
   u8_t id;
-  tPRIVILEGED* pPrivileged;
+ // tPRIVILEGED* pPrivileged;
     
-  pPrivileged = (tPRIVILEGED*)PRIVILEGED_START_ADDRESS;
+ // pPrivileged = (tPRIVILEGED*)PRIVILEGED_START_ADDRESS;
   
   /* return to object name, adding index depth (1) */
   ident_len += 1;
@@ -740,7 +747,7 @@ static void Identification_get_object_def (u8_t ident_len, s32_t *ident, struct 
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_READ_ONLY;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        od->v_len = strnlen( pPrivileged->Serial, sizeof(pPrivileged->Serial) );
+        od->v_len = 8;//strnlen( pPrivileged->Serial, sizeof(pPrivileged->Serial) );
         break;
       case 2: /* hardware (string, RO) */
         od->instance = MIB_OBJECT_SCALAR;
@@ -784,36 +791,36 @@ static void Identification_get_object_def (u8_t ident_len, s32_t *ident, struct 
 static void Identification_get_value (struct obj_def *od, u16_t len, void *value)
 {
   u8_t id;
-  CHAR* str;
-  tHARD_VERSION tmp;
-  tPRIVILEGED* pPrivileged;
-    
-  pPrivileged = (tPRIVILEGED*)PRIVILEGED_START_ADDRESS;
+  char* str;
+//  tHARD_VERSION tmp;
+//  tPRIVILEGED* pPrivileged;
+//    
+//  pPrivileged = (tPRIVILEGED*)PRIVILEGED_START_ADDRESS;
   
   id = od->id_inst_ptr[0];
   switch (id)
   {
     case 1: /* serial number */
-      ocstrncpy(value, (u8_t*)pPrivileged->Serial, len);
+    //  ocstrncpy(value, (u8_t*)pPrivileged->Serial, len);
       break;
     case 2: /* hardware */
-	   str = pvPortMalloc( len + 1 );
-		memcpy( &tmp, &pPrivileged->HardVersion, sizeof(tmp));
-		if( tmp.Type > 99 ) tmp.Type = 0;
-		if( tmp.Group > 99 ) tmp.Group = 0;
-		sprintf( str, TEXT("%02d.%02d.%03d"), 
-				   tmp.Group,
-					tmp.Type,
-					pPrivileged->HardVersion.Modification );
-		ocstrncpy(value, (u8_t*)str, len);
-		vPortFree( str );
+//	   str = pvPortMalloc( len + 1 );
+//		memcpy( &tmp, &pPrivileged->HardVersion, sizeof(tmp));
+//		if( tmp.Type > 99 ) tmp.Type = 0;
+//		if( tmp.Group > 99 ) tmp.Group = 0;
+//		sprintf( str, TEXT("%02d.%02d.%03d"), 
+//				   tmp.Group,
+//					tmp.Type,
+//					pPrivileged->HardVersion.Modification );
+//		ocstrncpy(value, (u8_t*)str, len);
+//		vPortFree( str );
       break;
     case 3: /* software */
 	   str = pvPortMalloc( len + 1 );
-		sprintf( str, TEXT("%02d.%02d.%02d.%02d"), 
-		   (cSoftVersion >> 24) & 0x000000FF, (cSoftVersion >> 16) & 0x000000FF,
-		   (cSoftVersion >> 8) & 0x000000FF, (cSoftVersion >> 0) & 0x000000FF );
-		ocstrncpy(value, (u8_t*)str, len);
+//		sprintf( str, TEXT("%02d.%02d.%02d.%02d"), 
+//		   (cSoftVersion >> 24) & 0x000000FF, (cSoftVersion >> 16) & 0x000000FF,
+//		   (cSoftVersion >> 8) & 0x000000FF, (cSoftVersion >> 0) & 0x000000FF );
+//		ocstrncpy(value, (u8_t*)str, len);
 		vPortFree( str );
       break;
 	 case 4: /* testpoint name */
@@ -1001,123 +1008,123 @@ static void Control_get_object_def (u8_t ident_len, s32_t *ident, struct obj_def
 static void Control_get_value (struct obj_def *od, u16_t len, void *value)
 {
   u8_t id;
-  EMeasState tState;
+//  EMeasState tState;
   
 
   id = od->id_inst_ptr[0];
   switch (id)
   {
   case 1: /* measure period */
-	*( (s32_t*)value ) = MeasThreadGetPeriod();
+//	*( (s32_t*)value ) = MeasThreadGetPeriod();
     break;
   case 2: /* measure launch */
-	tState = MeasThreadGetState();
-	if( tState == e_measuring || tState == e_waitformeasure )
-	  *( (s32_t*)value ) = 1ul;
-	else
-	  *( (s32_t*)value ) = 0ul;
+//	tState = MeasThreadGetState();
+//	if( tState == e_measuring || tState == e_waitformeasure )
+//	  *( (s32_t*)value ) = 1ul;
+//	else
+//	  *( (s32_t*)value ) = 0ul;
     break;
   case 3: /* time */
     {
-      TTime time;
-      
-      RTC_GetTime( &time );
-      sprintf(value, TEXT("%02d:%02d:%02d"), time.uHour, time.uMin, time.uSec);
+//      TTime time;
+//      
+//      RTC_GetTime( &time );
+//      sprintf(value, TEXT("%02d:%02d:%02d"), time.uHour, time.uMin, time.uSec);
       break;
     }
   case 4: /* date */
     {
-	  TDate date;
-     
-      RTC_GetDate( &date );
-      sprintf(value, TEXT("%02d.%02d.%04d"), date.uDay, date.uMonth, date.wYear);
+//	  TDate date;
+//     
+//      RTC_GetDate( &date );
+//      sprintf(value, TEXT("%02d.%02d.%04d"), date.uDay, date.uMonth, date.wYear);
       break;
     }
   case 5: // Reset
     {
-	  *((s32_t*)value) = 0;
+	// *((s32_t*)value) = 0;
       break;
     }
   case 6: // trapDestination1
-    sprintf(value, 
-            TEXT("%03d.%03d.%03d.%03d"), 
-            gSNMP_IPaddr1[0], 
-            gSNMP_IPaddr1[1], 
-            gSNMP_IPaddr1[2], 
-            gSNMP_IPaddr1[3]);
+ //   sprintf(value, 
+//            TEXT("%03d.%03d.%03d.%03d"), 
+//            gSNMP_IPaddr1[0], 
+//            gSNMP_IPaddr1[1], 
+//            gSNMP_IPaddr1[2], 
+//            gSNMP_IPaddr1[3]);
     break;
   case 7: // trapDestination2
-    sprintf(value, 
-            TEXT("%03d.%03d.%03d.%03d"), 
-            gSNMP_IPaddr2[0], 
-            gSNMP_IPaddr2[1], 
-            gSNMP_IPaddr2[2], 
-            gSNMP_IPaddr2[3]);
+//    sprintf(value, 
+//            TEXT("%03d.%03d.%03d.%03d"), 
+//            gSNMP_IPaddr2[0], 
+//            gSNMP_IPaddr2[1], 
+//            gSNMP_IPaddr2[2], 
+//            gSNMP_IPaddr2[3]);
     break;
   case 8: // trapDestination3
-    sprintf(value, 
-            TEXT("%03d.%03d.%03d.%03d"), 
-            gSNMP_IPaddr3[0], 
-            gSNMP_IPaddr3[1], 
-            gSNMP_IPaddr3[2], 
-            gSNMP_IPaddr3[3]);
+//    sprintf(value, 
+//            TEXT("%03d.%03d.%03d.%03d"), 
+//            gSNMP_IPaddr3[0], 
+//            gSNMP_IPaddr3[1], 
+//            gSNMP_IPaddr3[2], 
+//            gSNMP_IPaddr3[3]);
     break;
   case 9: // measParamEditMode
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      *((s32_t*)value) = 1;
-    }
-    else
-    {
-      *((s32_t*)value) = 0;
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      *((s32_t*)value) = 1;
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = 0;
+//    }
     break;
   case 10: // chPlanPointEdit
-    {
-	  *((s32_t*)value) = 0;
+//    {
+//	  *((s32_t*)value) = 0;
       break;
-    }
+ //   }
   case 11: // maxAnalogLevel
-    *((s32_t*)value) = tLimitsGeneral.MaxVideo;
+ //   *((s32_t*)value) = tLimitsGeneral.MaxVideo;
     break;
   case 12: // minAnalogLevel
-    *((s32_t*)value) = tLimitsGeneral.MinVideo;
+  //  *((s32_t*)value) = tLimitsGeneral.MinVideo;
     break;
   case 13: // maxDigitalLevel
-    *((s32_t*)value) = tLimitsGeneral.MaxDigLevel;
+ //   *((s32_t*)value) = tLimitsGeneral.MaxDigLevel;
     break;
   case 14: // minDigitalLevel
-    *((s32_t*)value) = tLimitsGeneral.MinDigLevel;
+//    *((s32_t*)value) = tLimitsGeneral.MinDigLevel;
     break;
   case 15: // minMerQAM64
-    *((s32_t*)value) = tLimitsGeneral.MER_64;
+//    *((s32_t*)value) = tLimitsGeneral.MER_64;
     break;
   case 16: // minMerQAM128
-    *((s32_t*)value) = tLimitsGeneral.MER_128;
+ //   *((s32_t*)value) = tLimitsGeneral.MER_128;
     break;
   case 17: // minMerQAM256
-    *((s32_t*)value) = tLimitsGeneral.MER_256;
+  //  *((s32_t*)value) = tLimitsGeneral.MER_256;
     break;
   case 18: // maxPreBER
-    *((s32_t*)value) = tLimitsGeneral.preBER;
+  //  *((s32_t*)value) = tLimitsGeneral.preBER;
     break;
   case 19: // maxDeltaAdj
-    *((s32_t*)value) = tLimitsGeneral.MaxAdjDelta;
+  //  *((s32_t*)value) = tLimitsGeneral.MaxAdjDelta;
     break;
   case 20: // maxDeltaDA
-    *((s32_t*)value) = tLimitsGeneral.MaxDeltaVD;
+  //  *((s32_t*)value) = tLimitsGeneral.MaxDeltaVD;
     break;
   case 21: // maxDelta300
-    *((s32_t*)value) = tLimitsGeneral.dLevel40_300;
+ //   *((s32_t*)value) = tLimitsGeneral.dLevel40_300;
     break;
   case 22: // maxDelta600
-    *((s32_t*)value) = tLimitsGeneral.dLevel40_600;
+  //  *((s32_t*)value) = tLimitsGeneral.dLevel40_600;
     break;
   case 23: // maxDelta1000
-    *((s32_t*)value) = tLimitsGeneral.dLevel40_900;
+  //  *((s32_t*)value) = tLimitsGeneral.dLevel40_900;
     break;
   case 24: // maxDeltaR100
-    *((s32_t*)value) = tLimitsGeneral.dLevel100;
+  //  *((s32_t*)value) = tLimitsGeneral.dLevel100;
     break;
   };
 }
@@ -1135,7 +1142,7 @@ static u8_t Control_set_test (struct obj_def *od, u16_t len, void *value)
 {
   u8_t id, set_ok;
   s32_t temp;
-  CHAR szTemp[16];
+  char szTemp[16];
 
 
   set_ok = 0;
@@ -1154,209 +1161,209 @@ static u8_t Control_set_test (struct obj_def *od, u16_t len, void *value)
     break;
   case 3:    /* time */
     {
-      TTime time;
+  //    TTime time;
       
-      if( len <= 8 )
-      {
-        memcpy( szTemp, value, len );
-        szTemp[len] = '\0';
-        if( StrToTime( &time, szTemp ) )
-        {
-          set_ok = 1;
-        }
-      }
+//      if( len <= 8 )
+//      {
+//        memcpy( szTemp, value, len );
+//        szTemp[len] = '\0';
+//        if( StrToTime( &time, szTemp ) )
+//        {
+//          set_ok = 1;
+//        }
+//      }
       break;
     }
   case 4:    /* date */
     {
-      TDate date;
-      
-      if( len <= 10 )
-      {
-        memcpy( szTemp, value, len );
-        szTemp[len] = '\0';	
-        if( StrToDate( &date, szTemp ) )
-        {
-          set_ok = 1;
-        }
-      }
+//      TDate date;
+//      
+//      if( len <= 10 )
+//      {
+//        memcpy( szTemp, value, len );
+//        szTemp[len] = '\0';	
+//        if( StrToDate( &date, szTemp ) )
+//        {
+//          set_ok = 1;
+//        }
+    //  }
       break;
     }
   case 5:    /* device restart */
-	 if( len == sizeof(s32_t) && temp == 1 )
-		 set_ok = 1;
+//	 if( len == sizeof(s32_t) && temp == 1 )
+//		 set_ok = 1;
      break;
   case 6: // trapDestination1
   case 7: // trapDestination2
   case 8: // trapDestination3
     {
-      tU32 ip1, ip2, ip3, ip4;
-      
-      if (len <= 15)
-      {
-        memcpy(szTemp, value, len);
-        szTemp[len] = '\0';
-        sscanf(szTemp, "%d.%d.%d.%d", &ip1, &ip2, &ip3, &ip4);
-        if (ip1 < 256 && ip2 < 256 && ip3 < 256 && ip4 < 256)
-        {
-          set_ok = 1;
-        }
-      }
+//      tU32 ip1, ip2, ip3, ip4;
+//      
+//      if (len <= 15)
+//      {
+//        memcpy(szTemp, value, len);
+//        szTemp[len] = '\0';
+//        sscanf(szTemp, "%d.%d.%d.%d", &ip1, &ip2, &ip3, &ip4);
+//        if (ip1 < 256 && ip2 < 256 && ip3 < 256 && ip4 < 256)
+//        {
+//          set_ok = 1;
+//        }
+//      }
     }
     break;
   case 9: // measParamEditMode
-	if (len == sizeof(s32_t))
-    {
-      EMeasState State;
-      
-      State = MeasThreadGetState();
-      
-      if (temp == 0)
-      {
-        set_ok = 1;
-      }
-      else if (temp == 1 && State == e_interrupted)
-      {
-        set_ok = 1;
-      }
-    }
+//	if (len == sizeof(s32_t))
+//    {
+//      EMeasState State;
+//      
+//      State = MeasThreadGetState();
+//      
+//      if (temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//      else if (temp == 1 && State == e_interrupted)
+//      {
+//        set_ok = 1;
+//      }
+//    }
 	break;
   case 10: // chPlanPointEdit
     {
-      tBOOL stat;
-      
-      stat = SnmpCheckChPlanPoint((tCHAR*)value, len);
-      if (stat != FALSE)
-      {
-        set_ok = 1;
-      }
+//      tBOOL stat;
+//      
+//      stat = SnmpCheckChPlanPoint((tCHAR*)value, len);
+//      if (stat != FALSE)
+//      {
+//        set_ok = 1;
+//      }
     }
     break;
   case 11: // maxAnalogLevel
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 45 && temp <= 95) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 45 && temp <= 95) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 12: // minAnalogLevel
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 45 && temp <= 95) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 45 && temp <= 95) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 13: // maxDigitalLevel
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 45 && temp <= 95) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 45 && temp <= 95) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 14: // minDigitalLevel
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 45 && temp <= 95) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 45 && temp <= 95) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 15: // minMerQAM64
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 25 && temp <= 40) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 25 && temp <= 40) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 16: // minMerQAM128
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 25 && temp <= 40) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 25 && temp <= 40) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 17: // minMerQAM256
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 25 && temp <= 40) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 25 && temp <= 40) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 18: // maxPreBER
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 1 && temp <= 5) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 1 && temp <= 5) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 19: // maxDeltaAdj
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 2 && temp <= 6) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 2 && temp <= 6) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 20: // maxDeltaDA
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 5 && temp <= 30) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 5 && temp <= 30) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 21: // maxDelta300
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 5 && temp <= 15) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 5 && temp <= 15) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 22: // maxDelta600
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 7 && temp <= 17) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 7 && temp <= 17) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 23: // maxDelta1000
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 10 && temp <= 20) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 10 && temp <= 20) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   case 24: // maxDeltaR100
-    if (gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if ((temp >= 5 && temp <= 12) || temp == 0)
-      {
-        set_ok = 1;
-      }
-    }
+//    if (gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if ((temp >= 5 && temp <= 12) || temp == 0)
+//      {
+//        set_ok = 1;
+//      }
+//    }
     break;
   };
   return set_ok;
@@ -1373,8 +1380,8 @@ static u8_t Control_set_test (struct obj_def *od, u16_t len, void *value)
 static void Control_set_value (struct obj_def *od, u16_t len, void *value)
 {
   u8_t id;
-  BYTE tmp;
-  CHAR szTemp[16];
+  uint8_t tmp;
+  char szTemp[16];
   s32_t temp;
   
   
@@ -1395,150 +1402,150 @@ static void Control_set_value (struct obj_def *od, u16_t len, void *value)
 		}
 		else if( tmp == 1 )
 		{
-          MeasThreadSetCommand(e_measure);
+       //   MeasThreadSetCommand(e_measure);
 		}
 	 	break;
   case 3:    /* time */
 	 {
-		TTime time;
+		////TTime time;
 		 
 		memcpy( szTemp, value, len );
 		szTemp[len] = '\0';
-		if( StrToTime( &time, szTemp ) )
-		{
-			RTC_SetTime( &time );
-		}
+////		if( StrToTime( &time, szTemp ) )
+////		{
+////			RTC_SetTime( &time );
+////		}
 	   break;
 	 }
   case 4:    /* date */
 	 {
-		TDate date;
-		 
-		memcpy( szTemp, value, len );
-		szTemp[len] = '\0';
-		if( StrToDate( &date, szTemp ) )
-		{
-			RTC_SetDate( &date );
-		}
+//		TDate date;
+//		 
+//		memcpy( szTemp, value, len );
+//		szTemp[len] = '\0';
+//		if( StrToDate( &date, szTemp ) )
+//		{
+//			RTC_SetDate( &date );
+//		}
 		
 	   break;
 	 }
   case 5:    /* device restart */
      {
-        tmp = *( (s32_t*)value );
-        if( tmp == 1)
-        {
-          gUpdateCode = UPDATE_RESET;   // установка флага сброса без обновления
-          AIRCR = 0x5FA << 16 | 1 << 2; // перезагрузка прибора
-        }
+//        tmp = *( (s32_t*)value );
+//        if( tmp == 1)
+//        {
+//          gUpdateCode = UPDATE_RESET;   // установка флага сброса без обновления
+//          AIRCR = 0x5FA << 16 | 1 << 2; // перезагрузка прибора
+//        }
 	    break;
      }
   case 6: // trapDestination1
   case 7: // trapDestination2
   case 8: // trapDestination3
     {
-      tU32 ip1, ip2, ip3, ip4;
-      
-      if (len <= 15)
-      {
-        memcpy(szTemp, value, len);
-        szTemp[len] = '\0';
-        sscanf(szTemp, "%d.%d.%d.%d", &ip1, &ip2, &ip3, &ip4);
-        if (id == 6)
-        {
-          gSNMP_IPaddr1[0] = ip1;
-          gSNMP_IPaddr1[1] = ip2;
-          gSNMP_IPaddr1[2] = ip3;
-          gSNMP_IPaddr1[3] = ip4;
-        }
-        else if (id == 7)
-        {
-          gSNMP_IPaddr2[0] = ip1;
-          gSNMP_IPaddr2[1] = ip2;
-          gSNMP_IPaddr2[2] = ip3;
-          gSNMP_IPaddr2[3] = ip4;
-        }
-        else if (id == 8)
-        {
-          gSNMP_IPaddr3[0] = ip1;
-          gSNMP_IPaddr3[1] = ip2;
-          gSNMP_IPaddr3[2] = ip3;
-          gSNMP_IPaddr3[3] = ip4;
-        }
-        SaveSettingsITM18();
-      }
+//      tU32 ip1, ip2, ip3, ip4;
+//      
+//      if (len <= 15)
+//      {
+//        memcpy(szTemp, value, len);
+//        szTemp[len] = '\0';
+//        sscanf(szTemp, "%d.%d.%d.%d", &ip1, &ip2, &ip3, &ip4);
+//        if (id == 6)
+//        {
+//          gSNMP_IPaddr1[0] = ip1;
+//          gSNMP_IPaddr1[1] = ip2;
+//          gSNMP_IPaddr1[2] = ip3;
+//          gSNMP_IPaddr1[3] = ip4;
+//        }
+//        else if (id == 7)
+//        {
+//          gSNMP_IPaddr2[0] = ip1;
+//          gSNMP_IPaddr2[1] = ip2;
+//          gSNMP_IPaddr2[2] = ip3;
+//          gSNMP_IPaddr2[3] = ip4;
+//        }
+//        else if (id == 8)
+//        {
+//          gSNMP_IPaddr3[0] = ip1;
+//          gSNMP_IPaddr3[1] = ip2;
+//          gSNMP_IPaddr3[2] = ip3;
+//          gSNMP_IPaddr3[3] = ip4;
+//        }
+//        SaveSettingsITM18();
+//      }
     }
     break;
   case 9: // chPlanEditMode
-    if (temp == 0 && gITM18_Mode == ITM18_MODE_EDIT)
-    {
-      if (SnmpChannels > 0)
-      {
-        SnmpWriteChPlan();  // запись канального плана из буфера
-      }
-      write_cell_mem((BYTE*)&tLimitsGeneral, 0, 0, 4); // запись данных шаблона проверки
-      MeasThreadSetState(e_changemeasparam); // установка флага изменения параметров измерения
-      gITM18_Mode = ITM18_MODE_MEASURE;
-    }
-    else if (temp == 1)
-    {
-      EMeasState State;
-      
-      State = MeasThreadGetState();
-      if (State == e_interrupted)
-      {
-        gMeasuredChBuf = 0;
-        gMeasuredCh = 0;
-        gTxViewRSACh = 0;
-        gITM18_Mode = ITM18_MODE_EDIT;
-        SnmpChannels = 0;
-      }
-    }
+//    if (temp == 0 && gITM18_Mode == ITM18_MODE_EDIT)
+//    {
+//      if (SnmpChannels > 0)
+//      {
+//        SnmpWriteChPlan();  // запись канального плана из буфера
+//      }
+//      write_cell_mem((BYTE*)&tLimitsGeneral, 0, 0, 4); // запись данных шаблона проверки
+//      MeasThreadSetState(e_changemeasparam); // установка флага изменения параметров измерения
+//      gITM18_Mode = ITM18_MODE_MEASURE;
+//    }
+//    else if (temp == 1)
+//    {
+//      EMeasState State;
+//      
+//      State = MeasThreadGetState();
+//      if (State == e_interrupted)
+//      {
+//        gMeasuredChBuf = 0;
+//        gMeasuredCh = 0;
+//        gTxViewRSACh = 0;
+//        gITM18_Mode = ITM18_MODE_EDIT;
+//        SnmpChannels = 0;
+//      }
+//    }
     break;
   case 10: // chPlanPointEdit
-    SnmpWriteChPlanPoint((tCHAR*)value, len);
+   // SnmpWriteChPlanPoint((tCHAR*)value, len);
     break;
   case 11: // maxAnalogLevel
-    tLimitsGeneral.MaxVideo = (BYTE)temp;
+ //   tLimitsGeneral.MaxVideo = (BYTE)temp;
     break;
   case 12: // minAnalogLevel
-    tLimitsGeneral.MinVideo = (BYTE)temp;
+ //   tLimitsGeneral.MinVideo = (BYTE)temp;
     break;
   case 13: // maxDigitalLevel
-    tLimitsGeneral.MaxDigLevel = (BYTE)temp;
+  //  tLimitsGeneral.MaxDigLevel = (BYTE)temp;
     break;
   case 14: // minDigitalLevel
-    tLimitsGeneral.MinDigLevel = (BYTE)temp;
+  //  tLimitsGeneral.MinDigLevel = (BYTE)temp;
     break;
   case 15: // minMerQAM64
-    tLimitsGeneral.MER_64 = (BYTE)temp;
+   // tLimitsGeneral.MER_64 = (BYTE)temp;
     break;
   case 16: // minMerQAM128
-    tLimitsGeneral.MER_128 = (BYTE)temp;
+  //  tLimitsGeneral.MER_128 = (BYTE)temp;
     break;
   case 17: // minMerQAM256
-    tLimitsGeneral.MER_256 = (BYTE)temp;
+  //  tLimitsGeneral.MER_256 = (BYTE)temp;
     break;
   case 18: // maxPreBER
-    tLimitsGeneral.preBER = (BYTE)temp;
+  //  tLimitsGeneral.preBER = (BYTE)temp;
     break;
   case 19: // maxDeltaAdj
-    tLimitsGeneral.MaxAdjDelta = (BYTE)temp;
+  //  tLimitsGeneral.MaxAdjDelta = (BYTE)temp;
     break;
   case 20: // maxDeltaDA
-    tLimitsGeneral.MaxDeltaVD = (BYTE)temp;
+   // tLimitsGeneral.MaxDeltaVD = (BYTE)temp;
     break;
   case 21: // maxDelta300
-    tLimitsGeneral.dLevel40_300 = (BYTE)temp;
+   // tLimitsGeneral.dLevel40_300 = (BYTE)temp;
     break;
   case 22: // maxDelta600
-    tLimitsGeneral.dLevel40_600 = (BYTE)temp;
+  // tLimitsGeneral.dLevel40_600 = (BYTE)temp;
     break;
   case 23: // maxDelta1000
-    tLimitsGeneral.dLevel40_900 = (BYTE)temp;
+  //  tLimitsGeneral.dLevel40_900 = (BYTE)temp;
     break;
   case 24: // maxDeltaR100
-    tLimitsGeneral.dLevel100 = (BYTE)temp;
+  //  tLimitsGeneral.dLevel100 = (BYTE)temp;
     break;
   };
 }
@@ -1551,33 +1558,33 @@ static void Control_set_value (struct obj_def *od, u16_t len, void *value)
  \return TRUE - формат строки правильный
          FALSE - формат строки не правильный
 ------------------------------------------------------------------------------*/
-tBOOL SnmpCheckChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
+uint8_t SnmpCheckChPlanPoint (char* pChPlanPoint, uint16_t Length)
 {
-  tCHAR StrCh[30];
-  tCHAR NameCh[7];
-  tU32 Frequency;
-  tU32 Type;
-  tU32 BandWidth;
-  tU32 Modulation;
-  tU32 SR;
-  tCHAR* pStr;
+  char StrCh[30];
+  char NameCh[7];
+  uint32_t Frequency;
+  uint32_t Type;
+  uint32_t BandWidth;
+  uint32_t Modulation;
+  uint32_t SR;
+  char* pStr;
   
   
   // проверка режима работы прибора
-  if (gITM18_Mode != ITM18_MODE_EDIT)
-  {
-    return FALSE;
-  }
-  // проверка количества каналов
-  if (SnmpChannels >= MAX_NUM_CH)
-  {
-    return FALSE;
-  }
-  // проверка длины строки
-  if (Length < 15 && Length > 26)
-  {
-    return FALSE;
-  }
+////  if (gITM18_Mode != ITM18_MODE_EDIT)
+////  {
+////    return FALSE;
+////  }
+////  // проверка количества каналов
+////  if (SnmpChannels >= MAX_NUM_CH)
+////  {
+////    return FALSE;
+////  }
+////  // проверка длины строки
+////  if (Length < 15 && Length > 26)
+////  {
+////    return FALSE;
+////  }
   memcpy(StrCh, pChPlanPoint, Length);
   StrCh[Length] = '\0';
   // поиск имени канала
@@ -1589,40 +1596,40 @@ tBOOL SnmpCheckChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
   }
   else
   {
-    return FALSE;
+    return 0;
   }
   sscanf(pStr, ",%d,%d,%d,%d,%d", &Frequency, &Type, &BandWidth, &Modulation, &SR);
   // проверка диапазона частот
   if (Frequency < 45000 || Frequency > 1000000)
   {
-    return FALSE;
+    return 0;
   }
   // проверка разрешения по частоте
   if ((Frequency%125) != 0)
   {
-    return FALSE;
+    return 0;
   }
   // проверка типа канала
   if (Type > 5)
   {
-    return FALSE;
+    return 0;
   }
   // проверка полосы пропускания
   if (BandWidth < 6 || BandWidth > 8)
   {
-    return FALSE;
+    return 0;
   }
   // проверка модуляции
   if (Modulation != 0 && Modulation != 11 && Modulation != 12 && Modulation != 13)
   {
-    return FALSE;
+    return 0;
   }
   // проверка символьной скорости
   if (SR != 0 && (SR < 5000 || SR > 7000))
   {
-    return FALSE;
+    return 0;
   }
-  return TRUE;
+  return 1;
 }
 
 /**-----------------------------------------------------------------------------
@@ -1632,24 +1639,24 @@ tBOOL SnmpCheckChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
  \param  Length - длина строки 
  \return нет
 ------------------------------------------------------------------------------*/
-void SnmpWriteChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
+void SnmpWriteChPlanPoint (char* pChPlanPoint, uint16_t Length)
 {
-  tCH_PLAN* pChPlan = NULL; // указатель канального плана для SNMP
-  tCHAR StrCh[30];
-  tCHAR NameCh[7];
-  tU32 Frequency;
-  tU32 Type;
-  tU32 BandWidth;
-  tU32 Modulation;
-  tU32 SR;
-  tCHAR* pStr;
+  uint32_t* pChPlan = NULL; // указатель канального плана для SNMP
+  char StrCh[30];
+  char NameCh[7];
+  uint32_t Frequency;
+  uint32_t Type;
+  uint32_t BandWidth;
+  uint32_t Modulation;
+  uint32_t SR;
+  char* pStr;
   
   
-  if (gITM18_Mode != ITM18_MODE_EDIT)
-  {
-    return;
-  }
-  pChPlan = (tCH_PLAN*)gCommonBuf; // настройка указателя канального плана
+//  if (gITM18_Mode != ITM18_MODE_EDIT)
+//  {
+//    return;
+//  }
+ // pChPlan = (tCH_PLAN*)gCommonBuf; // настройка указателя канального плана
   // разбор строки канального плана
   memcpy(StrCh, pChPlanPoint, Length);
   StrCh[Length] = '\0';
@@ -1666,47 +1673,47 @@ void SnmpWriteChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
   }
   sscanf(pStr, ",%d,%d,%d,%d,%d", &Frequency, &Type, &BandWidth, &Modulation, &SR);
   // заполение параметров канала
-  pChPlan->ChPlanChannel[SnmpChannels].Channel.freq = Frequency / 125;
-  strcpy(pChPlan->ChPlanChannel[SnmpChannels].Channel.comment, NameCh);
+//  pChPlan->ChPlanChannel[SnmpChannels].Channel.freq = Frequency / 125;
+//  strcpy(pChPlan->ChPlanChannel[SnmpChannels].Channel.comment, NameCh);
   if (Type == 0) // аналоговый канал
   {
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 0;
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.delta_fr = 0;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = DVBC_MOD_UNKNOWN;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = 0;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.delta_fr = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = DVBC_MOD_UNKNOWN;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
   }
   else if (Type == 1) // цифровой канал с неизвестной модуляцией
   {
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 1;
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.width_fr = BandWidth * 8;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = DVBC_MOD_UNKNOWN;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = 0;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 1;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.width_fr = BandWidth * 8;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = DVBC_MOD_UNKNOWN;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
   }
   else // цифровой канал DVB-C
   {
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 1;
-    pChPlan->ChPlanChannel[SnmpChannels].Channel.width_fr = BandWidth * 8;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = Modulation;
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = SR;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.type = 1;
+//    pChPlan->ChPlanChannel[SnmpChannels].Channel.width_fr = BandWidth * 8;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Modulation = Modulation;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.SR = SR;
     if (Type == 2)
     {
-      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
+//      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_A;
     }
     else if (Type == 3)
     {
-      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_B;
+//      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_B;
     }
     else if (Type == 4)
     {
-      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_C;
+//      pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Annex = DVBC_ANNEX_C;
     }
-    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
+//    pChPlan->ChPlanChannel[SnmpChannels].DigChannel.Interleaver = 0;
   }
-  SnmpChannels++; // увеличение числа переданных каналов
+  //SnmpChannels++; // увеличение числа переданных каналов
 }
 
 /**-----------------------------------------------------------------------------
@@ -1717,59 +1724,59 @@ void SnmpWriteChPlanPoint (tCHAR* pChPlanPoint, tU16 Length)
 ------------------------------------------------------------------------------*/
 void SnmpWriteChPlan (void)
 {
-  tCH_PLAN* pChPlan = NULL; // указатель канального плана для SNMP
-  WORD FminLast;
-  WORD FminCur;
-  BYTE ChFmin;
-  BYTE i;
-  BYTE j;
-  
-  
-  if (gITM18_Mode != ITM18_MODE_EDIT)
-  {
-    return;
-  }
-  pChPlan = (tCH_PLAN*)gCommonBuf; // настройка указателя канального плана
-  
-  // очищаем буфер от измерений - они больше не валидны
-  gMeasuredChBuf = 0;
-  gMeasuredCh = 0;
-  gTxViewRSACh = 0;
-  
-  // сбрасываем параметры кэш
-  ResetChPlanCache();
-  
-  // сохраняем заголовок частотного плана
-  uChPlanChannels = SnmpChannels;
-  pChPlan->ChPlanHead.n_points = SnmpChannels;
-  strcpy(pChPlan->ChPlanHead.comment, "SNMP");
-  write_head_mem((BYTE*)&pChPlan->ChPlanHead, 0, 0);
-  // сохраняем заголовок цифрового частотного плана
-  write_head_mem((BYTE*)&pChPlan->ChPlanHead, 0, 1);
-  
-  // сохранение каналов с сортировкой по частоте
-  FminLast = (45000 / 125) - 1;
-  for (i = 0; i < SnmpChannels; i++)
-  {
-    ChFmin = 0;
-    FminCur = (1000000 / 125) + 1;
-    // выбор номера канала с минимальной частотой, но не меньшей чем FminLast
-    for (j = 0; j < SnmpChannels; j++)
-    {
-      if (pChPlan->ChPlanChannel[j].Channel.freq > FminLast && 
-          pChPlan->ChPlanChannel[j].Channel.freq < FminCur)
-      {
-        ChFmin = j;
-        FminCur = pChPlan->ChPlanChannel[j].Channel.freq;
-      }
-    }
-    // сохранение канала
-    // основной частотный план
-    write_cell_mem((BYTE*)&pChPlan->ChPlanChannel[ChFmin].Channel, i, 0, 0);
-    // дополнительный частотный план */
-    write_cell_mem((BYTE*)&pChPlan->ChPlanChannel[ChFmin].DigChannel, i, 0, 1);
-    FminLast = FminCur; 
-  }
+//////  tCH_PLAN* pChPlan = NULL; // указатель канального плана для SNMP
+//////  WORD FminLast;
+//////  WORD FminCur;
+//////  BYTE ChFmin;
+//////  BYTE i;
+//////  BYTE j;
+//////  
+//////  
+//////  if (gITM18_Mode != ITM18_MODE_EDIT)
+//////  {
+//////    return;
+//////  }
+//////  pChPlan = (tCH_PLAN*)gCommonBuf; // настройка указателя канального плана
+//////  
+//////  // очищаем буфер от измерений - они больше не валидны
+//////  gMeasuredChBuf = 0;
+//////  gMeasuredCh = 0;
+//////  gTxViewRSACh = 0;
+//////  
+//////  // сбрасываем параметры кэш
+//////  ResetChPlanCache();
+//////  
+//////  // сохраняем заголовок частотного плана
+//////  uChPlanChannels = SnmpChannels;
+//////  pChPlan->ChPlanHead.n_points = SnmpChannels;
+//////  strcpy(pChPlan->ChPlanHead.comment, "SNMP");
+//////  write_head_mem((BYTE*)&pChPlan->ChPlanHead, 0, 0);
+//////  // сохраняем заголовок цифрового частотного плана
+//////  write_head_mem((BYTE*)&pChPlan->ChPlanHead, 0, 1);
+//////  
+//////  // сохранение каналов с сортировкой по частоте
+//////  FminLast = (45000 / 125) - 1;
+//////  for (i = 0; i < SnmpChannels; i++)
+//////  {
+//////    ChFmin = 0;
+//////    FminCur = (1000000 / 125) + 1;
+//////    // выбор номера канала с минимальной частотой, но не меньшей чем FminLast
+//////    for (j = 0; j < SnmpChannels; j++)
+//////    {
+//////      if (pChPlan->ChPlanChannel[j].Channel.freq > FminLast && 
+//////          pChPlan->ChPlanChannel[j].Channel.freq < FminCur)
+//////      {
+//////        ChFmin = j;
+//////        FminCur = pChPlan->ChPlanChannel[j].Channel.freq;
+//////      }
+//////    }
+//////    // сохранение канала
+//////    // основной частотный план
+//////    write_cell_mem((BYTE*)&pChPlan->ChPlanChannel[ChFmin].Channel, i, 0, 0);
+//////    // дополнительный частотный план */
+//////    write_cell_mem((BYTE*)&pChPlan->ChPlanChannel[ChFmin].DigChannel, i, 0, 1);
+//////    FminLast = FminCur; 
+//////  }
 }
 
 /**-----------------------------------------------------------------------------
@@ -1843,10 +1850,10 @@ static void Meas_var_get_value (struct obj_def *od, u16_t len, void *value)
   switch (id)
   {
     case 1: /* channels number */
-    	*( (s32_t*)value ) = (s32_t)uChPlanChannels;
+    ///	*( (s32_t*)value ) = (s32_t)uChPlanChannels;
       break;
     case 5: /* measurements counter */
-	   *( (s32_t*)value ) = (s32_t)gMeasCounter;
+	///   *( (s32_t*)value ) = (s32_t)gMeasCounter;
       break;
 	case 6: /* temperature */
 	   *( (s32_t*)value ) = (s32_t)GetTemperature();
@@ -1878,7 +1885,7 @@ u16_t Chplan_level_length (void* addr_inf, u8_t level)
 	}
 	else if( level == 2 )
 	{
-		nodes_num = (u16_t)uChPlanChannels;
+	//	nodes_num = (u16_t)uChPlanChannels;
 	}
 
 	return nodes_num;
@@ -1917,7 +1924,7 @@ s32_t Chplan_get_ident_cmp (void* addr_inf, u8_t level, u16_t idx, s32_t sub_id)
 			unsuccess = 0;
 		}
 	}
-	else if( level == 2 && idx < (u16_t)uChPlanChannels )
+	else if( level == 2 && idx < (u16_t)255)//uChPlanChannels )
 	{
 		my_sub_id = idx + 1;
 		if( my_sub_id == sub_id )
@@ -1969,7 +1976,9 @@ static void Chplan_get_object_def (u8_t rid, u8_t ident_len, s32_t *ident, struc
 {
   u8_t id;
   u8_t ch_num;
-  point_fr_map* ptr;
+ // point_fr_map* ptr;
+
+    uint32_t* ptr;
 
   
   (void)rid;
@@ -1994,11 +2003,11 @@ static void Chplan_get_object_def (u8_t rid, u8_t ident_len, s32_t *ident, struc
         od->v_len = sizeof(s32_t);
 		break;
 	case 2: /* channel name (string, RO) */
-        ptr = snmp_GetCacheChan( ch_num - 1 );
-		od->instance = MIB_OBJECT_SCALAR;
-        od->access = MIB_OBJECT_READ_ONLY;
-        od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        od->v_len = strnlen( ptr->comment, sizeof( ptr->comment ) );
+//        ptr = snmp_GetCacheChan( ch_num - 1 );
+//		od->instance = MIB_OBJECT_SCALAR;
+//        od->access = MIB_OBJECT_READ_ONLY;
+//        od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
+//        od->v_len = strnlen( ptr->comment, sizeof( ptr->comment ) );
         break;
     case 3: /* frequency (integer, RO) */
         od->instance = MIB_OBJECT_SCALAR;
@@ -2056,76 +2065,76 @@ static void Chplan_get_value(u8_t rid, struct obj_def *od, u16_t len, void *valu
 {
   u8_t id;
   u8_t ch_num;
-  point_fr_map* ptr;
-  point_fr_map_dig* ptr_dig;
+//  point_fr_map* ptr;
+//  point_fr_map_dig* ptr_dig;
   
 
   id = od->id_inst_ptr[0];
   ch_num = od->id_inst_ptr[1];
-  ptr = snmp_GetCacheChan(ch_num - 1);
-  ptr_dig = snmp_GetCacheChan_dig(ch_num - 1);
+//  ptr = snmp_GetCacheChan(ch_num - 1);
+//  ptr_dig = snmp_GetCacheChan_dig(ch_num - 1);
   switch (id)
   {
   case 1: /* channel index */
     *((s32_t*)value) = ch_num;
     break;
   case 2: /* channel name */
-	ocstrncpy(value, (u8_t*)ptr->comment, len);
+	//ocstrncpy(value, (u8_t*)ptr->comment, len);
     break;
   case 3: /* frequency */
-	*((s32_t*)value) = (s32_t)ptr->freq * 125ul;
+	//*((s32_t*)value) = (s32_t)ptr->freq * 125ul;
     break;
   case 4: /* channel type */
-    if (ptr->type == 0)
-    {
-      *((s32_t*)value) = 0;
-    }
-    else if (ptr_dig->Modulation == DVBC_MOD_UNKNOWN)
-    {
-      *((s32_t*)value) = 1;
-    }
-    else if (ptr_dig->Annex == DVBC_ANNEX_A)
-    {
-      *((s32_t*)value) = 2;
-    }
-    else if (ptr_dig->Annex == DVBC_ANNEX_B)
-    {
-      *((s32_t*)value) = 3;
-    }
-    else if (ptr_dig->Annex == DVBC_ANNEX_C)
-    {
-      *((s32_t*)value) = 4;
-    }
+//    if (ptr->type == 0)
+//    {
+//      *((s32_t*)value) = 0;
+//    }
+//    else if (ptr_dig->Modulation == DVBC_MOD_UNKNOWN)
+//    {
+//      *((s32_t*)value) = 1;
+//    }
+//    else if (ptr_dig->Annex == DVBC_ANNEX_A)
+//    {
+//      *((s32_t*)value) = 2;
+//    }
+//    else if (ptr_dig->Annex == DVBC_ANNEX_B)
+//    {
+//      *((s32_t*)value) = 3;
+//    }
+//    else if (ptr_dig->Annex == DVBC_ANNEX_C)
+//    {
+//      *((s32_t*)value) = 4;
+//    }
     break;
   case 5: /* channel band width */
-    if (ptr->type != 0)
-    {
-      *((s32_t*)value) = (s32_t)ptr->width_fr * 125ul;
-    }
-    else
-    {
-      *((s32_t*)value) = 0;
-    }
+//    if (ptr->type != 0)
+//    {
+//      *((s32_t*)value) = (s32_t)ptr->width_fr * 125ul;
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = 0;
+//    }
     break;
   case 6: /* channel modulation */
-    if (ptr->type != 0)
-    {
-      *((s32_t*)value) = (s32_t)ptr_dig->Modulation;
-    }
-    else
-    {
-      *((s32_t*)value) = 0;
-    }
+//    if (ptr->type != 0)
+//    {
+//    //  *((s32_t*)value) = (s32_t)ptr_dig->Modulation;
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = 0;
+//    }
     break;
   case 7: /* symbol rate */
-    if (ptr->type != 0)
-    {
-      *((s32_t*)value) = (s32_t)ptr_dig->SR;
-    }
-    else
-    {
-      *((s32_t*)value) = 0;
-    }
+//    if (ptr->type != 0)
+//    {
+//   //   *((s32_t*)value) = (s32_t)ptr_dig->SR;
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = 0;
+//    }
     break;
   };
 }
@@ -2154,7 +2163,7 @@ u16_t Meastable_level_length (void* addr_inf, u8_t level)
 	}
 	else if( level == 2 )
 	{
-		nodes_num = (u16_t)uChPlanChannels;
+		//nodes_num = (u16_t)uChPlanChannels;
 	}
 
 	
@@ -2194,7 +2203,7 @@ s32_t Meastable_get_ident_cmp (void* addr_inf, u8_t level, u16_t idx, s32_t sub_
 			unsuccess = 0;
 		}
 	}
-	else if( level == 2 && idx < (u16_t)uChPlanChannels )
+	else if( level == 2 && idx < (u16_t)255)//uChPlanChannels )
 	{
 		my_sub_id = idx + 1;
 		if( my_sub_id == sub_id )
@@ -2305,99 +2314,99 @@ static void Meastable_get_value (u8_t rid, struct obj_def *od, u16_t len, void *
 {
   u8_t id;
   u8_t ch_num;
-  TMeasSliceCh* tMeasVal = NULL;
-  point_fr_map* pChParam;
+//  TMeasSliceCh* tMeasVal = NULL;
+//  point_fr_map* pChParam;
 
   
   id = od->id_inst_ptr[0];
   ch_num = od->id_inst_ptr[1];
   
-  if (gITM18_Mode == ITM18_MODE_MEASURE)
-  {
-    tMeasVal = &(((TMeasSlice*)gCommonBuf)->tCh[ch_num - 1]);
-    pChParam = snmp_GetCacheChan(ch_num - 1);
-  }
+////  if (gITM18_Mode == 255)//ITM18_MODE_MEASURE)
+////  {
+////  //  tMeasVal = &(((TMeasSlice*)gCommonBuf)->tCh[ch_num - 1]);
+////  //  pChParam = snmp_GetCacheChan(ch_num - 1);
+////  }
   switch (id)
   {
   case 1: /* channel index */
 	*((s32_t*)value) = ch_num;
 	break;
   case 2: /* level */
-    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
-    {
-      *((s32_t*)value) = 0;
-    }
-    else if (pChParam->type == 0)
-    {
-      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
-      *((s32_t*)value) = (s32_t)tMeasVal->tAnChan.wLevel;
-      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
-    }
-    else
-    {
-      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
-      *((s32_t*)value) = (s32_t)tMeasVal->tDgChan.dwfLevel;
-      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
-    }
+//    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
+//    {
+//      *((s32_t*)value) = 0;
+//    }
+//    else if (pChParam->type == 0)
+//    {
+//      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
+//      *((s32_t*)value) = (s32_t)tMeasVal->tAnChan.wLevel;
+//      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
+//    }
+//    else
+//    {
+//      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
+//      *((s32_t*)value) = (s32_t)tMeasVal->tDgChan.dwfLevel;
+//      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
+//    }
     break;
   case 3: /* VAR */
-    *((s32_t*)value) = (s32_t)0;
+   // *((s32_t*)value) = (s32_t)0;
     break;
   case 4: /* CNR */
-    *((s32_t*)value) = (s32_t)0;
+  //  *((s32_t*)value) = (s32_t)0;
 	break;
   case 5: /* MER */
-    xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
-    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
-    {
-      *((s32_t*)value) = 0;
-    }
-    else if (pChParam->type != 0 && tMeasVal->tDgChan.dwbChanLock)
-    {
-	  *((s32_t*)value) = (s32_t)tMeasVal->tDgChan.dwfMER;
-    }
-    else
-    {
-      *((s32_t*)value) = (s32_t)0;
-    }
-    xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
+//    xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
+//    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
+//    {
+//      *((s32_t*)value) = 0;
+//    }
+//    else if (pChParam->type != 0 && tMeasVal->tDgChan.dwbChanLock)
+//    {
+//	  *((s32_t*)value) = (s32_t)tMeasVal->tDgChan.dwfMER;
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = (s32_t)0;
+//    }
+//    xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
     break;
   case 6: /* preBER */
   case 7: /* postBER */
-    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
-    {
-      *((s32_t*)value) = 0;
-    }
-    else if (pChParam->type != 0)
-    {
-      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
-      if (tMeasVal->tDgChan.dwbChanLock)
-      {
-        if (tMeasVal->tDgChan.dwbBerOff)
-        {
-          *((u32_t*)value) = (u32_t)0;
-        }
-        else if( id == 6 )
-        {
-          *((u32_t*)value) = snmp_ConvertBER(tMeasVal->tDgChan.dwfPreBER_exp, 
-                                             tMeasVal->tDgChan.uPreBER_man );
-        }
-        else
-        {
-          *((u32_t*)value) = snmp_ConvertBER(tMeasVal->tDgChan.dwfPostBER_exp, 
-                                             tMeasVal->tDgChan.uPostBER_man );
-        }
-      }
-      else
-      {
-        *((u32_t*)value) = 0xFFFFFFFF;
-      }
-      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
-    }
-    else
-    {
-      *((s32_t*)value) = (s32_t)0;
-    }
+//    if (tMeasVal == NULL || ch_num > gMeasuredChBuf)
+//    {
+//      *((s32_t*)value) = 0;
+//    }
+//    else if (pChParam->type != 0)
+//    {
+//      xSemaphoreTake(gMeasResultMutex, portMAX_DELAY); // захват мьютекса результатов измерений
+//      if (tMeasVal->tDgChan.dwbChanLock)
+//      {
+//        if (tMeasVal->tDgChan.dwbBerOff)
+//        {
+//          *((u32_t*)value) = (u32_t)0;
+//        }
+//        else if( id == 6 )
+//        {
+//          *((u32_t*)value) = snmp_ConvertBER(tMeasVal->tDgChan.dwfPreBER_exp, 
+//                                             tMeasVal->tDgChan.uPreBER_man );
+//        }
+//        else
+//        {
+//          *((u32_t*)value) = snmp_ConvertBER(tMeasVal->tDgChan.dwfPostBER_exp, 
+//                                             tMeasVal->tDgChan.uPostBER_man );
+//        }
+//      }
+//      else
+//      {
+//        *((u32_t*)value) = 0xFFFFFFFF;
+//      }
+//      xSemaphoreGive(gMeasResultMutex);                // освобождение мьютекса результатов измерений
+//    }
+//    else
+//    {
+//      *((s32_t*)value) = (s32_t)0;
+//    }
     break;
   };
 }
@@ -2457,7 +2466,7 @@ u16_t Errtable_level_length (void* addr_inf, u8_t level)
 	}
 	else if( level == 2 )
 	{
-		nodes_num = (u16_t)uChPlanChannels;
+		//nodes_num = (u16_t)uChPlanChannels;
 	}
 
 	return nodes_num;
@@ -2496,7 +2505,7 @@ s32_t Errtable_get_ident_cmp (void* addr_inf, u8_t level, u16_t idx, s32_t sub_i
 			unsuccess = 0;
 		}
 	}
-	else if( level == 2 && idx < (u16_t)uChPlanChannels )
+	else if( level == 2 && idx < (u16_t)255)//uChPlanChannels )
 	{
 		my_sub_id = idx + 1;
 		if( my_sub_id == sub_id )
@@ -2599,75 +2608,75 @@ static void Errtable_get_value (u8_t rid, struct obj_def *od, u16_t len, void *v
 
   id = od->id_inst_ptr[0];
   ch_num = od->id_inst_ptr[1];
-
-  /* index */
-  if( id == 1 )
-  {
-     *((s32_t*)value) = ch_num;
-  }
-  /* alert */
-  else if( id == 2 )
-  {
-    if( dwChOveralErrors[ch_num - 1] != 0 )
-	 {
-		 *((s32_t*)value) = 1ul;
-	 }
-	 else
-	 {
-		 *((s32_t*)value) = 0ul;
-	 }
-  }
-  /* [3...7] lowLevel, highLevel, lowVAR, highVAR, lowCNR */
-  else if( id < 8 )
-  {
-	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 3 ) )
-    {
-		 *((s32_t*)value) = 1ul;
-	 }
-	 else
-	 {
-		 *((s32_t*)value) = 0ul;
-	 }
-  }
-  /* [8...10] lowMER, highPreBER, highPostBER */
-  else if( id < 11 )
-  {
-	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 3 ) ||
-		  CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_DG_NOLOCK ) )
-    {
-		 *((s32_t*)value) = 1ul;
-	 }
-	 else
-	 {
-		 *((s32_t*)value) = 0ul;
-	 }
-  }
-  /* [11] highDL_adjacent */
-  else if( id == 11 )
-  {
-	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_HIGHDLADJ_PREV ) ||
-		  CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_HIGHDLADJ_NEXT ) )
-    {
-		 *((s32_t*)value) = 1ul;
-	 }
-	 else
-	 {
-		 *((s32_t*)value) = 0ul;
-	 }
-  }
-  /* [12...16] highDL_40_300, highDL_40_600, highDL_40_1000, highDL_DF_100, 
-  highDL_An_Dg */
-  else if( id < 17 )
-  {
-	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 2 ) )
-    {
-		 *((s32_t*)value) = 1ul;
-	 }
-	 else
-	 {
-		 *((s32_t*)value) = 0ul;
-	 }
-  }
+////
+////  /* index */
+////  if( id == 1 )
+////  {
+////     *((s32_t*)value) = ch_num;
+////  }
+////  /* alert */
+////  else if( id == 2 )
+////  {
+//////    if( dwChOveralErrors[ch_num - 1] != 0 )
+//////	 {
+//////		 *((s32_t*)value) = 1ul;
+//////	 }
+//////	 else
+//////	 {
+//////		 *((s32_t*)value) = 0ul;
+//////	 }
+////  }
+////  /* [3...7] lowLevel, highLevel, lowVAR, highVAR, lowCNR */
+////  else if( id < 8 )
+////  {
+//////	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 3 ) )
+//////    {
+//////		 *((s32_t*)value) = 1ul;
+//////	 }
+//////	 else
+//////	 {
+//////		 *((s32_t*)value) = 0ul;
+//////	 }
+////  }
+////  /* [8...10] lowMER, highPreBER, highPostBER */
+////  else if( id < 11 )
+////  {
+//////	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 3 ) ||
+//////		  CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_DG_NOLOCK ) )
+//////    {
+//////		 *((s32_t*)value) = 1ul;
+//////	 }
+//////	 else
+//////	 {
+//////		 *((s32_t*)value) = 0ul;
+//////	 }
+////  }
+////  /* [11] highDL_adjacent */
+////  else if( id == 11 )
+////  {
+//////	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_HIGHDLADJ_PREV ) ||
+//////		  CHERR_GETERROR( dwChOveralErrors[ch_num - 1], CHERR_HIGHDLADJ_NEXT ) )
+//////    {
+//////		 *((s32_t*)value) = 1ul;
+//////	 }
+//////	 else
+//////	 {
+//////		 *((s32_t*)value) = 0ul;
+//////	 }
+////  }
+////  /* [12...16] highDL_40_300, highDL_40_600, highDL_40_1000, highDL_DF_100, 
+////  highDL_An_Dg */
+////  else if( id < 17 )
+////  {
+//////	 if( CHERR_GETERROR( dwChOveralErrors[ch_num - 1], id - 2 ) )
+//////    {
+//////		 *((s32_t*)value) = 1ul;
+//////	 }
+//////	 else
+//////	 {
+//////		 *((s32_t*)value) = 0ul;
+//////	 }
+//////  }
 }
 
 // функции для узла ALARM
@@ -2694,22 +2703,22 @@ static void ciu_alarm_hardware_status_get_object_def (u8_t ident_len, s32_t *ide
 
     id = ident[0];
     LWIP_DEBUGF(SNMP_MIB_DEBUG,("get_object_def planar.%"U16_F".0\n",(u16_t)id));
-    switch (id)
-    {
-      case 2: /* hardware status (string, NA) */
-        od->instance = MIB_OBJECT_SCALAR;
-        od->access = MIB_OBJECT_NOT_ACCESSIBLE;
-        od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        if( szHardwareStatus != NULL )
-		   od->v_len = strlen( szHardwareStatus );
-		else
-		   od->v_len = 0; 
-        break;
-		default:
-        LWIP_DEBUGF(SNMP_MIB_DEBUG,("planar_get_object_def: no such object\n"));
-        od->instance = MIB_OBJECT_NONE;
-        break;
-    };
+////    switch (id)
+////    {
+////      case 2: /* hardware status (string, NA) */
+////        od->instance = MIB_OBJECT_SCALAR;
+////        od->access = MIB_OBJECT_NOT_ACCESSIBLE;
+////        od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
+//////        if( szHardwareStatus != NULL )
+//////		   od->v_len = strlen( szHardwareStatus );
+//////		else
+//////		   od->v_len = 0; 
+////        break;
+////		default:
+////        LWIP_DEBUGF(SNMP_MIB_DEBUG,("planar_get_object_def: no such object\n"));
+////        od->instance = MIB_OBJECT_NONE;
+////        break;
+////    };
   }
   else
   {
@@ -2734,7 +2743,7 @@ static void ciu_alarm_hardware_status_get_value (struct obj_def *od, u16_t len, 
   switch (id)
   {
   case 2: /* hardware status */
-    ocstrncpy(value, (u8_t*)szHardwareStatus, len);
+  //  ocstrncpy(value, (u8_t*)szHardwareStatus, len);
     break;
   };
 }
@@ -2767,10 +2776,10 @@ static void ciu_alarm_temperature_status_get_object_def (u8_t ident_len, s32_t *
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        if( szTemperatureStatus != NULL )
-		    od->v_len = strlen( szTemperatureStatus );
-		else
-			od->v_len = 0;
+//        if( szTemperatureStatus != NULL )
+//		    od->v_len = strlen( szTemperatureStatus );
+//		else
+//			od->v_len = 0;
         break;
 		default:
         LWIP_DEBUGF(SNMP_MIB_DEBUG,("planar_get_object_def: no such object\n"));
@@ -2802,7 +2811,7 @@ static void ciu_alarm_temperature_status_get_value (struct obj_def *od, u16_t le
   switch (id)
   {
   case 2: /* temperature status */
-    ocstrncpy(value, (u8_t*)szTemperatureStatus, len);
+  //  ocstrncpy(value, (u8_t*)szTemperatureStatus, len);
     break;
   };
 }
@@ -2835,37 +2844,37 @@ static void ciu_alarm_channels_status_get_object_def (u8_t ident_len, s32_t *ide
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_Level, sizeof(szSnmp_Level) );
+	//	  od->v_len = strnlen( szSnmp_Level, sizeof(szSnmp_Level) );
         break;
       case 3: /* VAR severity (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_VAR, sizeof(szSnmp_VAR) );
+	//	  od->v_len = strnlen( szSnmp_VAR, sizeof(szSnmp_VAR) );
         break;
       case 4: /* CNR severity (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_CNR, sizeof(szSnmp_CNR) );
+	//	  od->v_len = strnlen( szSnmp_CNR, sizeof(szSnmp_CNR) );
         break;
       case 5: /* MER severity (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_MER, sizeof(szSnmp_MER) );
+	//	  od->v_len = strnlen( szSnmp_MER, sizeof(szSnmp_MER) );
         break;
       case 6: /* preBER severity (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_preBER, sizeof(szSnmp_preBER) );
+	//	  od->v_len = strnlen( szSnmp_preBER, sizeof(szSnmp_preBER) );
         break;
       case 7: /* postBER severity (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-		  od->v_len = strnlen( szSnmp_postBER, sizeof(szSnmp_postBER) );
+	//	  od->v_len = strnlen( szSnmp_postBER, sizeof(szSnmp_postBER) );
         break;
 		 default:
         LWIP_DEBUGF(SNMP_MIB_DEBUG,("planar_get_object_def: no such object\n"));
@@ -2897,22 +2906,22 @@ static void ciu_alarm_channels_status_get_value (struct obj_def *od, u16_t len, 
   switch (id)
   {
     case 2: /* level severity */
-      ocstrncpy(value, (u8_t*)szSnmp_Level, len);
+   ///   ocstrncpy(value, (u8_t*)szSnmp_Level, len);
 		break;
     case 3: /* VAR severity */
-      ocstrncpy(value, (u8_t*)szSnmp_VAR, len);
+   //   ocstrncpy(value, (u8_t*)szSnmp_VAR, len);
 		break;
 	 case 4: /* CNR severity */
-      ocstrncpy(value, (u8_t*)szSnmp_CNR, len);
+   //   ocstrncpy(value, (u8_t*)szSnmp_CNR, len);
 		break;
     case 5: /* MER severity */
-      ocstrncpy(value, (u8_t*)szSnmp_MER, len);
+   //   ocstrncpy(value, (u8_t*)szSnmp_MER, len);
 		break;
     case 6: /* preBER severity */
-      ocstrncpy(value, (u8_t*)szSnmp_preBER, len);
+   //   ocstrncpy(value, (u8_t*)szSnmp_preBER, len);
 		break;
     case 7: /* postBER severity */
-      ocstrncpy(value, (u8_t*)szSnmp_postBER, len);
+   //   ocstrncpy(value, (u8_t*)szSnmp_postBER, len);
       break;
   };
 }
@@ -2945,16 +2954,16 @@ static void ciu_alarm_flatness_status_get_object_def (u8_t ident_len, s32_t *ide
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        if( szBandErrorType != NULL )
-		    od->v_len = strlen( szBandErrorType );
-		  else
-			 od->v_len = 0;
+//        if( szBandErrorType != NULL )
+//		    od->v_len = strlen( szBandErrorType );
+//		  else
+//			 od->v_len = 0;
         break;
       case 3: /* flatness severity value (string, NA) */
         od->instance = MIB_OBJECT_SCALAR;
         od->access = MIB_OBJECT_NOT_ACCESSIBLE;
         od->asn_type = (SNMP_ASN1_UNIV | SNMP_ASN1_PRIMIT | SNMP_ASN1_OC_STR);
-        od->v_len = strnlen( szSnmp_BandErrorVal, sizeof(szSnmp_BandErrorVal) );
+       // od->v_len = strnlen( szSnmp_BandErrorVal, sizeof(szSnmp_BandErrorVal) );
 		 default:
         LWIP_DEBUGF(SNMP_MIB_DEBUG,("planar_get_object_def: no such object\n"));
         od->instance = MIB_OBJECT_NONE;
@@ -2985,10 +2994,10 @@ static void ciu_alarm_flatness_status_get_value (struct obj_def *od, u16_t len, 
   switch (id)
   {
     case 2: /* flatness severity type */
-      ocstrncpy(value, (u8_t*)szBandErrorType, len);
+    //  ocstrncpy(value, (u8_t*)szBandErrorType, len);
 		break;
     case 3: /* flatness severity value */
-      ocstrncpy(value, (u8_t*)szSnmp_BandErrorVal, len);
+    //  ocstrncpy(value, (u8_t*)szSnmp_BandErrorVal, len);
       break;
   };
 }
@@ -3189,7 +3198,7 @@ err_t snmp_send_trap_ex (s8_t generic_trap,
                          struct snmp_obj_id* varbinds, 
                          u8_t varbinds_num)
 {
-	extern BOOL bSnmpActive;
+	extern uint8_t bSnmpActive;
 	
 	struct snmp_varbind** vb_list;
 	struct mib_node* node;

@@ -232,8 +232,15 @@ system_get_value(const struct snmp_scalar_array_node_def *node, void *value)
   const u8_t*  var = NULL;
   const s16_t* var_len;
   u16_t result;
+  uint16_t lens_mes;
 
   switch (node->oid) {
+    case 8: /* sysLocation */
+    var= "helloworld";
+   // node->type = SNMP_ASN1_TYPE_OCTET_STRING;
+  //  lens_mes=strlen(var);
+    var_len = 0;
+    break;
   case 1: /* sysDescr */
     var     = sysdescr;
     var_len = (const s16_t*)sysdescr_len;
@@ -245,7 +252,7 @@ system_get_value(const struct snmp_scalar_array_node_def *node, void *value)
       return dev_enterprise_oid->len * sizeof(u32_t);
     }
   case 3: /* sysUpTime */
-    MIB2_COPY_SYSUPTIME_TO((u32_t*)value);
+    //MIB2_COPY_SYSUPTIME_TO((u32_t*)value);
     return sizeof(u32_t);
   case 4: /* sysContact */
     var     = syscontact;
@@ -289,8 +296,10 @@ system_set_test(const struct snmp_scalar_array_node_def *node, u16_t len, void *
 
   switch (node->oid) {
   case 4: /* sysContact */
-    var_bufsize  = &syscontact_bufsize;
-    var_wr_len   = syscontact_wr_len;
+//        var_bufsize  = &syscontact_bufsize;
+//    var_wr_len   = syscontact_wr_len;
+    var_bufsize  = value;
+    var_wr_len   = &len;
     break;
   case 5: /* sysName */
     var_bufsize  = &sysname_bufsize;
@@ -332,8 +341,10 @@ system_set_value(const struct snmp_scalar_array_node_def *node, u16_t len, void 
 
   switch (node->oid) {
   case 4: /* sysContact */
-    var_wr     = syscontact_wr;
-    var_wr_len = syscontact_wr_len;
+//    var_wr     = syscontact_wr;
+//    var_wr_len = syscontact_wr_len;
+     var_wr  = value;
+    var_wr_len   = &len;
     break;
   case 5: /* sysName */
     var_wr     = sysname_wr;
@@ -369,7 +380,8 @@ static const struct snmp_scalar_array_node_def system_nodes[] = {
   {4, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysContact */
   {5, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysName */
   {6, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysLocation */
-  {7, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY}   /* sysServices */
+  {7, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* sysServices */
+  {8, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY}   /* sysServices */
 };
 
 const struct snmp_scalar_array_node snmp_mib2_system_node = SNMP_SCALAR_CREATE_ARRAY_NODE(1, system_nodes, system_get_value, system_set_test, system_set_value);

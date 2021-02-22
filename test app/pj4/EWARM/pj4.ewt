@@ -1220,9 +1220,6 @@
                     <name>$PROJ_DIR$\..\Core\Src\LOGS.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_private_mib\lwip_prvmib.c</name>
-                </file>
-                <file>
                     <name>$PROJ_DIR$\..\Core\Src\main.c</name>
                 </file>
                 <file>
@@ -1533,25 +1530,7 @@
                 <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_icmp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_interfaces.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_ip.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_snmp.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_system.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_tcp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_udp.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_msg.c</name>

@@ -813,6 +813,18 @@ static void prvAddNewTaskToReadyList( TCB_t *pxNewTCB ) PRIVILEGED_FUNCTION;
 
 #endif /* configSUPPORT_DYNAMIC_ALLOCATION */
 /*-----------------------------------------------------------*/
+void vApplicationIdleHook( void )
+{
+	while(1)
+          
+        {
+        
+        
+        
+        }
+}
+
+
 
 static void prvInitialiseNewTask( 	TaskFunction_t pxTaskCode,
 									const char * const pcName,		/*lint !e971 Unqualified char types are allowed for strings and single characters only. */
@@ -3164,6 +3176,7 @@ void vTaskMissedYield( void )
 {
 	xYieldPending = pdTRUE;
 }
+//vApplicationIdleHook
 /*-----------------------------------------------------------*/
 
 #if ( configUSE_TRACE_FACILITY == 1 )

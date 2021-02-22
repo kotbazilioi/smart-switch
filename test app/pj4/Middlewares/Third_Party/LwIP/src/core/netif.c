@@ -626,7 +626,7 @@ netif_set_up(struct netif *netif)
   if (!(netif->flags & NETIF_FLAG_UP)) {
     netif->flags |= NETIF_FLAG_UP;
 
-    MIB2_COPY_SYSUPTIME_TO(&netif->ts);
+ //   MIB2_COPY_SYSUPTIME_TO(&netif->ts);
 
     NETIF_STATUS_CALLBACK(netif);
 
@@ -683,7 +683,7 @@ netif_set_down(struct netif *netif)
 {
   if (netif->flags & NETIF_FLAG_UP) {
     netif->flags &= ~NETIF_FLAG_UP;
-    MIB2_COPY_SYSUPTIME_TO(&netif->ts);
+  //  MIB2_COPY_SYSUPTIME_TO(&netif->ts);
 
 #if LWIP_IPV4 && LWIP_ARP
     if (netif->flags & NETIF_FLAG_ETHARP) {

@@ -29,61 +29,28 @@
 
 #include "lwip/netif.h"
 #include "lwip/apps/snmp.h"
+#include "lwip/apps/snmp_core.h"
 #include "lwip/apps/snmp_mib2.h"
 //#include "lwip/apps/snmpv3.h"
 #include "lwip/apps/snmp_snmpv2_framework.h"
 #include "lwip/apps/snmp_snmpv2_usm.h"
 //#include "examples/snmp/snmp_v3/snmpv3_dummy.h"
-#include "private_mib.h"
+//#include "private_mib.h"
 #include "snmp_msg.h"
 #include "snmp_ex.h"
 #include "snmp_netconn.h" 
+#include "flash_if.h"
+ip4_addr_t tipaddr;
+struct snmp_obj_id oid_trtest; 
+struct snmp_varbind vbt_tr;
+
 
 #if LWIP_SNMP
 static const struct snmp_mib *mibs[] = {
-//  &mib2,
-//  &mib_private
-////#if LWIP_SNMP_V3
-////  , &snmpframeworkmib
-////  , &snmpusmmib
-////#endif
-//};
-//#endif /* LWIP_SNMP */
-//
-//void
-//snmp_init(void)
-//{
-//#if LWIP_SNMP
-//  s32_t req_nr;
-//  lwip_privmib_init();
-//#if SNMP_LWIP_MIB2
-//#if SNMP_USE_NETCONN
-//  snmp_threadsync_init(&snmp_mib2_lwip_locks, snmp_mib2_lwip_synchronizer);
-//#endif /* SNMP_USE_NETCONN */
-//  snmp_mib2_set_syscontact_readonly((const u8_t*)"root", NULL);
-//  snmp_mib2_set_syslocation_readonly((const u8_t*)"lwIP development PC", NULL);
-//  snmp_mib2_set_sysdescr((const u8_t*)"lwIP example", NULL);
-//#endif /* SNMP_LWIP_MIB2 */
-//
-////#if LWIP_SNMP_V3
-////  snmpv3_dummy_init();
-////#endif
-//
-//  snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
-//  snmp_init();
-//
-//  snmp_trap_dst_ip_set(0, &netif_default->gw);
-//  snmp_trap_dst_enable(0, 1);
-////
-////  snmp_send_inform_generic(SNMP_GENTRAP_COLDSTART, NULL, &req_nr);
-////  snmp_send_trap_generic(SNMP_GENTRAP_COLDSTART);
-//
-//#endif /* LWIP_SNMP */
-//}
   
-  
- &mib2,
-  &mib_private
+
+  &mib2_1,
+ // &mib_private
 #if LWIP_SNMP_V3
   , &snmpframeworkmib
   , &snmpusmmib
@@ -91,95 +58,48 @@ static const struct snmp_mib *mibs[] = {
 };
 #endif /* LWIP_SNMP */
 
-void
-snmp_ex_init(void)
+void snmp_ex_init(void)
 {
+   IP4_ADDR(&tipaddr, FW_data.V_IP_SNMP[0], FW_data.V_IP_SNMP[1], FW_data.V_IP_SNMP[2], FW_data.V_IP_SNMP[3]);
 #if LWIP_SNMP
-  lwip_privmib_init();
+ // lwip_privmib_init();
 #if SNMP_LWIP_MIB2
 #if SNMP_USE_NETCONN
   snmp_threadsync_init(&snmp_mib2_lwip_locks, snmp_mib2_lwip_synchronizer);
 #endif /* SNMP_USE_NETCONN */
-  snmp_mib2_set_syscontact_readonly((const u8_t*)"root", NULL);
-  snmp_mib2_set_syslocation_readonly((const u8_t*)"lwIP development PC", NULL);
-  snmp_mib2_set_sysdescr((const u8_t*)"simhost", NULL);
+  snmp_mib2_set_syscontact_readonly((const u8_t*)"netping", NULL);
+  snmp_mib2_set_syslocation_readonly((const u8_t*)"netping.ru", NULL);
+  snmp_mib2_set_sysdescr((const u8_t*)"SmartSwich", NULL);
 #endif /* SNMP_LWIP_MIB2 */
 
 #if LWIP_SNMP_V3
   snmpv3_dummy_init();
 #endif
 
-  snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
+
+snmp_trap_dst_ip_set (0,&tipaddr);
+snmp_trap_dst_enable (0,1);
+
+snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
   snmp_init();
+  snmp_coldstart_trap();
+  
+
+ 
+  vbt_tr.value="hello_nets";
+  vbt_tr.value_len=sizeof("hello_nets");
+  uint32_t OID_TR[]={1,3,6,1,4,1,2022,1,1};  
+  oid_trtest.len=sizeof(OID_TR)/4;
+  memcpy((uint32_t*)oid_trtest.id,(uint32_t*)OID_TR,sizeof(OID_TR));
+  
+  
+//  oid_trtest.id[0]=1;
+  vbt_tr.type=SNMP_ASN1_TYPE_OCTET_STRING;
+  vbt_tr.oid.len=3;
+  memcpy(vbt_tr.oid.id,OID_TR,12);
+  snmp_send_trap(&oid_trtest,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
+    
+    
+    
 #endif /* LWIP_SNMP */
 }
-//
-//
-//// ?????????? ? ?????? SNMP ---------------------------------------------------
-//void SnmpPrepareForWork(void)
-//{
-// struct ip_addr xIpAddr;
-// struct snmp_obj_id SnmpObjId;
-//
-//
-// // ????????? sysName
-// snmp_set_sysname((u8_t*)Sysname, (u8_t*)&Sysname_len);
-// // ????????? sysDescr
-// snmp_set_sysdesr((u8_t*)Sysdescr, (u8_t*)&Sysdescr_len);
-// // ????????? sysContact
-// snmp_set_syscontact((u8_t*)Syscontact, (u8_t*)&Syscontact_len);
-// // ????????? sysLocation
-// snmp_set_syslocation((u8_t*)Syslocation, (u8_t*)&Syslocation_len);
-//
-// // ?????? SNMP_SYSOBJID
-// SnmpObjId.len = 9;
-// SnmpObjId.id[0] = 1;
-// SnmpObjId.id[1] = 3;
-// SnmpObjId.id[2] = 6;
-// SnmpObjId.id[3] = 1;
-// SnmpObjId.id[4] = 4;
-// SnmpObjId.id[5] = 1;
-// SnmpObjId.id[6] = ENTERPRISE_ID;
-// SnmpObjId.id[7] = 2;
-// SnmpObjId.id[8] = 4;
-// snmp_set_sysobjid(&SnmpObjId);
-//
-// // ????????? ??????
-// if ((gSNMP_IPaddr1[0] & gSNMP_IPaddr1[1] & gSNMP_IPaddr1[2] & gSNMP_IPaddr1[3]) != 0xFF &&
-//     (gSNMP_IPaddr1[0] | gSNMP_IPaddr1[1] | gSNMP_IPaddr1[2] | gSNMP_IPaddr1[3]) != 0)
-// {
-//   IP4_ADDR(&xIpAddr, gSNMP_IPaddr1[0], gSNMP_IPaddr1[1], gSNMP_IPaddr1[2], gSNMP_IPaddr1[3]);
-//   snmp_trap_dst_enable(0, 1);
-//   snmp_trap_dst_ip_set(0, &xIpAddr);
-// }
-// else
-// {
-//   snmp_trap_dst_enable(0, 0);
-// }
-//// if ((gSNMP_IPaddr2[0] & gSNMP_IPaddr2[1] & gSNMP_IPaddr2[2] & gSNMP_IPaddr2[3]) != 0xFF &&
-////     (gSNMP_IPaddr2[0] | gSNMP_IPaddr2[1] | gSNMP_IPaddr2[2] | gSNMP_IPaddr2[3]) != 0)
-//// {
-////   IP4_ADDR(&xIpAddr, gSNMP_IPaddr2[0], gSNMP_IPaddr2[1], gSNMP_IPaddr2[2], gSNMP_IPaddr2[3]);
-////   snmp_trap_dst_enable(1, 1);
-////   snmp_trap_dst_ip_set(1, &xIpAddr);
-//// }
-//// else
-//// {
-////   snmp_trap_dst_enable(1, 0);
-//// }
-//// if ((gSNMP_IPaddr3[0] & gSNMP_IPaddr3[1] & gSNMP_IPaddr3[2] & gSNMP_IPaddr3[3]) != 0xFF &&
-////     (gSNMP_IPaddr3[0] | gSNMP_IPaddr3[1] | gSNMP_IPaddr3[2] | gSNMP_IPaddr3[3]) != 0)
-//// {
-////   IP4_ADDR(&xIpAddr, gSNMP_IPaddr3[0], gSNMP_IPaddr3[1], gSNMP_IPaddr3[2], gSNMP_IPaddr3[3]);
-////   snmp_trap_dst_enable(2, 1);
-////   snmp_trap_dst_ip_set(2, &xIpAddr);
-//// }
-//// else
-//// {
-////   snmp_trap_dst_enable(2, 0);
-//// }
-//
-// // ???????? ????? ????????? ??????
-// snmp_coldstart_trap();
-//}
-//

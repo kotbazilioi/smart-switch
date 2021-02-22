@@ -47,9 +47,9 @@
 #if LWIP_SNMP
 
 /** Directory where the sensor files are */
-#define SENSORS_DIR           "w:\\sensors"
+#define SENSORS_DIR           "E:\\sensors"
 /** Set to 1 to read sensor values from files (in directory defined by SENSORS_DIR) */
-#define SENSORS_USE_FILES     0
+#define SENSORS_USE_FILES     1
 /** Set to 1 to search sensor files at startup (in directory defined by SENSORS_DIR) */
 #define SENSORS_SEARCH_FILES  0
 

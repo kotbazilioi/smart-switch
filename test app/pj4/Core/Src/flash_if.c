@@ -530,10 +530,10 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     FW_data.V_logs_struct.CRC16 = 0;
     memset((uint8_t*)&FW_data.V_logs_struct.log_reple,0,2000);
      
-     FW_data.V_IP_SNMP[0]=0;//     62.117.76.142
-     FW_data.V_IP_SNMP[1]=0;
+     FW_data.V_IP_SNMP[0]=192;//     62.117.76.142
+     FW_data.V_IP_SNMP[1]=168;
      FW_data.V_IP_SNMP[2]=0;
-     FW_data.V_IP_SNMP[3]=0;
+     FW_data.V_IP_SNMP[3]=152;
      FW_data.V_TYPE_OUT=0;
      
      FW_data.V_NTP_CIRCL = 0;

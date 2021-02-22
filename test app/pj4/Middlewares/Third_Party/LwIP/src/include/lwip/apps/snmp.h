@@ -49,6 +49,7 @@ extern "C" {
 
 #include "lwip/err.h"
 #include "lwip/apps/snmp_core.h"
+extern struct mib_node* const mgmt_nodes[1] ;
 
 /** SNMP variable binding descriptor (publically needed for traps) */
 struct snmp_varbind

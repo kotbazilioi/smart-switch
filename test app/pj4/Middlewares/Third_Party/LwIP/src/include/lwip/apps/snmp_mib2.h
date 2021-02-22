@@ -48,7 +48,7 @@ extern "C" {
 
 #include "lwip/apps/snmp_core.h"
 
-extern const struct snmp_mib mib2;
+extern const struct snmp_mib mib2_1;
 
 #if SNMP_USE_NETCONN
 #include "lwip/apps/snmp_threadsync.h"

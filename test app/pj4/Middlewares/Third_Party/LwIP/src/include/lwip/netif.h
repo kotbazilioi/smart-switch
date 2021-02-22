@@ -223,6 +223,8 @@ u8_t netif_alloc_client_data_id(void);
  *  The following fields should be filled in by the initialization
  *  function for the device driver: hwaddr_len, hwaddr[], mtu, flags */
 struct netif {
+//  uint32_t* ifinucastpkts;
+//  uint32_t ifinoctets; 
   /** pointer to next in linked list */
   struct netif *next;
 

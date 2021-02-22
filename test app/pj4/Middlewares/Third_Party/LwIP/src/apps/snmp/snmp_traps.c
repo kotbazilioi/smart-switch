@@ -190,7 +190,7 @@ snmp_send_trap(const struct snmp_obj_id* eoid, s32_t generic_trap, s32_t specifi
           trap_msg.spc_trap = 0;
         }
 
-        MIB2_COPY_SYSUPTIME_TO(&trap_msg.ts);
+     ///   MIB2_COPY_SYSUPTIME_TO(&trap_msg.ts);
 
         /* pass 0, calculate length fields */
         tot_len = snmp_trap_varbind_sum(&trap_msg, varbinds);

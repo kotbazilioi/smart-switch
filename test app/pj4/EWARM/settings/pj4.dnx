@@ -12,15 +12,15 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
-        <stlinkserialNo>0666FF323239524257215932</stlinkserialNo>
-        <stlinkfoundProbes />
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <stlinkResetStyle>0</stlinkResetStyle>
         <stlinkResetStrategy>2</stlinkResetStrategy>
+        <stlinkserialNo>0666FF323239524257215932</stlinkserialNo>
+        <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>1700055485</Checksum>
+        <Checksum>3377038600</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -90,27 +90,32 @@
         <Fmt22>log_reple_t-type_event	3	0</Fmt22>
         <Fmt23>log_reple_t-year	3	0</Fmt23>
         <Fmt24>logs_t-CRC16	4	0</Fmt24>
-        <Fmt25>struct snmp_request-source_port	3	0</Fmt25>
+        <Fmt25>struct snmp_obj_id-len	3	0</Fmt25>
+        <Fmt26>struct snmp_request-source_port	3	0</Fmt26>
     </struct_types>
     <array_types>
-        <Fmt0>uint8_t[4]	3	0</Fmt0>
+        <Fmt0>u32_t[50]	4	0</Fmt0>
+        <Fmt1>uint8_t[10]	4	0</Fmt1>
+        <Fmt2>uint8_t[4]	3	0</Fmt2>
     </array_types>
     <watch_formats>
         <Fmt0>{W}1:RESETL	3	0</Fmt0>
-        <Fmt1>{W}1:SWICH_ON_HTTP	3	0</Fmt1>
-        <Fmt2>{W}1:crc	4	0</Fmt2>
-        <Fmt3>{W}1:crc_in	4	0</Fmt3>
-        <Fmt4>{W}1:ct_char	3	0</Fmt4>
-        <Fmt5>{W}1:ct_pass	3	0</Fmt5>
-        <Fmt6>{W}1:dat	4	0</Fmt6>
-        <Fmt7>{W}1:data[451]	4	0</Fmt7>
-        <Fmt8>{W}1:destination	4	0</Fmt8>
-        <Fmt9>{W}1:event	3	0</Fmt9>
-        <Fmt10>{W}1:ip_mass[0]	3	0</Fmt10>
-        <Fmt11>{W}1:ip_mass[2]	3	0</Fmt11>
-        <Fmt12>{W}1:ip_mass[3]	3	0</Fmt12>
-        <Fmt13>{W}1:reple	3	0</Fmt13>
-        <Fmt14>{W}1:status_dns	4	0</Fmt14>
+        <Fmt1>{W}1:SNMP_ERR_GENERROR	3	0</Fmt1>
+        <Fmt2>{W}1:SWICH_ON_HTTP	3	0</Fmt2>
+        <Fmt3>{W}1:crc	4	0</Fmt3>
+        <Fmt4>{W}1:crc_in	4	0</Fmt4>
+        <Fmt5>{W}1:ct_char	3	0</Fmt5>
+        <Fmt6>{W}1:ct_pass	3	0</Fmt6>
+        <Fmt7>{W}1:dat	4	0</Fmt7>
+        <Fmt8>{W}1:data[451]	4	0</Fmt8>
+        <Fmt9>{W}1:destination	4	0</Fmt9>
+        <Fmt10>{W}1:event	3	0</Fmt10>
+        <Fmt11>{W}1:ip_mass[0]	3	0</Fmt11>
+        <Fmt12>{W}1:ip_mass[2]	3	0</Fmt12>
+        <Fmt13>{W}1:ip_mass[3]	3	0</Fmt13>
+        <Fmt14>{W}1:reple	3	0</Fmt14>
+        <Fmt15>{W}1:result	3	0</Fmt15>
+        <Fmt16>{W}1:status_dns	4	0</Fmt16>
     </watch_formats>
     <Trace2>
         <Enabled>0</Enabled>
@@ -161,14 +166,13 @@
         <mode>1</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_5.c}.259.4" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_netconn.c}.71.7" 0 0 1 "" 0 "" 0</Bp1>
-        <Count>2</Count>
+        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_system.c}.342.3" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_interfaces.c}.170.3" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_icmp.c}.63.3" 0 0 1 "" 0 "" 0</Bp2>
+        <Bp3>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_mib2_system.c}.302.5" 0 0 1 "" 0 "" 0</Bp3>
+        <Bp4>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_ex.c}.100.3" 0 0 1 "" 0 "" 0</Bp4>
+        <Count>5</Count>
     </Breakpoints2>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -191,4 +195,8 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
 </settings>

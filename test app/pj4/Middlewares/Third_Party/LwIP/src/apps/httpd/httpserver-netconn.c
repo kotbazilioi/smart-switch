@@ -884,6 +884,9 @@ post_data_t elem_post_data;
           break;
            case 4:
             {
+              
+                    
+                   vTaskDelay(10);
                len_buf_list=costr_page2((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
                  vTaskDelay(10);
@@ -893,6 +896,8 @@ post_data_t elem_post_data;
                  
                len_buf_list=costr_page4((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+                     
+                   vTaskDelay(20);
             }
           break;
            case 5: //settings
@@ -900,34 +905,40 @@ post_data_t elem_post_data;
 ////               fs_open(&file, "/img/netping.gif");
 ////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
 ////              fs_close(&file);
+                    
+                   vTaskDelay(10);
                len_buf_list=costr_page3((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-               vTaskDelay(5);
+               vTaskDelay(10);
                
                len_buf_list=costr_page5((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
-                vTaskDelay(5);
+                vTaskDelay(10);
                
                len_buf_list=costr_page6((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-                vTaskDelay(5);
+                vTaskDelay(10);
                len_buf_list=costr_page6_1((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-                vTaskDelay(5);
+                vTaskDelay(10);
                
                len_buf_list=costr_page7((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
                
                
-                   vTaskDelay(5);
+                   vTaskDelay(10);
                len_buf_list=costr_page7_1((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+                     
+                   vTaskDelay(20);
 //               len_buf_list=costr_page4((char*)buf_list);
 //               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
             }
           break;
            case 6:  //logs
             {
+                    
+                   vTaskDelay(10);
                 len_buf_list=costr_page8((char*)buf_list);
                 netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
                 vTaskDelay(10);
@@ -949,7 +960,7 @@ post_data_t elem_post_data;
                     }
                 len_buf_list=costr_page9((char*)buf_list);
                 netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-                vTaskDelay(10);
+                vTaskDelay(20);
             }
           break;
            case 7:
@@ -974,7 +985,7 @@ post_data_t elem_post_data;
               }
           }
  }
-
+// char buf_page[3000];
 static void http_server_serve(struct netconn *conn) 
 {
    
@@ -984,8 +995,10 @@ static void http_server_serve(struct netconn *conn)
   char* buf;
    u16_t buflen;
    char* buf_page=(char*)pvPortMalloc(3000);
+//   char buf_page[3000];
+//   char* buf_page=(char*)malloc(3000);
 //f=(char*)malloc(3000);
-// char buf_page[3000];
+  
  
   uint16_t len_buf_list;
   uint16_t ct_fpass=0;
@@ -1139,14 +1152,19 @@ static void http_server_serve(struct netconn *conn)
      }
     }
   }
+//vTaskDelay(100);
    vPortFree(buf_page);
+ //   netbuf_delete(buf_page);
   /* Close the connection (server closes in HTTP) */
   netconn_close(conn);
   
   /* Delete the buffer (netconn_recv gives us ownership,
    so we have to make sure to deallocate the buffer) */
   
-  netbuf_delete(inbuf);
+    netbuf_delete(inbuf);
+  /* delete connection */
+  netconn_delete(conn);
+          
 }
 
 
@@ -1159,7 +1177,8 @@ static void http_server_netconn_thread(void *arg)
 { 
   struct netconn *conn, *newconn;
   err_t err, accept_err;
-  
+  //for(;;)
+ // {
   /* Create a new TCP connection handle */
   conn = netconn_new(NETCONN_TCP);
   
@@ -1182,14 +1201,13 @@ static void http_server_netconn_thread(void *arg)
           /* serve connection */
           http_server_serve(newconn);
 
-          /* delete connection */
-          netconn_delete(newconn);
+        
         }
       }
     }
   }
 }
-
+//}
 /**
   * @brief  Initialize the HTTP server (start its thread) 
   * @param  none
@@ -1197,7 +1215,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 1*1024, WEBSERVER_THREAD_PRIO);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 2*256, WEBSERVER_THREAD_PRIO);
 }
 
 /**
@@ -1206,157 +1224,3 @@ void http_server_netconn_init()
   * @param  conn pointer on connection structure 
   * @retval None
   */
-////void DynWebPage(struct netconn *conn)
-////{
-////  portCHAR PAGE_BODY[512];
-////  portCHAR pagehits[10] = {0};
-////
-////  memset(PAGE_BODY, 0,512);
-////
-////  /* Update the hit count */
-////  nPageHits++;
-////  sprintf(pagehits, "%d", (int)nPageHits);
-////  strcat(PAGE_BODY, pagehits);
-////  strcat((char *)PAGE_BODY, "<pre><br>Name          State  Priority  Stack   Num" );
-////  strcat((char *)PAGE_BODY, "<br>---------------------------------------------<br>");
-////    
-////  /* The list of tasks and their status */
-////  osThreadList((unsigned char *)(PAGE_BODY + strlen(PAGE_BODY)));
-////  strcat((char *)PAGE_BODY, "<br><br>---------------------------------------------");
-////  strcat((char *)PAGE_BODY, "<br>B : Blocked, R : Ready, D : Deleted, S : Suspended<br>");
-////
-////  /* Send the dynamically generated page */
-////  netconn_write(conn, PAGE_START, strlen((char*)PAGE_START), NETCONN_COPY);
-////  netconn_write(conn, PAGE_BODY, strlen(PAGE_BODY), NETCONN_COPY);
-////}
-////
-////void DynWebPageStr(struct netconn *conn)
-////{
-////  portCHAR PAGE_BODY[768];
-////  uint16_t len = 0;
-////  RTC_DateTypeDef sdatestructureget;
-////  RTC_TimeTypeDef stimestructureget;
-////  
-////  /* Get the RTC current Time */
-////  HAL_RTC_GetTime(&hrtc, &stimestructureget, RTC_FORMAT_BIN);
-////  /* Get the RTC current Date */
-////  HAL_RTC_GetDate(&hrtc, &sdatestructureget, RTC_FORMAT_BIN);
-////  /* Display time Format : hh:mm:ss */
-//// // sprintf((char*)showtime,"%02d:%02d:%02d",stimestructureget.Hours, stimestructureget.Minutes, stimestructureget.Seconds);
-////  
-////  
-////  sprintf(PAGE_BODY,"%s%s%s    %d : %d : %d",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,stimestructureget.Hours,stimestructureget.Minutes,stimestructureget.Seconds);
-////  len = strlen(PAGE_BODY);
-////  
-//////osThreadList((uint8_t *)(PAGE_BODY + len));        
-////netconn_write(conn, PAGE_BODY, strlen((char*)PAGE_BODY), NETCONN_COPY);
-////}
-
-//////////
-//////////static void http_server_serve(struct netconn *conn) 
-//////////{
-//////////  struct netbuf *inbuf;
-//////////  err_t recv_err;
-//////////  char* buf;
-//////////  u16_t buflen;
-//////////  struct fs_file file;
-//////////  uint8_t buf_list[1300];
-//////////  
-//////////  
-//////////  /* Read the data from the port, blocking if nothing yet there. 
-//////////   We assume the request (the part we care about) is in one netbuf */
-//////////  recv_err = netconn_recv(conn, &inbuf);
-//////////  
-//////////  if (recv_err == ERR_OK)
-//////////  {
-//////////    if (netconn_err(conn) == ERR_OK) 
-//////////    {
-//////////      netbuf_data(inbuf, (void**)&buf, &buflen);
-//////////    
-//////////      /* Is this an HTTP GET command? (only check the first 5 chars, since
-//////////      there are other formats for GET, and we're keeping it very simple )*/
-//////////      if ((buflen >=5) && (strncmp(buf, "GET /", 5) == 0))
-//////////      {
-//////////        /* Check if request to get ST.gif */ 
-//////////        if (strncmp((char const *)buf,"GET / HTTP/1.1",14)==0)
-//////////        {
-//////////          fs_open(&file, "/pass.html"); 
-//////////          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////////          memcpy (buf_list,(uint8_t*)(file.data),file.len);
-//////////////          set_addres_list((uint8_t *)buf_list,file.len);
-//////////////          netconn_write(conn, (const unsigned char*)(buf_list), (size_t)file.len, NETCONN_NOCOPY);
-//////////          fs_close(&file);
-//////////        }   
-//////////        /* Check if request to get stm32.jpeg */
-//////////////        else if (strncmp((char const *)buf,"GET /style.css",14)==0)
-//////////////            {
-//////////////              fs_open(&file, "/style.css");
-//////////////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////////              fs_close(&file);
-//////////////            }
-//////////        else if (strncmp((char const *)buf,"GET /?ip_addres",15)==0)//
-//////////          {
-//////////            //out//449 22   
-//////////             // 594 
-//////////             //731
-//////////            
-//////////            //in// 16 40 66
-//////////            memcpy (buf_list,(uint8_t*)buf,buflen);
-//////////            get_addres_list((uint8_t *)buf,buflen);
-//////////              fs_open(&file, "/index.html"); 
-//////////             memcpy (buf_list,(uint8_t*)(file.data),file.len);
-//////////              set_addres_list((uint8_t *)buf_list,file.len);
-//////////              netconn_write(conn, (const unsigned char*)(buf_list), (size_t)file.len, NETCONN_NOCOPY);
-//////////              // netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////              fs_close(&file);
-//////////////          
-//////////            }
-//////////       else if (strncmp((char const *)buf,"GET /?Start_boot=boot",21)==0)
-//////////            {
-//////////              
-//////////              fs_open(&file, "/index_end.html"); 
-//////////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////              fs_close(&file);
-//////////              vTaskDelay(100);
-//////////              jamp_to_boot();
-//////////            }
-//////////      else if (strncmp((char const *)buf,"GET /img/netping.gif",17)==0)
-//////////            {
-//////////              fs_open(&file, "/img/netping.gif");
-//////////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////              fs_close(&file);
-//////////            }
-//////////////      else if (strncmp((char const *)buf,"GET /IMG/bg03.png",17)==0)
-//////////////            {
-//////////////              fs_open(&file, "/IMG/bg03.png");
-//////////////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////////              fs_close(&file);
-//////////////            }
-//////////////      else if (strncmp((char const *)buf,"GET /content.html",17)==0)
-//////////////            {
-//////////////              DynWebPageStr(conn);
-//////////////            }
-//////////////        else if((strncmp(buf, "GET /index.html", 15) == 0)||(strncmp(buf, "GET / ", 6) == 0)) 
-//////////////        {
-//////////////          /* Load STM32F7xx page */
-//////////////////          fs_open(&file, "/index.html"); 
-//////////////////          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////////////          fs_close(&file);
-//////////////        }
-//////////        else 
-//////////        {
-//////////          /* Load Error page */
-//////////          fs_open(&file, "/404.html"); 
-//////////          netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//////////          fs_close(&file);
-//////////        }
-//////////      }      
-//////////    }
-//////////  }
-//////////  /* Close the connection (server closes in HTTP) */
-//////////  netconn_close(conn);
-//////////  
-//////////  /* Delete the buffer (netconn_recv gives us ownership,
-//////////   so we have to make sure to deallocate the buffer) */
-//////////  netbuf_delete(inbuf);
-//////////}
