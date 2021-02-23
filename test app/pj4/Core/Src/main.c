@@ -71,6 +71,7 @@ RTC_HandleTypeDef hrtc;
 osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
 osThreadId logs_task_nameHandle;
+osThreadId  IO_CNTRLHandle;
 uint8_t flag_set_ip=0;
 uint16_t ct_dns_time=0;
 uint8_t status_dns=0;
@@ -86,7 +87,8 @@ static void MX_RTC_Init(void);
 void StartDefaultTask(void const * argument);
 void Task_HAL1(void const * argument);
 void logs_task(void const * argument);
-
+void IO_CNRL_APP(void const * argument);
+void set_out_port(uint8_t sost,uint8_t canal);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -105,8 +107,33 @@ int main(void)
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET;
   
 //void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions )
+ FLASH_If_Init();
+  /* USER CODE END 2 */
+ load_struct_flash_data();
+ 
+   MX_GPIO_Init();
+ 
+  /* MCU Configuration--------------------------------------------------------*/
 
-  pxHeapRegions_f107.pucStartAddress=(uint8_t*)(__segment_begin( "HEAP"));
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+ 
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+  
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+
+  
+   pxHeapRegions_f107.pucStartAddress=(uint8_t*)(__segment_begin( "HEAP"));
   pxHeapRegions_f107.xSizeInBytes= (size_t)((unsigned char *)__segment_end( "HEAP") - (unsigned char *)__segment_begin( "HEAP")); 
  
 //  pxHeapRegions_f107->pucStartAddress = (uint8_t*)(__segment_begin( "HEAP"));
@@ -115,28 +142,10 @@ int main(void)
   /* USER CODE BEGIN 1 */
 // init_system_heap();
   /* USER CODE END 1 */
- FLASH_If_Init();
-  /* USER CODE END 2 */
- load_struct_flash_data();
+
  
-  /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
-
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
-
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
-
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+ 
   MX_RTC_Init();
   /* USER CODE BEGIN 2 */
 
@@ -172,6 +181,11 @@ int main(void)
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
+  /* definition and creation of IO_CNTRL */
+ osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, 128);
+ IO_CNTRLHandle = osThreadCreate(osThread(IO_CNTRL), NULL);
+ 
+ 
   
   //void GET_reple (uint8_t event,log_reple_t* reple)
    form_reple_to_save(POWER_ON);
@@ -328,17 +342,51 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(PHY_RST_GPIO_Port, PHY_RST_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED_GREEN_Pin|LED_RED_Pin, GPIO_PIN_RESET);
-
+  HAL_GPIO_WritePin(GPIOC, LED_RED_Pin, GPIO_PIN_RESET);
+  
+  GPIO_InitStruct.Pin = LED_GREEN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  
+  //set_out_port(HAL_RTCEx_BKUPRead(&hrtc,1),1);
+  if (HAL_RTCEx_BKUPRead(&hrtc,1)==0)
+  {
+    if (FW_data.V_TYPE_OUT==0)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
+    }
+    if (FW_data.V_TYPE_OUT==1)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+    }    
+  }
+  
+  if (HAL_RTCEx_BKUPRead(&hrtc,1)==1)
+  {
+    if (FW_data.V_TYPE_OUT==0)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+    }
+    if (FW_data.V_TYPE_OUT==1)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
+    }    
+  }
+  
+  /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
+ 
+  
   /*Configure GPIO pin : PHY_RST_Pin */
   GPIO_InitStruct.Pin = PHY_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(PHY_RST_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
-  GPIO_InitStruct.Pin = LED_GREEN_Pin|LED_RED_Pin;
+  
+   /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -438,7 +486,109 @@ ip4_addr_t ipdns1;
   }
   /* USER CODE END 5 */
 }
+void set_out_port(uint8_t sost,uint8_t canal)
+{
+  if (canal==1)
+  {
+  if (sost==0)
+  {
+    if (FW_data.V_TYPE_OUT==0)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
+    }
+    if (FW_data.V_TYPE_OUT==1)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+    }    
+  }
+  
+  if (sost==1)
+  {
+    if (FW_data.V_TYPE_OUT==0)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+    }
+    if (FW_data.V_TYPE_OUT==1)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
+    }    
+  }
+  
+  
+  if (sost>1)
+  {
+    if ((FW_data.V_TYPE_OUT==2)||(FW_data.V_TYPE_OUT==1)||(FW_data.V_TYPE_OUT==0))
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
+      osDelay(1000);
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+    }
+    
+    if (FW_data.V_TYPE_OUT==3)
+    {
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
+      osDelay(1000);
+      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0); 
+    }    
+  }
+  
+  
+ // void HAL_GPIO_WritePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)
+  }  
+    
+ //HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin);    
 
+}
+/* USER CODE END Header_IO_CNRL_APP */
+void IO_CNRL_APP(void const * argument)
+{
+ uint16_t data=0;
+ /* USER CODE BEGIN IO_CNRL_APP */
+ /* Infinite loop */
+ for(;;)
+ {
+//   uint32_t OID_out[]={1,3,6,1,4,1,2022,1,1};
+   uint32_t OID_out[]={1,2020,1,0};
+
+   if ((flag_global_swich_out==SWICH_ON_WEB)||(flag_global_swich_out==SWICH_OFF_WEB)||(flag_global_swich_out==SWICH_TOLG_WEB)||
+       (flag_global_swich_out==SWICH_ON_SNMP)||(flag_global_swich_out==SWICH_OFF_SNMP)||(flag_global_swich_out==SWICH_TOLG_SNMP))
+   {
+
+
+      data= HAL_RTCEx_BKUPRead(&hrtc,1);
+
+     
+      if(data==0)
+        {
+          send_mess_trap(OID_out,FW_data.V_ON_MESS,strlen(FW_data.V_ON_MESS));
+          set_out_port(data,1);
+          flag_global_swich_out=0;
+        }
+      
+        if(data==1)
+        {
+          OID_out[3]=2;
+          send_mess_trap(OID_out,FW_data.V_ON_MESS,strlen(FW_data.V_ON_MESS));
+          send_mess_trap();
+            set_out_port(data,1);
+            flag_global_swich_out=0;
+        }
+       if (data>1)
+       {
+         OID_out[3]=3;
+         send_mess_trap(OID_out,FW_data.V_ON_MESS,strlen(FW_data.V_ON_MESS));
+         send_mess_trap();
+          set_out_port(2,1); 
+          flag_global_swich_out=0;
+       }
+   }
+  
+  
+  
+   osDelay(100);
+ }
+ /* USER CODE END IO_CNRL_APP */
+}
 /* USER CODE BEGIN Header_Task_HAL1 */
 /**
 * @brief Function implementing the LED_task thread.
@@ -502,10 +652,29 @@ void logs_task(void const * argument)
      if ((flag_global_load_def==1)&&(flag_global_save_log==0))
       { // load_def_data
         
-        load_def_data();
-      
+        load_def_data();      
         flag_global_load_def=0;
       }
+      if ((flag_global_boot_mode==1)&&(flag_global_save_log==0))
+      { // load_def_data
+        vTaskDelay(1000);
+       jamp_to_boot();
+      
+        flag_global_boot_mode=0;
+      }
+//      if ((flag_global_reset_mode==1)&&(flag_global_save_log==0))
+//      { // load_def_data
+//        vTaskDelay(1000);
+//       jamp_to_app();
+//      
+//        flag_global_reset_mode=0;
+//      }
+    
+  
+       
+    
+    
+    
     osDelay(100);
   }
   /* USER CODE END logs_task */

@@ -492,6 +492,7 @@ void param_run(post_data_t* post_data,uint8_t index)
 //              memcpy((uint8_t*)FW_data.V_IP_NTP2, (char*)IP_buf,4 );
 //            }
              form_reple_to_save(RESETL);
+          //   flag_global_reset_mode=1;
              save_reple_log(reple_to_save);
              flag_global_save_log=0;
              vTaskDelay(100);
@@ -506,18 +507,20 @@ void param_run(post_data_t* post_data,uint8_t index)
             {
                form_reple_to_save(SWICH_ON_WEB);
                flag_global_swich_out=SWICH_ON_WEB;
+               HAL_RTCEx_BKUPWrite(&hrtc,1,0);
             }
             else if (post_data->data[0]==0x31)
               {
                 form_reple_to_save(SWICH_OFF_WEB);
                 flag_global_swich_out=SWICH_OFF_WEB;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,1);
               
               }
             else if (post_data->data[0]==0x32)
               {
                  form_reple_to_save(SWICH_TOLG_WEB);
                  flag_global_swich_out=SWICH_TOLG_WEB;
-              
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);
               }
               
           
@@ -794,7 +797,8 @@ void param_run(post_data_t* post_data,uint8_t index)
            form_reple_to_save(UPDATE_FW);           
           // while(flag_global_save_log==1){vTaskDelay(10);};
            vTaskDelay(100);
-           jamp_to_boot();
+           flag_global_boot_mode=1;
+          // jamp_to_boot();
           }
     else
      
@@ -1185,7 +1189,7 @@ static void http_server_netconn_thread(void *arg)
   if (conn!= NULL)
   {
     /* Bind to port 80 (HTTP) with default IP address */
-    err = netconn_bind(conn, NULL, 80);
+    err = netconn_bind(conn, NULL, FW_data.V_WEB_PORT);
     
     if (err == ERR_OK)
     {

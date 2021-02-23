@@ -41,9 +41,9 @@
 #include "snmp_netconn.h" 
 #include "flash_if.h"
 ip4_addr_t tipaddr;
-struct snmp_obj_id oid_trtest; 
-struct snmp_varbind vbt_tr;
 
+struct snmp_varbind vbt_tr;
+  struct snmp_obj_id oid_trtest={2,{1,3}}; 
 
 #if LWIP_SNMP
 static const struct snmp_mib *mibs[] = {
@@ -86,20 +86,19 @@ snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
   
 
  
-  vbt_tr.value="hello_nets";
-  vbt_tr.value_len=sizeof("hello_nets");
-  uint32_t OID_TR[]={1,3,6,1,4,1,2022,1,1};  
-  oid_trtest.len=sizeof(OID_TR)/4;
-  memcpy((uint32_t*)oid_trtest.id,(uint32_t*)OID_TR,sizeof(OID_TR));
-  
-  
-//  oid_trtest.id[0]=1;
-  vbt_tr.type=SNMP_ASN1_TYPE_OCTET_STRING;
-  vbt_tr.oid.len=3;
-  memcpy(vbt_tr.oid.id,OID_TR,12);
-  snmp_send_trap(&oid_trtest,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
-    
+ 
     
     
 #endif /* LWIP_SNMP */
+}
+void send_mess_trap (uint32_t* OID_TR,char* mess,uint16_t lens_mess)
+{
+  vbt_tr.value=mess;
+  vbt_tr.value_len=lens_mess;
+  vbt_tr.type=SNMP_ASN1_TYPE_OCTET_STRING;
+  vbt_tr.oid.len=4;
+  memcpy((uint32_t*)vbt_tr.oid.id,(uint32_t*)OID_TR,4*4);
+  snmp_send_trap(0,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
+ // snmp_send_trap_specific(6,&vbt_tr);
+
 }

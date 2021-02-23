@@ -193,11 +193,12 @@
  * to apply for your own enterprise ID with IANA:
  * http://www.iana.org/numbers.html
  */
-#define SNMP_DEVICE_ENTERPRISE_OID {1, 3, 6, 1, 4, 1, SNMP_LWIP_ENTERPRISE_OID}
+//#define SNMP_DEVICE_ENTERPRISE_OID {1, 3, 6, 1, 4, 1, SNMP_LWIP_ENTERPRISE_OID}
+#define SNMP_DEVICE_ENTERPRISE_OID {1,3,6,1,4,1}
 /**
  * Length of SNMP_DEVICE_ENTERPRISE_OID
  */
-#define SNMP_DEVICE_ENTERPRISE_OID_LEN 7
+#define SNMP_DEVICE_ENTERPRISE_OID_LEN 6
 #endif
 
 /**

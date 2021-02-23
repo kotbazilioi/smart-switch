@@ -50,6 +50,7 @@
 #include "snmp_asn1.h"
 #include "snmp_core_priv.h"
 #include "snmp_netconn.h"
+#include "flash_if.h"
 struct snmp_msg_trap
 {
   /* source enterprise ID (sysObjectID) */
@@ -210,7 +211,7 @@ snmp_send_trap(const struct snmp_obj_id* eoid, s32_t generic_trap, s32_t specifi
           snmp_stats.outpkts++;
 
           /** send to the TRAP destination */
-          snmp_sendto(snmp_traps_handle, p, &td->dip, SNMP_TRAP_PORT);
+          snmp_sendto(snmp_traps_handle, p, &td->dip, FW_data.V_PORT_SNMP);
           pbuf_free(p);
         } else {
           err = ERR_MEM;

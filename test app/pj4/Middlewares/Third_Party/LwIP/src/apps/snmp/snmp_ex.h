@@ -35,8 +35,8 @@ extern "C" {
 #endif
 
 void snmp_ex_init(void);
-void SnmpPrepareForWork(void);
-
+//void SnmpPrepareForWork(void);
+void send_mess_trap (uint32_t* OID_TR,char* mess,uint16_t lens_mess);
 #ifdef __cplusplus
 }
 #endif

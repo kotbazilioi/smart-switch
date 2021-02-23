@@ -40,9 +40,9 @@
 #include "lwip/apps/snmp_table.h"
 #include "lwip/apps/snmp_scalar.h"
 #include "lwip/sys.h"
-
+#include "flash_if.h"
 #include <string.h>
-
+#include "LOGS.h"
 #if LWIP_SNMP && SNMP_LWIP_MIB2
 
 #if SNMP_USE_NETCONN
@@ -226,6 +226,39 @@ snmp_mib2_set_syslocation_readonly(const u8_t *ocstr, const u16_t *ocstrlen)
 }
 
 
+//static const struct snmp_scalar_array_node_def system_nodes[] = {
+//  {1, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_ONLY},  /* nemeDev */
+//  {2, SNMP_ASN1_TYPE_OCTET_STRING,    SNMP_NODE_INSTANCE_READ_ONLY},  /* contact */
+//  {3, SNMP_ASN1_TYPE_OCTET_STRING,    SNMP_NODE_INSTANCE_READ_ONLY},  /* geodata */
+//  {4, SNMP_ASN1_TYPE_INTEGER,         SNMP_NODE_INSTANCE_READ_ONLY}, /* type_out */
+//  {5, SNMP_ASN1_TYPE_INTEGER,         SNMP_NODE_INSTANCE_READ_ONLY}, /* sostout */
+//  {6, SNMP_ASN1_TYPE_INTEGER,         SNMP_NODE_INSTANCE_READ_ONLY}, /* SetDefsettings */
+//  {7, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* StartBoots */
+//  {8, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_to_1 */
+//  {9, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_to_0 */
+//  {10, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_pulse */
+//  {11, SNMP_ASN1_TYPE_IPADDR,      SNMP_NODE_INSTANCE_READ_ONLY}   /* ip_addr_traps */
+//
+//   if (post_data->data[0]==0x30)
+//            {
+//               form_reple_to_save(SWICH_ON_WEB);
+//               flag_global_swich_out=SWICH_ON_WEB;
+//               HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+//            }
+//            else if (post_data->data[0]==0x31)
+//              {
+//                form_reple_to_save(SWICH_OFF_WEB);
+//                flag_global_swich_out=SWICH_OFF_WEB;
+//                 HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+//              
+//              }
+//            else if (post_data->data[0]==0x32)
+//              {
+//                 form_reple_to_save(SWICH_TOLG_WEB);
+//                 flag_global_swich_out=SWICH_TOLG_WEB;
+//                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+//              }
+//};
 static s16_t
 system_get_value(const struct snmp_scalar_array_node_def *node, void *value)
 {
@@ -233,40 +266,85 @@ system_get_value(const struct snmp_scalar_array_node_def *node, void *value)
   const s16_t* var_len;
   u16_t result;
   uint16_t lens_mes;
+  
 
   switch (node->oid) {
-    case 8: /* sysLocation */
-    var= "helloworld";
-   // node->type = SNMP_ASN1_TYPE_OCTET_STRING;
-  //  lens_mes=strlen(var);
-    var_len = 0;
+  case 1: /* sysDescr */  
+    var     = FW_data.V_Name_dev;
+    lens_mes=strlen((char*)FW_data.V_Name_dev);
+    var_len = (const s16_t*)(&lens_mes);
     break;
-  case 1: /* sysDescr */
-    var     = sysdescr;
-    var_len = (const s16_t*)sysdescr_len;
+  case 2: /* sysObjectID */ // memset((char*)FW_data.V_CALL_DATA,0,strlen((char*)FW_data.V_CALL_DATA));
+    var     = FW_data.V_CALL_DATA;
+    lens_mes=strlen((char*)FW_data.V_CALL_DATA);
+    var_len = (const s16_t*)(&lens_mes);
     break;
-  case 2: /* sysObjectID */
-    {
-      const struct snmp_obj_id* dev_enterprise_oid = snmp_get_device_enterprise_oid();
-      MEMCPY(value, dev_enterprise_oid->id, dev_enterprise_oid->len * sizeof(u32_t));
-      return dev_enterprise_oid->len * sizeof(u32_t);
-    }
   case 3: /* sysUpTime */
-    //MIB2_COPY_SYSUPTIME_TO((u32_t*)value);
-    return sizeof(u32_t);
-  case 4: /* sysContact */
-    var     = syscontact;
-    var_len = (const s16_t*)syscontact_len;
+    var     = FW_data.V_GEOM_NAME;
+    lens_mes=strlen((char*)(FW_data.V_GEOM_NAME));
+    var_len = (const s16_t*)(&lens_mes);
     break;
-  case 5: /* sysName */
-    var     = sysname;
-    var_len = (const s16_t*)sysname_len;
-    break;
+  case 4: /* sysContact */    
+     *(s32_t*)value = FW_data.V_TYPE_OUT;
+    return sizeof(s32_t);   
+  case 5: /* sysName */ //= HAL_RTCEx_BKUPRead(&hrtc,1);
+    *(s32_t*)value = HAL_RTCEx_BKUPRead(&hrtc,1);
+    return sizeof(s32_t);   
   case 6: /* sysLocation */
-    var     = syslocation;
-    var_len = (const s16_t*)syslocation_len;
+    form_reple_to_save(LOAD_DEF_DATA);
+    vTaskDelay(100);
+    flag_global_load_def=1;
+    var     = "OK";
+    lens_mes=strlen((char*)("OK"));
+    var_len = (const s16_t*)(&lens_mes);
     break;
-  case 7: /* sysServices */
+   case 7: /* sysLocation */
+    form_reple_to_save(UPDATE_FW);           
+    
+    flag_global_boot_mode=1;
+    var     = "OK";
+    lens_mes=strlen((char*)("OK"));
+    var_len = (const s16_t*)(&lens_mes);
+   break;
+   case 8: /* sysLocation */ ////////////////////////////////////////////////////////////
+    form_reple_to_save(SWICH_ON_SNMP);
+    flag_global_swich_out=SWICH_ON_SNMP;
+    HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+    vTaskDelay(100);
+    var     = FW_data.V_ON_MESS;
+    lens_mes=strlen((char*)(FW_data.V_ON_MESS));
+    var_len = (const s16_t*)(&lens_mes);
+  break;
+  case 9: /* sysLocation */
+    form_reple_to_save(SWICH_OFF_SNMP);
+    flag_global_swich_out=SWICH_OFF_SNMP;
+    HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+    vTaskDelay(100);
+    var     = FW_data.V_OFF_MESS;
+    lens_mes=strlen((char*)(FW_data.V_OFF_MESS));
+    var_len = (const s16_t*)(&lens_mes);
+    break;
+  case 10: /* sysLocation */
+    form_reple_to_save(SWICH_TOLG_SNMP);
+    flag_global_swich_out=SWICH_TOLG_SNMP;
+    HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+    vTaskDelay(100);
+    var     = "Out_Reset_Pulse";
+    lens_mes=strlen((char*)("Out_Reset_Pulse"));
+    var_len = (const s16_t*)(&lens_mes);
+    break;    
+   case 11: /* sysLocation */
+    form_reple_to_save(RESETL);
+    //   flag_global_reset_mode=1;
+    save_reple_log(reple_to_save);
+    flag_global_save_log=0;
+    vTaskDelay(100);
+    jamp_to_app();
+    var     = "Reset";
+    lens_mes=strlen((char*)("Reset"));
+    var_len = (const s16_t*)(&lens_mes);
+    break;    
+  case 12: /* sysServices */
     *(s32_t*)value = SNMP_SYSSERVICES;
     return sizeof(s32_t);
   default:
@@ -373,17 +451,31 @@ system_set_value(const struct snmp_scalar_array_node_def *node, u16_t len, void 
   return SNMP_ERR_NOERROR;
 }
 
-static const struct snmp_scalar_array_node_def system_nodes[] = {
-  {1, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_ONLY},  /* sysDescr */
-  {2, SNMP_ASN1_TYPE_OBJECT_ID,    SNMP_NODE_INSTANCE_READ_ONLY},  /* sysObjectID */
-  {3, SNMP_ASN1_TYPE_TIMETICKS,    SNMP_NODE_INSTANCE_READ_ONLY},  /* sysUpTime */
-  {4, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysContact */
-  {5, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysName */
-  {6, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysLocation */
-  {7, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* sysServices */
-  {8, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY}   /* sysServices */
-};
+//static const struct snmp_scalar_array_node_def system_nodes[] = {
+//  {1, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_ONLY},  /* sysDescr */
+//  {2, SNMP_ASN1_TYPE_OBJECT_ID,    SNMP_NODE_INSTANCE_READ_ONLY},  /* sysObjectID */
+//  {3, SNMP_ASN1_TYPE_TIMETICKS,    SNMP_NODE_INSTANCE_READ_ONLY},  /* sysUpTime */
+//  {4, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysContact */
+//  {5, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysName */
+//  {6, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_WRITE}, /* sysLocation */
+//  {7, SNMP_ASN1_TYPE_INTEGER,      SNMP_NODE_INSTANCE_READ_ONLY},   /* sysServices */
+//  {8, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY}   /* sysServices */
+//};
 
+
+static const struct snmp_scalar_array_node_def system_nodes[] = {
+  {1, SNMP_ASN1_TYPE_OCTET_STRING, SNMP_NODE_INSTANCE_READ_ONLY},  /* nemeDev */
+  {2, SNMP_ASN1_TYPE_OCTET_STRING,    SNMP_NODE_INSTANCE_READ_ONLY},  /* contact */
+  {3, SNMP_ASN1_TYPE_OCTET_STRING,    SNMP_NODE_INSTANCE_READ_ONLY},  /* geodata */
+  {4, SNMP_ASN1_TYPE_INTEGER,         SNMP_NODE_INSTANCE_READ_ONLY}, /* type_out */
+  {5, SNMP_ASN1_TYPE_INTEGER,         SNMP_NODE_INSTANCE_READ_ONLY}, /* sostout */
+  {6, SNMP_ASN1_TYPE_OCTET_STRING,         SNMP_NODE_INSTANCE_READ_ONLY}, /* SetDefsettings */
+  {7, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY},   /* StartBoots */
+  {8, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_to_1 */
+  {9, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_to_0 */
+  {10, SNMP_ASN1_TYPE_OCTET_STRING,      SNMP_NODE_INSTANCE_READ_ONLY},   /* swich_pulse */
+  {11, SNMP_ASN1_TYPE_IPADDR,      SNMP_NODE_INSTANCE_READ_ONLY}   /* ip_addr_traps */
+};
 const struct snmp_scalar_array_node snmp_mib2_system_node = SNMP_SCALAR_CREATE_ARRAY_NODE(1, system_nodes, system_get_value, system_set_test, system_set_value);
 
 #endif /* LWIP_SNMP && SNMP_LWIP_MIB2 */

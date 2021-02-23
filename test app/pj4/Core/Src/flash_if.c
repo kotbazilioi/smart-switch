@@ -45,6 +45,8 @@ uint8_t flag_global_save_data;
 uint8_t flag_global_load_def;
 uint8_t flag_global_save_log;
 uint8_t flag_global_swich_out;
+uint8_t flag_global_boot_mode;
+uint8_t flag_global_reset_mode;
 log_reple_t start_time;
 log_reple_t real_time;
 file_data_t data_file;
