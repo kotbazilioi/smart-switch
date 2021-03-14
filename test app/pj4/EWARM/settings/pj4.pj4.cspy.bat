@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.general.xcl" --backend -f "E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.general.xcl" --backend -f "D:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.general.xcl" "--debug_file=%~1" --backend -f "E:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.general.xcl" "--debug_file=%~1" --backend -f "D:\ika\development\F107\boot1\smart-switch\test app\pj4\EWARM\settings\pj4.pj4.driver.xcl" 
 
 @echo off 
 :end

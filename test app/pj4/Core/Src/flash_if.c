@@ -447,7 +447,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
      FW_data.V_IP_CONFIG[2]=0;
-     FW_data.V_IP_CONFIG[3]=10;
+     FW_data.V_IP_CONFIG[3]=21;
      
      FW_data.V_IP_MASK[0]=255;
      FW_data.V_IP_MASK[1]=255;

@@ -69,7 +69,7 @@ void DynWebPageStr(struct netconn *conn);
 /* Private variables ---------------------------------------------------------*/
 u32_t nPageHits = 0;
 char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,0x0a};
-
+uint8_t flag_req_logon=0;
   uint8_t page_n,page_sost;
 /**
   * @brief serve tcp connection  
@@ -880,17 +880,27 @@ post_data_t elem_post_data;
             }
           break;
           case 3:
-            {
-              fs_open(&file, "/404.html"); 
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-              fs_close(&file);
+            { //watchdog.html
+               vTaskDelay(10);
+               len_buf_list=costr_watchdog1((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               vTaskDelay(10);
+               len_buf_list=costr_watchdog2((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               vTaskDelay(10);
+               len_buf_list=costr_watchdog3((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               vTaskDelay(10);
+                len_buf_list=costr_watchdog4((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               vTaskDelay(10);
             }
           break;
            case 4:
             {
               
                     
-                   vTaskDelay(10);
+               vTaskDelay(10);
                len_buf_list=costr_page2((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
                  vTaskDelay(10);
@@ -990,7 +1000,7 @@ post_data_t elem_post_data;
           }
  }
 // char buf_page[3000];
-static void http_server_serve(struct netconn *conn) 
+static void http_server_serve(struct netconn *conn1) 
 {
    
  //post_data_t post_data[32];
@@ -1000,8 +1010,7 @@ static void http_server_serve(struct netconn *conn)
    u16_t buflen;
    char* buf_page=(char*)pvPortMalloc(3000);
 //   char buf_page[3000];
-//   char* buf_page=(char*)malloc(3000);
-//f=(char*)malloc(3000);
+
   
  
   uint16_t len_buf_list;
@@ -1011,11 +1020,11 @@ static void http_server_serve(struct netconn *conn)
   
   /* Read the data from the port, blocking if nothing yet there. 
    We assume the request (the part we care about) is in one netbuf */
-  recv_err = netconn_recv(conn, &inbuf);
+  recv_err = netconn_recv(conn1, &inbuf);
   
   if (recv_err == ERR_OK)
   {
-    if (netconn_err(conn) == ERR_OK) 
+    if (netconn_err(conn1) == ERR_OK) 
     {
       netbuf_data(inbuf, (void**)&buf, &buflen);
       
@@ -1043,18 +1052,23 @@ static void http_server_serve(struct netconn *conn)
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
       key_http_len=strlen(buf_page);
       
-       if ((flag_logon==0)&&(strncmp(key_http,buf_page,key_http_len) == 0))
+        if (strncmp(key_http,buf_page,key_http_len) != 0)
+          {          
+            len_buf_list=costr_pass((char*)buf_page);
+            netconn_write(conn1, (char*)(buf_page), (size_t)len_buf_list, NETCONN_NOCOPY);
+            vTaskDelay(20);
+            flag_logon=0;
+            flag_req_logon=1;
+            // memcpy(key_http,"admin:admin",12); 
+          }   
+       else
+          {
+           if ((flag_logon==0)&&(strncmp(key_http,buf_page,key_http_len) == 0))
             {
               flag_logon=1;
               page_n=4;
             }
-          if (strncmp(key_http,buf_page,key_http_len) != 0)
-          {          
-            len_buf_list=costr_pass((char*)buf_page);
-            netconn_write(conn, (const unsigned char*)(buf_page), (size_t)len_buf_list, NETCONN_NOCOPY);
-            flag_logon=0;
-            // memcpy(key_http,"admin:admin",12); 
-          }   
+          }
       
       
   if (flag_logon==1)    
@@ -1066,37 +1080,43 @@ static void http_server_serve(struct netconn *conn)
             if (strncmp((char const *)buf,"GET /handler.php?login=",23)==0)
               {
                  page_n=4;
-                 page_html_swich(page_n,conn,buf_page);
+                 page_html_swich(page_n,conn1,buf_page);
               }
             else
               if ((strncmp((char const *)buf,"GET /index.html",15)==0)||(strncmp((char const *)buf,"GET / HTTP/1.1",14)==0))
              {
                page_n=4;
                page_sost=1;
-               page_html_swich(page_n,conn,buf_page);
+               page_html_swich(page_n,conn1,buf_page);
              }
             else if (strncmp((char const *)buf,"GET /logs.html",14)==0)
              {
                page_n=6;
                page_sost=2;
-               page_html_swich(page_n,conn,buf_page);
+               page_html_swich(page_n,conn1,buf_page);
+             }
+            else if (strncmp((char const *)buf,"GET /watchdog.html",18)==0)
+             {
+               page_n=3;
+               page_sost=3;
+               page_html_swich(page_n,conn1,buf_page);
              }
             else if (strncmp((char const *)buf,"GET /settings.html",14)==0)
               {
                page_n=5;
                page_sost=3;
-               page_html_swich(page_n,conn,buf_page);
+               page_html_swich(page_n,conn1,buf_page);
               }
             else if (strncmp((char const *)buf,"GET /img/netping.gif",17)==0)
             {
               page_n=1;
-              page_html_swich(page_n,conn,buf_page);
+              page_html_swich(page_n,conn1,buf_page);
             }
             else  
              {
               /* Load Error page */
                page_n=3;
-               page_html_swich(page_n,conn,buf_page);
+               page_html_swich(page_n,conn1,buf_page);
              }
           //}        
       } 
@@ -1111,7 +1131,7 @@ static void http_server_serve(struct netconn *conn)
                       if (page_sost==1)
                            {
                              page_n=4;
-                            page_html_swich(page_n,conn,buf_page);
+                            page_html_swich(page_n,conn1,buf_page);
                             vTaskDelay(20);
                             parser_post(buf,buflen,page_sost);
                            
@@ -1124,7 +1144,7 @@ static void http_server_serve(struct netconn *conn)
 //                         {
 //                         page_n=4; // pass
 //                         flag_logon=0;
-//                         page_html_swich(page_n,conn,buf_page);   
+//                         page_html_swich(page_n,conn1,buf_page);   
 //                         form_reple_to_save(RESETL);
 //                         
 //                         save_reple_log(reple_to_save);
@@ -1140,7 +1160,7 @@ static void http_server_serve(struct netconn *conn)
                             parser_post(buf,buflen,page_sost);
                             page_n=5;
                             vTaskDelay(20);
-                            page_html_swich(page_n,conn,buf_page);
+                            page_html_swich(page_n,conn1,buf_page);
                          }
                          if(page_sost==2)
                           {
@@ -1157,17 +1177,16 @@ static void http_server_serve(struct netconn *conn)
     }
   }
 //vTaskDelay(100);
-   vPortFree(buf_page);
+  vPortFree(buf_page);
  //   netbuf_delete(buf_page);
   /* Close the connection (server closes in HTTP) */
-  netconn_close(conn);
+  netconn_close(conn1);
   
   /* Delete the buffer (netconn_recv gives us ownership,
    so we have to make sure to deallocate the buffer) */
   
-    netbuf_delete(inbuf);
-  /* delete connection */
-  netconn_delete(conn);
+  netbuf_delete(inbuf);
+
           
 }
 
@@ -1181,16 +1200,16 @@ static void http_server_netconn_thread(void *arg)
 { 
   struct netconn *conn, *newconn;
   err_t err, accept_err;
-  //for(;;)
- // {
+//  for(;;)
+//  {
   /* Create a new TCP connection handle */
   conn = netconn_new(NETCONN_TCP);
   
   if (conn!= NULL)
   {
     /* Bind to port 80 (HTTP) with default IP address */
-    err = netconn_bind(conn, NULL, FW_data.V_WEB_PORT);
-    
+    //err = netconn_bind(conn, NULL, FW_data.V_WEB_PORT);
+      err = netconn_bind(conn, NULL,80);
     if (err == ERR_OK)
     {
       /* Put the connection into LISTEN state */
@@ -1198,20 +1217,20 @@ static void http_server_netconn_thread(void *arg)
   
       while(1) 
       {
-        /* accept any icoming connection */
         accept_err = netconn_accept(conn, &newconn);
         if(accept_err == ERR_OK)
         {
           /* serve connection */
           http_server_serve(newconn);
 
-        
+           /* delete connection */
+          netconn_delete(newconn);          
         }
       }
     }
   }
-}
 //}
+}
 /**
   * @brief  Initialize the HTTP server (start its thread) 
   * @param  none
@@ -1219,7 +1238,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL, 2*256, WEBSERVER_THREAD_PRIO);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL,2*1024, WEBSERVER_THREAD_PRIO);
 }
 
 /**
