@@ -410,15 +410,40 @@ return 0;
 
 //<p style="text-align:center"><input name="Start_boot" required="required" type="checkbox" value="boot" />&ensp; <input type="submit" value="Start frimware update? Start bootloader " /></p>
 //<label><input type="checkbox" name="name"> messeg</label>
- uint16_t set_checkbox (char* str1,char* name,char* value,char* id)
+ uint16_t set_checkbox (char* str1,char* name,char* value,char* id,uint8_t ck)
 { 
-
+ // set_checkbox (str3,"V_EN_WATCHDOG","1","WDT",FW_data.V_EN_WATCHDOG);
 //<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
-
-sprintf(str1,"<label><input type=\"checkbox\" name=\"%s\" form=\"%s\" value=\"%s\"> </label>",name,id,value);
+if (ck==0)
+{
+ 
+ //sprintf(str1,"<label><input type=\"checkbox\" required=\"required\"  name=\"%s\" form=\"%s\" value=\"%s\"> </label>",name,id,value);
+     sprintf(str1,"<input type=\"checkbox\"   name=\"%s\" id=\"%s\" value=\"%s\"> ",name,id,value);
+}
+else
+{
+//  input name=\"output_logic\" type=\"radio\" value=\"0\"checked
+//sprintf(str1,"<label><input type=\"checkbox\" required=\"required\"  name=\"%s\" form=\"%s\" value=\"%s\"  checked> </label>",name,id,value);
+  sprintf(str1,"<input type=\"checkbox\"  name=\"%s\"  id=\"%s\" value=\"%s\" checked> ",name,id,value);
+}
 
 return 0;
 }
+
+ uint16_t set_checkonoff (char* str1,char* name,uint8_t ck)
+ {  
+   if (ck==1)
+   {
+      sprintf(str1,"<p><select name=\"%s\"><option selected >ON</option><option>OFF</option></select></p>",name);
+   }
+   else
+   {
+   
+      sprintf(str1,"<p><select name=\"%s\"><option  >ON</option><option selected >OFF</option></select></p>",name);
+   }
+ }
+   
+   
 
  uint16_t set_checkbox_bot (char* str1,char* name,char* value,char* mess,char* id)
 { 
@@ -1826,28 +1851,29 @@ uint32_t costr_watchdog1(char* str1)
    
    
    memset (str3,0, sizeof(str3));
-   set_checkbox (str3,"en_watchdog","1"," ");
+ //  set_checkbox (str3,"V_EN_WATCHDOG","1","WDT",FW_data.V_EN_WATCHDOG);
+   set_checkonoff (str3,"V_EN_WATCHDOG",FW_data.V_EN_WATCHDOG);// (char* str1,char* name,uint8_t ck)
    set_table_string(str2,"Включить режим 'Сторож'",str3);
    strcat(str1,str2);
    len=strlen(str1); 
    
    memset (str3,0, sizeof(str3));
    memset (str4,0, sizeof(str4));
-   set_checkbox (str4,"en_watchdog_cn_a","1","A");
+   set_checkbox (str4,"V_EN_WATCHDOG_CN_A","1","A",FW_data.V_EN_WATCHDOG_CN_A);
    strcat(str3,str4);
    set_open_block(str4,"b>A    </b");
    strcat(str3,str4);
    len=strlen(str3);
     
    memset (str4,0, sizeof(str4));
-   set_checkbox (str4,"en_watchdog_cn_b","1","B");
+   set_checkbox (str4,"V_EN_WATCHDOG_CN_B","1","B",FW_data.V_EN_WATCHDOG_CN_B);
    strcat(str3,str4);
    set_open_block(str4,"b>B    </b");
    strcat(str3,str4);
    len=strlen(str3);
     
    memset (str4,0, sizeof(str4));
-   set_checkbox (str4,"en_watchdog_cn_c","1","C");
+   set_checkbox (str4,"V_EN_WATCHDOG_CN_C","1","C",FW_data.V_EN_WATCHDOG_CN_C);
    strcat(str3,str4);
    set_open_block(str4,"b>C    </b");
    strcat(str3,str4);
@@ -1880,33 +1906,34 @@ uint32_t costr_watchdog2(char* str1)
   memset (str3,0, sizeof(str3));
   memset (str4,0, sizeof(str4));
 
-   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);  
-   set_text_input(str3,"ip_addr_canal_A",15,str4);  
+   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_A[0],FW_data.V_IP_WDT_ADDR_CN_A[1],FW_data.V_IP_WDT_ADDR_CN_A[2],FW_data.V_IP_WDT_ADDR_CN_A[3]);  
+   set_text_input(str3,"IP_WDT_ADDR_CN_A",15,str4);  
    set_table_string(str2,"IP адресс канал А",str3);
    strcat(str1,str2);
    
-   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_MASK[0],FW_data.V_IP_MASK[1],FW_data.V_IP_MASK[2],FW_data.V_IP_MASK[3]);
-   set_text_input(str3,"ip_addr_canal_B",15,str4);  
+   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_B[0],FW_data.V_IP_WDT_ADDR_CN_B[1],FW_data.V_IP_WDT_ADDR_CN_B[2],FW_data.V_IP_WDT_ADDR_CN_B[3]);
+   set_text_input(str3,"IP_WDT_ADDR_CN_B",15,str4);  
    set_table_string(str2,"IP адресс канал B",str3);  
    strcat(str1,str2);
    
-   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_GET[0],FW_data.V_IP_GET[1],FW_data.V_IP_GET[2],FW_data.V_IP_GET[3]);
-   set_text_input(str3,"ip_addr_canal_C",15,str4);  
+   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_C[0],FW_data.V_IP_WDT_ADDR_CN_C[1],FW_data.V_IP_WDT_ADDR_CN_C[2],FW_data.V_IP_WDT_ADDR_CN_C[3]);
+   set_text_input(str3,"IP_WDT_ADDR_CN_C",15,str4);  
    set_table_string(str2,"IP адресс канал C",str3);  
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_CONFIG[0]);  
-   set_intnum(str3,"ct_res_allstart",4,str4,0,1000);  
+   sprintf(str3,"<b>%d</b>",FW_data.V_CT_RES_ALLSTART);  
+  // set_intnum(str3,"V_CT_RES_ALLSTART",4,str4,0,1000);  
+  //  set_open_block(str2,"b>НАСТРОЙКА РЕЖИМА СТОРОЖ</b");
    set_table_string(str2,"Cчетчик сбросов канала (обнуляется при перезагрузке прошивки)",str3);
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_MASK[0]);
-   set_intnum(str3,"T_send_ping",3,str4,10,301);  
+   sprintf(str4,"%d",FW_data.V_T_SEND_PING);
+   set_intnum(str3,"V_T_SEND_PING",3,str4,10,301);  
    set_table_string(str2,"Период опроса пингов 10-300с",str3);  
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_GET[0]);
-   set_intnum(str3,"time_resend_ping",4,str4,600,9000);  
+   sprintf(str4,"%d",FW_data.V_TIME_RESEND_PING);
+   set_intnum(str3,"V_TIME_RESEND_PING",4,str4,600,9000);  
    set_table_string(str2,"Таймаут перед повтором пинга  600-9000c",str3);  
    strcat(str1,str2);
    
@@ -1925,23 +1952,23 @@ uint32_t costr_watchdog3(char* str1)
   memset (str3,0, sizeof(str3));
   memset (str4,0, sizeof(str4));
   
-   sprintf(str4,"%d",FW_data.V_IP_CONFIG[0]);  
-   set_intnum(str3,"max_repid_ping",3,str4,0,100);  
+   sprintf(str4,"%d",FW_data.V_MAX_REPID_PING);  
+   set_intnum(str3,"V_MAX_REPID_PING",3,str4,0,100);  
    set_table_string(str2,"Максимальное число перезапросов",str3);
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_MASK[0]);
-   set_intnum(str3,"time_reset_pulse",3,str4,1,901);  
+   sprintf(str4,"%d",FW_data.V_TIME_RESET_PULSE);
+   set_intnum(str3,"V_TIME_RESET_PULSE",3,str4,1,901);  
    set_table_string(str2,"Длительность сброса 1-900с",str3);  
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_GET[0]);
-   set_intnum(str3,"pause_reset_to_repid",4,str4,1,3600);  
+   sprintf(str4,"%d",FW_data.V_PAUSE_RESET_TO_REPID);
+   set_intnum(str3,"V_PAUSE_RESET_TO_REPID",4,str4,1,3600);  
    set_table_string(str2,"Пауза после сброса перед возобновлением пингов 1-3600с",str3);  
    strcat(str1,str2);
    
-   sprintf(str4,"%d",FW_data.V_IP_GET[0]);
-   set_intnum(str3,"max_resend_pacet_reset",3,str4,1,255);  
+   sprintf(str4,"%d",FW_data.V_MAX_RESEND_PACET_RESET);
+   set_intnum(str3,"V_MAX_RESEND_PACET_RESET",3,str4,1,255);  
    set_table_string(str2,"Ограничение числа идущих подряд сбросов 1-255",str3);  
    strcat(str1,str2);
    
@@ -1981,19 +2008,7 @@ uint32_t costr_watchdog3(char* str1)
   
   
   
-   if (FW_data.V_TYPE_OUT ==0)
-   {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"checked");
-   set_table_string(str2,"Прямое управление ",str3);  
-   strcat(str1,str2);
-   }
-   else
-   {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"");
-   set_table_string(str2,"Прямое управление ",str3);  
-   strcat(str1,str2);   
-   }
-   
+  
    
      len=strlen(str1);
   return len;
@@ -2008,6 +2023,20 @@ uint32_t costr_watchdog4(char* str1)
   memset (str3,0, sizeof(str3));
   memset (str4,0, sizeof(str4));
 
+   if (FW_data.V_TYPE_OUT ==0)
+   {
+   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"checked");
+   set_table_string(str2,"Прямое управление ",str3);  
+   strcat(str1,str2);
+   }
+   else
+   {
+   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"");
+   set_table_string(str2,"Прямое управление ",str3);  
+   strcat(str1,str2);   
+   }
+   
+   
    if (FW_data.V_TYPE_OUT ==1)
    {
     set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"1\"checked");
@@ -2074,88 +2103,100 @@ uint32_t costr_watchdog4(char* str1)
 //  strcat(str1,str2);
   
   // Table   
+ 
+     len=strlen(str1);
+  return len;
+};
+   
+   uint32_t costr_watchdog5(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+  
+  
    set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
    strcat(str1,str2);   
 
    
-   if (FW_data.V_TYPE_OUT ==0)
+   if (FW_data.V_TYPE_LOGIC ==0)
    {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"checked");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"0\"checked");
    set_table_string(str2,"Не ответил хотя бы один опрашиваемый адрес (A,B,C) ",str3);  
    strcat(str1,str2);
    }
    else
    {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"0\"");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"0\"");
    set_table_string(str2,"Не ответил хотя бы один опрашиваемый адрес (A,B,C)",str3);  
    strcat(str1,str2);   
    }
    
-    if (FW_data.V_TYPE_OUT ==1)
+    if (FW_data.V_TYPE_LOGIC ==1)
    {
-    set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"1\"checked");
+    set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"1\"checked");
    set_table_string(str2,"Не ответил ни один из опрашиваемых адресов (A,B,C)",str3);  
    strcat(str1,str2);
    }
    else
    {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"1\"");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"1\"");
    set_table_string(str2,"Не ответил ни один из опрашиваемых адресов (A,B,C)",str3);  
    strcat(str1,str2);
    
    }
    
-    if (FW_data.V_TYPE_OUT ==2)
+    if (FW_data.V_TYPE_LOGIC ==2)
    {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"2\"checked");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"2\"checked");
    set_table_string(str2,"Не ответил адрес А и один из B или C",str3);  
    strcat(str1,str2);
    }
    else
    {
-      set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"2\"");
+      set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"2\"");
    set_table_string(str2,"Не ответил адрес А и один из B или C",str3);  
    strcat(str1,str2);   
    }
    
    
-    if (FW_data.V_TYPE_OUT ==3)
+    if (FW_data.V_TYPE_LOGIC ==3)
    {   
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"3\"checked");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"3\"checked");
    set_table_string(str2,"не ответил адрес А, однако ответил B или C",str3);  
    strcat(str1,str2);
    }
    else
    {
-   set_open_block(str3,"input name=\"output_type\" type=\"radio\" value=\"3\"");
+   set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"3\"");
    set_table_string(str2,"не ответил адрес А, однако ответил B или C",str3);  
    strcat(str1,str2);
    }
-   
-   
-   
-   
    
 ////////   set_text_input(str3,"call_data",32,FW_data.V_CALL_DATA);  
 ////////   set_table_string(str2,"Контактные данные",str3);  
 ////////   strcat(str1,str2);
 ////////   
-   set_submit(str3,"save_watchdog","1","Сохранить","sets");
+   set_submit(str3,"save_all","1","Сохранить","sets");
    set_table_string(str2,"Сохранить настройки ",str3);  
    strcat(str1,str2);
-////////  reset_open_block(str2,"h3");
-////////  strcat(str1,str2);
-////////   
-//////// 
-////////   reset_open_block(str2,"tbody");
-////////   strcat(str1,str2);
-////////  
-////////   reset_open_block(str2,"table");
-////////   strcat(str1,str2);
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
    
 //
-//  reset_open_block(str2,"form");
-//  strcat(str1,str2);
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
   
   
 

@@ -352,7 +352,26 @@ char V_CALL_DATA[16];
 uint8_t V_IP_SNMP[4];
 signed char V_NTP_CIRCL;
 uint8_t V_TYPE_OUT;
-uint8_t V_resv[1669];
+
+
+//new
+uint8_t V_TYPE_LOGIC;
+uint8_t V_EN_WATCHDOG;
+uint8_t V_EN_WATCHDOG_CN_A;
+uint8_t V_EN_WATCHDOG_CN_B;
+uint8_t V_EN_WATCHDOG_CN_C;
+uint8_t V_IP_WDT_ADDR_CN_A[4];
+uint8_t V_IP_WDT_ADDR_CN_B[4];
+uint8_t V_IP_WDT_ADDR_CN_C[4];
+uint16_t V_CT_RES_ALLSTART;
+uint16_t V_T_SEND_PING;
+uint16_t V_TIME_RESEND_PING;
+uint16_t V_MAX_REPID_PING;
+uint16_t V_TIME_RESET_PULSE;
+uint16_t V_PAUSE_RESET_TO_REPID;
+uint16_t V_MAX_RESEND_PACET_RESET;
+
+uint8_t V_resv[1638];
 
 ////#define A_RESV 0x800413B
 logs_t V_logs_struct;

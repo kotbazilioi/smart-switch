@@ -544,6 +544,35 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
      FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
      
+       FW_data.V_TYPE_LOGIC=0;
+       FW_data.V_EN_WATCHDOG=0;
+       FW_data.V_EN_WATCHDOG_CN_A=1;
+       FW_data.V_EN_WATCHDOG_CN_B=1;
+       FW_data.V_EN_WATCHDOG_CN_C=1;
+       FW_data.V_IP_WDT_ADDR_CN_A[0]=192;
+       FW_data.V_IP_WDT_ADDR_CN_A[1]=168;
+       FW_data.V_IP_WDT_ADDR_CN_A[2]=0;
+       FW_data.V_IP_WDT_ADDR_CN_A[3]=55;
+      
+       FW_data.V_IP_WDT_ADDR_CN_B[0]=192;
+       FW_data.V_IP_WDT_ADDR_CN_B[1]=168;
+       FW_data.V_IP_WDT_ADDR_CN_B[2]=0;
+       FW_data.V_IP_WDT_ADDR_CN_B[3]=56;
+      
+       FW_data.V_IP_WDT_ADDR_CN_C[0]=192;
+       FW_data.V_IP_WDT_ADDR_CN_C[1]=168;
+       FW_data.V_IP_WDT_ADDR_CN_C[2]=0;
+       FW_data.V_IP_WDT_ADDR_CN_C[3]=57;
+       FW_data.V_CT_RES_ALLSTART=0;
+       FW_data.V_T_SEND_PING=10;
+       FW_data.V_TIME_RESEND_PING=600;
+       FW_data.V_MAX_REPID_PING=5;
+       FW_data.V_TIME_RESET_PULSE=10;
+       FW_data.V_PAUSE_RESET_TO_REPID=20;
+       FW_data.V_MAX_RESEND_PACET_RESET=8;
+     
+     
+     
      save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
      
 

@@ -17,6 +17,7 @@ uint32_t costr_watchdog1(char* str1);
 uint32_t costr_watchdog2(char* str1);
 uint32_t costr_watchdog3(char* str1);
 uint32_t costr_watchdog4(char* str1);
+uint32_t costr_watchdog5(char* str1);
 extern uint32_t ct_logoff_time;
 extern uint8_t flag_logon;
 extern unsigned char key_http[30];

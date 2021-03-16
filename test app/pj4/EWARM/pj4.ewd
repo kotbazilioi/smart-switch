@@ -1106,7 +1106,7 @@
                 <option>
                     <name>CCSTLinkJtagSpeedList</name>
                     <version>2</version>
-                    <state>0</state>
+                    <state>9</state>
                 </option>
                 <option>
                     <name>CCSTLinkDAPNumber</name>
@@ -1136,7 +1136,7 @@
                 <debug>1</debug>
                 <option>
                     <name>CThirdPartyDriverDll</name>
-                    <state>###Uninitialized###</state>
+                    <state>Browse to your third-party driver</state>
                 </option>
                 <option>
                     <name>CThirdPartyLogFileCheck</name>

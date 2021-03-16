@@ -566,6 +566,7 @@ void param_run(post_data_t* post_data,uint8_t index)
     else if (strncmp((char*)post_data->name,"call_data", sizeof("call_data")) == 0)
           {
            // FW_data.V_Name_dev
+            FW_data.V_DHCP=0;
             len_mess=strlen(post_data->data);
               memset((char*)FW_data.V_CALL_DATA,0,strlen((char*)FW_data.V_CALL_DATA));
               for (ct_temp0=0;ct_temp0<len_mess;ct_temp0++)
@@ -597,7 +598,140 @@ void param_run(post_data_t* post_data,uint8_t index)
               memcpy((uint8_t*)FW_data.V_IP_CONFIG, (char*)IP_buf,4 );
             }
           
+          }/*****************************************/
+     else if (strncmp((char*)post_data->name,"V_IP_WDT_ADDR_CN_A", sizeof("V_IP_WDT_ADDR_CN_A")) == 0)
+          {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            if (scanf_ip ((char*) post_data->data,IP_buf,len_mess)==0)
+            {
+              memcpy((uint8_t*)FW_data.V_IP_WDT_ADDR_CN_A, (char*)IP_buf,4 );
+            }
+          
           }
+     else if (strncmp((char*)post_data->name,"V_IP_WDT_ADDR_CN_B", sizeof("V_IP_WDT_ADDR_CN_B")) == 0)
+          {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            if (scanf_ip ((char*) post_data->data,IP_buf,len_mess)==0)
+            {
+              memcpy((uint8_t*)FW_data.V_IP_WDT_ADDR_CN_B, (char*)IP_buf,4 );
+            }
+          
+          }
+     else if (strncmp((char*)post_data->name,"V_IP_WDT_ADDR_CN_C", sizeof("V_IP_WDT_ADDR_CN_C")) == 0)
+          {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            if (scanf_ip ((char*) post_data->data,IP_buf,len_mess)==0)
+            {
+              memcpy((uint8_t*)FW_data.V_IP_WDT_ADDR_CN_C, (char*)IP_buf,4 );
+            }
+          
+          }
+      else if (strncmp((char*)post_data->name,"V_EN_WATCHDOG", sizeof("V_EN_WATCHDOG")) == 0)
+          {
+            FW_data.V_EN_WATCHDOG_CN_A=0;
+            FW_data.V_EN_WATCHDOG_CN_B=0;
+            FW_data.V_EN_WATCHDOG_CN_C=0;
+          //  len_mess=strlen(post_data->data);
+            if (strncmp((char*)post_data->data,"ON", sizeof("ON")) == 0)//(scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_EN_WATCHDOG=1;
+            }
+            else
+            {
+              FW_data.V_EN_WATCHDOG=0;
+            }
+          }
+      else if (strncmp((char*)post_data->name,"V_EN_WATCHDOG_CN_A", sizeof("V_EN_WATCHDOG_CN_A")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_EN_WATCHDOG_CN_A=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"V_EN_WATCHDOG_CN_B", sizeof("V_EN_WATCHDOG_CN_B")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_EN_WATCHDOG_CN_B=port_n;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_EN_WATCHDOG_CN_C", sizeof("V_EN_WATCHDOG_CN_C")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_EN_WATCHDOG_CN_C=port_n;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_CT_RES_ALLSTART", sizeof("V_CT_RES_ALLSTART")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+             // FW_data.V_CT_RES_ALLSTART=port_n;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_T_SEND_PING", sizeof("V_T_SEND_PING")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_T_SEND_PING=port_n;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_TIME_RESEND_PING", sizeof("V_TIME_RESEND_PING")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_TIME_RESEND_PING=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"V_MAX_REPID_PING", sizeof("V_MAX_REPID_PING")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_MAX_REPID_PING=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"V_TIME_RESET_PULSE", sizeof("V_TIME_RESET_PULSE")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_TIME_RESET_PULSE=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"V_PAUSE_RESET_TO_REPID", sizeof("V_PAUSE_RESET_TO_REPID")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_PAUSE_RESET_TO_REPID=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"V_MAX_RESEND_PACET_RESET", sizeof("V_MAX_RESEND_PACET_RESET")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_MAX_RESEND_PACET_RESET=port_n;
+            }
+          }
+     else if (strncmp((char*)post_data->name,"output_logic", sizeof("output_logic")) == 0)
+          {
+            len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_TYPE_LOGIC=port_n;
+            }
+          }    
     else if (strncmp((char*)post_data->name,"mask_addr", sizeof("mask_addr")) == 0)
           {
              len_mess=strlen(post_data->data);
@@ -892,7 +1026,10 @@ post_data_t elem_post_data;
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
                vTaskDelay(10);
                 len_buf_list=costr_watchdog4((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);    
+               vTaskDelay(10);
+                len_buf_list=costr_watchdog5((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);       
                vTaskDelay(10);
             }
           break;
@@ -1098,7 +1235,7 @@ static void http_server_serve(struct netconn *conn1)
             else if (strncmp((char const *)buf,"GET /watchdog.html",18)==0)
              {
                page_n=3;
-               page_sost=3;
+               page_sost=2;
                page_html_swich(page_n,conn1,buf_page);
              }
             else if (strncmp((char const *)buf,"GET /settings.html",14)==0)
@@ -1122,8 +1259,7 @@ static void http_server_serve(struct netconn *conn1)
       } 
       else
       {
-//       if (flag_logon==1)
-//          {
+
             if ((buflen >=5) && (strncmp(buf, "POST /", 5) == 0))
               {
                 if (strncmp(buf, "POST /", 5) == 0)
@@ -1131,47 +1267,30 @@ static void http_server_serve(struct netconn *conn1)
                       if (page_sost==1)
                            {
                              page_n=4;
-                            page_html_swich(page_n,conn1,buf_page);
-                            vTaskDelay(20);
-                            parser_post(buf,buflen,page_sost);
-                           
-                           
-                            
-                         //  }
-//                      if (strncmp((char*)(buf+buflen-11),"check_res=1", 11)==0)
-//                        {                        
-//                       if (page_sost==1)
-//                         {
-//                         page_n=4; // pass
-//                         flag_logon=0;
-//                         page_html_swich(page_n,conn1,buf_page);   
-//                         form_reple_to_save(RESETL);
-//                         
-//                         save_reple_log(reple_to_save);
-//                         flag_global_save_log=0;
-//                         vTaskDelay(100);
-//                         jamp_to_app();
-//                         }
-                        }         
-                      else 
-                        {  
-                         if (page_sost==3)
-                         {
-                            parser_post(buf,buflen,page_sost);
-                            page_n=5;
-                            vTaskDelay(20);
-                            page_html_swich(page_n,conn1,buf_page);
-                         }
-                         if(page_sost==2)
-                          {
-                            
-                          }
-                        }                
- 
-                    
+                             page_html_swich(page_n,conn1,buf_page);
+                             vTaskDelay(20);
+                             parser_post(buf,buflen,page_sost);
+                           }         
+                        else 
+                           {  
+                             if (page_sost==3)
+                              {
+                               parser_post(buf,buflen,page_sost);
+                               page_n=5;
+                               vTaskDelay(20);
+                               page_html_swich(page_n,conn1,buf_page);
+                              }
+                             if(page_sost==2)
+                               {
+                                parser_post(buf,buflen,page_sost);
+                                page_n=3;
+                                vTaskDelay(20);
+                                page_html_swich(page_n,conn1,buf_page);
+                               }
+                            }            
                     }
               }
-        //  }
+        
       }
      }
     }
