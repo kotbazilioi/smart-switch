@@ -603,6 +603,7 @@ uint32_t costr_page2(char* str1)
    
    
      len=strlen(str1);
+     while(len>3000){}
   return len;
 };
    
@@ -720,6 +721,7 @@ uint32_t costr_page2_1(char* str1)
   
   
   len=strlen(str1);
+  while(len>3000){}
   return len;
 };
 
@@ -928,6 +930,7 @@ uint32_t costr_page4(char* str1)
   
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1075,6 +1078,7 @@ uint32_t costr_page3(char* str1)
 
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1175,6 +1179,7 @@ uint32_t costr_page5(char* str1)
 //  strcat(str1,str2);
    
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1286,6 +1291,7 @@ uint32_t costr_page6(char* str1)
 
    
      len=strlen(str1);
+          while(len>3000){}
   return len;
 };
    
@@ -1400,6 +1406,7 @@ uint32_t costr_page6(char* str1)
   
    
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1498,6 +1505,7 @@ uint32_t costr_page7(char* str1)
    
      
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1633,6 +1641,7 @@ uint32_t costr_page7(char* str1)
   
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1715,6 +1724,7 @@ uint32_t costr_page8(char* str1)
   strcat(str1,http_logs_area);
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 }  
   
@@ -1747,6 +1757,7 @@ uint32_t costr_page9(char* str1)
 
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };
 
@@ -1893,6 +1904,7 @@ uint32_t costr_watchdog1(char* str1)
 //   
    
    len=strlen(str1);
+        while(len>3000){}
   return len;
 };  
 
@@ -1907,17 +1919,17 @@ uint32_t costr_watchdog2(char* str1)
   memset (str4,0, sizeof(str4));
 
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_A[0],FW_data.V_IP_WDT_ADDR_CN_A[1],FW_data.V_IP_WDT_ADDR_CN_A[2],FW_data.V_IP_WDT_ADDR_CN_A[3]);  
-   set_text_input(str3,"IP_WDT_ADDR_CN_A",15,str4);  
+   set_text_input(str3,"V_IP_WDT_ADDR_CN_A",15,str4);  
    set_table_string(str2,"IP адресс канал А",str3);
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_B[0],FW_data.V_IP_WDT_ADDR_CN_B[1],FW_data.V_IP_WDT_ADDR_CN_B[2],FW_data.V_IP_WDT_ADDR_CN_B[3]);
-   set_text_input(str3,"IP_WDT_ADDR_CN_B",15,str4);  
+   set_text_input(str3,"V_IP_WDT_ADDR_CN_B",15,str4);  
    set_table_string(str2,"IP адресс канал B",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_WDT_ADDR_CN_C[0],FW_data.V_IP_WDT_ADDR_CN_C[1],FW_data.V_IP_WDT_ADDR_CN_C[2],FW_data.V_IP_WDT_ADDR_CN_C[3]);
-   set_text_input(str3,"IP_WDT_ADDR_CN_C",15,str4);  
+   set_text_input(str3,"V_IP_WDT_ADDR_CN_C",15,str4);  
    set_table_string(str2,"IP адресс канал C",str3);  
    strcat(str1,str2);
    
@@ -1934,10 +1946,11 @@ uint32_t costr_watchdog2(char* str1)
    
    sprintf(str4,"%d",FW_data.V_TIME_RESEND_PING);
    set_intnum(str3,"V_TIME_RESEND_PING",4,str4,600,9000);  
-   set_table_string(str2,"Таймаут перед повтором пинга  600-9000c",str3);  
+   set_table_string(str2,"Таймаут перед повтором пинга  600-9000 мc",str3);  
    strcat(str1,str2);
    
      len=strlen(str1);
+          while(len>3000){}
   return len;
 };
 
@@ -2011,6 +2024,7 @@ uint32_t costr_watchdog3(char* str1)
   
    
      len=strlen(str1);
+          while(len>3000){}
   return len;
 };
 
@@ -2105,6 +2119,7 @@ uint32_t costr_watchdog4(char* str1)
   // Table   
  
      len=strlen(str1);
+          while(len>3000){}
   return len;
 };
    
@@ -2172,7 +2187,7 @@ uint32_t costr_watchdog4(char* str1)
    else
    {
    set_open_block(str3,"input name=\"output_logic\" type=\"radio\" value=\"3\"");
-   set_table_string(str2,"не ответил адрес А, однако ответил B или C",str3);  
+   set_table_string(str2,"Не ответил адрес А, однако ответил B или C",str3);  
    strcat(str1,str2);
    }
    
@@ -2203,5 +2218,6 @@ uint32_t costr_watchdog4(char* str1)
 
   
   len=strlen(str1);
+       while(len>3000){}
   return len;
 };

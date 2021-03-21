@@ -70,7 +70,7 @@ void DynWebPageStr(struct netconn *conn);
 u32_t nPageHits = 0;
 char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,0x0a};
 uint8_t flag_req_logon=0;
-  uint8_t page_n,page_sost;
+  uint8_t page_n,page_sost=1;
 /**
   * @brief serve tcp connection  
   * @param conn: pointer on connection structure 
@@ -1141,11 +1141,13 @@ static void http_server_serve(struct netconn *conn1)
 {
    
  //post_data_t post_data[32];
-  struct netbuf *inbuf;
+  struct netbuf *inbuf;//=(struct netbuf*)pvPortMalloc(1500);
   err_t recv_err;
   char* buf;
    u16_t buflen;
-   char* buf_page=(char*)pvPortMalloc(3000);
+
+
+        char* buf_page=(char*)pvPortMalloc(3000); 
 //   char buf_page[3000];
 
   
@@ -1170,7 +1172,7 @@ static void http_server_serve(struct netconn *conn1)
             ct_logoff_time = 0;            
           }
         
-        
+       
         
      memset((void*)key_http,0,30);
       
@@ -1303,7 +1305,7 @@ static void http_server_serve(struct netconn *conn1)
   
   /* Delete the buffer (netconn_recv gives us ownership,
    so we have to make sure to deallocate the buffer) */
-  
+ // vPortFree(inbuf);
   netbuf_delete(inbuf);
 
           
@@ -1319,16 +1321,16 @@ static void http_server_netconn_thread(void *arg)
 { 
   struct netconn *conn, *newconn;
   err_t err, accept_err;
-//  for(;;)
-//  {
+  for(;;)
+  {
   /* Create a new TCP connection handle */
   conn = netconn_new(NETCONN_TCP);
   
   if (conn!= NULL)
   {
     /* Bind to port 80 (HTTP) with default IP address */
-    //err = netconn_bind(conn, NULL, FW_data.V_WEB_PORT);
-      err = netconn_bind(conn, NULL,80);
+    err = netconn_bind(conn, NULL, FW_data.V_WEB_PORT);
+    //  err = netconn_bind(conn, NULL,80);
     if (err == ERR_OK)
     {
       /* Put the connection into LISTEN state */
@@ -1340,15 +1342,16 @@ static void http_server_netconn_thread(void *arg)
         if(accept_err == ERR_OK)
         {
           /* serve connection */
+          vTaskDelay(50);
           http_server_serve(newconn);
-
+          vTaskDelay(50);
            /* delete connection */
           netconn_delete(newconn);          
         }
       }
     }
   }
-//}
+}
 }
 /**
   * @brief  Initialize the HTTP server (start its thread) 
@@ -1357,7 +1360,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL,2*1024, WEBSERVER_THREAD_PRIO);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL,1*1024, osPriorityHigh);
 }
 
 /**

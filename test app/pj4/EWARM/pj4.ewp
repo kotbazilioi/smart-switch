@@ -49,16 +49,16 @@
                 <option>
                     <name>GRuntimeLibSelect</name>
                     <version>0</version>
-                    <state>2</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>GRuntimeLibSelectSlave</name>
                     <version>0</version>
-                    <state>2</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
+                    <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state>$TOOLKIT_DIR$\inc\c\DLib_Config_Full.h</state>
+                    <state>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
@@ -377,6 +377,7 @@
                     <state>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\snmp</state>
                     <state>E:\ika\development\F107\boot1\smart-switch\test app\pj4\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_private_mib</state>
                     <state>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp</state>
+                    <state>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\ping</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -397,7 +398,7 @@
                 <option>
                     <name>CCOptStrategy</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
@@ -460,7 +461,7 @@
                 <option>
                     <name>CCOptStrategySlave</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>2</state>
                 </option>
                 <option>
                     <name>CCGuardCalls</name>
@@ -1123,6 +1124,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\ping\ping.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_ex.c</name>

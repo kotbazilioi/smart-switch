@@ -30,6 +30,7 @@
 #include "dns.h"
 #include "LOGS.h"
 #include "html_page.h"
+#include "ping.h"
 #include <stdio.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -182,9 +183,9 @@ int main(void)
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
   /* definition and creation of IO_CNTRL */
- osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, 128);
+ osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, 256);
  IO_CNTRLHandle = osThreadCreate(osThread(IO_CNTRL), NULL);
- 
+// 
  
   
   //void GET_reple (uint8_t event,log_reple_t* reple)
@@ -435,7 +436,10 @@ ip4_addr_t ipdns1;
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
     //  udpecho_init();
+  
+  
   http_server_netconn_init();
+  ping_init();
   /* Infinite loop */
   for(;;)
   {
@@ -476,6 +480,7 @@ ip4_addr_t ipdns1;
      
 //        {}
        snmp_ex_init();
+      
       }
 //    ipdns1=*(dns_getserver (0));
 //   FW_data.V_IP_DNS[0]=(ipdns1.addr&0x000000ff);
@@ -492,11 +497,11 @@ void set_out_port(uint8_t sost,uint8_t canal)
   {
   if (sost==0)
   {
-    if (FW_data.V_TYPE_OUT==0)
+    if ((FW_data.V_TYPE_OUT==0)||(FW_data.V_TYPE_OUT==2))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
     }
-    if (FW_data.V_TYPE_OUT==1)
+    if ((FW_data.V_TYPE_OUT==1)||(FW_data.V_TYPE_OUT==3))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
     }    
@@ -504,11 +509,11 @@ void set_out_port(uint8_t sost,uint8_t canal)
   
   if (sost==1)
   {
-    if (FW_data.V_TYPE_OUT==0)
+    if ((FW_data.V_TYPE_OUT==0)||(FW_data.V_TYPE_OUT==2))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
     }
-    if (FW_data.V_TYPE_OUT==1)
+    if ((FW_data.V_TYPE_OUT==1)||(FW_data.V_TYPE_OUT==3))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
     }    
@@ -517,17 +522,17 @@ void set_out_port(uint8_t sost,uint8_t canal)
   
   if (sost>1)
   {
-    if ((FW_data.V_TYPE_OUT==2)||(FW_data.V_TYPE_OUT==1)||(FW_data.V_TYPE_OUT==0))
+    if ((FW_data.V_TYPE_OUT==0)||(FW_data.V_TYPE_OUT==2))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
-      osDelay(1000);
+      osDelay(1000*FW_data.V_TIME_RESET_PULSE);
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
     }
     
-    if (FW_data.V_TYPE_OUT==3)
+    if ((FW_data.V_TYPE_OUT==1)||(FW_data.V_TYPE_OUT==3))
     {
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
-      osDelay(1000);
+      osDelay(1000*FW_data.V_TIME_RESET_PULSE);
       HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0); 
     }    
   }
@@ -549,9 +554,13 @@ void IO_CNRL_APP(void const * argument)
  {
 //   uint32_t OID_out[]={1,3,6,1,4,1,2022,1,1};
    uint32_t OID_out[]={1,2020,1,0};
+   
+   
+   
+   
 
    if ((flag_global_swich_out==SWICH_ON_WEB)||(flag_global_swich_out==SWICH_OFF_WEB)||(flag_global_swich_out==SWICH_TOLG_WEB)||
-       (flag_global_swich_out==SWICH_ON_SNMP)||(flag_global_swich_out==SWICH_OFF_SNMP)||(flag_global_swich_out==SWICH_TOLG_SNMP))
+       (flag_global_swich_out==SWICH_ON_SNMP)||(flag_global_swich_out==SWICH_OFF_SNMP)||(flag_global_swich_out==SWICH_TOLG_SNMP)||(flag_global_swich_out==SWICH_TOLG_WATCH))
    {
 
 
@@ -569,7 +578,7 @@ void IO_CNRL_APP(void const * argument)
         {
           OID_out[3]=2;
           send_mess_trap(OID_out,FW_data.V_ON_MESS,strlen(FW_data.V_ON_MESS));
-          send_mess_trap();
+         // send_mess_trap();
             set_out_port(data,1);
             flag_global_swich_out=0;
         }
@@ -577,7 +586,7 @@ void IO_CNRL_APP(void const * argument)
        {
          OID_out[3]=3;
          send_mess_trap(OID_out,FW_data.V_ON_MESS,strlen(FW_data.V_ON_MESS));
-         send_mess_trap();
+       ///  send_mess_trap();
           set_out_port(2,1); 
           flag_global_swich_out=0;
        }
@@ -596,6 +605,7 @@ void IO_CNRL_APP(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_Task_HAL1 */
+
 void Task_HAL1(void const * argument)
 {
  /// log_reple_t reple1;
@@ -625,7 +635,148 @@ void Task_HAL1(void const * argument)
       }
   ///   GET_reple(SWICH_ON_WEB,&reple1);
      HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
-//     save_reple_log(reple1);
+    
+    if ((FW_data.V_EN_WATCHDOG==1)&&(flag_delay_ping==0))
+    {      
+      if (FW_data.V_TYPE_LOGIC==0)
+      {
+         if ( (ping_data.flag_err[0]!=0)||(ping_data.flag_err[1]!=0)||(ping_data.flag_err[2]!=0))
+          {
+                if (ct_max_res<FW_data.V_MAX_RESEND_PACET_RESET)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);  
+                 ct_max_res++;
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                if (FW_data.V_MAX_RESEND_PACET_RESET==0)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);                
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                  
+  
+          }
+         else
+          {
+              ct_max_res=0;
+          }
+      }
+      
+      if (FW_data.V_TYPE_LOGIC==1)
+      {
+         if ( (ping_data.flag_err[0]!=0)&&(ping_data.flag_err[1]!=0)&&(ping_data.flag_err[2]!=0))
+          {
+                if (ct_max_res<FW_data.V_MAX_RESEND_PACET_RESET)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);  
+                 ct_max_res++;
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                if (FW_data.V_MAX_RESEND_PACET_RESET==0)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);                
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                
+                
+          }
+         else
+          {
+              ct_max_res=0;
+          }
+      }
+      
+      
+      if (FW_data.V_TYPE_LOGIC==2)
+      {
+         if ( ((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[1]!=0))||((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[2]!=0)))
+          {
+                 if (ct_max_res<FW_data.V_MAX_RESEND_PACET_RESET)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);  
+                 ct_max_res++;
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                if (FW_data.V_MAX_RESEND_PACET_RESET==0)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);                
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+          }
+         else
+          {
+              ct_max_res=0;
+          }
+      }
+      
+      
+      if (FW_data.V_TYPE_LOGIC==3)
+      {
+         if ( ((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[1]!=1))&&((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[2]!=1)))
+          {
+                 if (ct_max_res<FW_data.V_MAX_RESEND_PACET_RESET)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);  
+                 ct_max_res++;
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+                if (FW_data.V_MAX_RESEND_PACET_RESET==0)
+                {
+                 form_reple_to_save(SWICH_TOLG_WATCH);
+                 flag_global_swich_out=SWICH_TOLG_WATCH;
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,2);                
+                 flag_delay_ping=1;
+                 ct_cn_a=0;
+                 ct_cn_b=0;
+                 ct_cn_c=0;
+                }
+            
+          }
+          else
+          {
+              ct_max_res=0;
+          }
+      }
+      
+      
+    }
+    
+
      osDelay(100);
      
   }

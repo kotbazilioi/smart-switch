@@ -51,6 +51,22 @@
 #include "lwipopts.h"
 #include "lwip/debug.h"
 
+   
+   
+#define SNMP_PRIVATE_MIB 1
+#define LWIP_RAW  1
+#define LWIP_UDP 1
+#define LWIP_SOCKET  1
+//#define  LWIP_DEBUG 1
+//#define  LWIP_PLATFORM_DIAG 1
+
+#define LWIP_SO_RCVTIMEO 1 
+#define LWIP_SO_SNDTIMEO 1
+#define LWIP_SO_SNDRCVTIMEO_NONSTANDARD 1   
+#define MEMP_OVERFLOW_CHECK             1   
+#define LWIP_SO_RCVBUF                  1   
+   
+   
 /**
  * @defgroup lwip_opts Options (lwipopts.h)
  * @ingroup lwip

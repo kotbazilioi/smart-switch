@@ -22,7 +22,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "main.h"
-
+#include "lwip/opt.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -62,6 +62,11 @@ void vApplicationMallocFailedHook(void);
 /* USER CODE BEGIN 5 */
 __weak void vApplicationMallocFailedHook(void)
 {
+  
+  while (1)
+  {
+  LWIP_DEBUGF( PING_DEBUG, (" error malloc"));
+  }
    /* vApplicationMallocFailedHook() will only be called if
    configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h. It is a hook
    function that will get called if a call to pvPortMalloc() fails.

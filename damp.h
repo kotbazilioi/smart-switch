@@ -1,0 +1,68 @@
+
+#define A_START_BOOT 0x08000000
+#define A_BOOT_FW 0x08000004
+#define A_CRC_APP 0x8004000
+#define A_CRC_DATA_BOOT 0x8004002
+//*******************************
+#define A_IP_ADRESS 0x8004004
+#define A_IP_MASK 0x8004008
+#define A_GET_ADRESS 0x800400c
+#define A_FW_VER 0x8004010
+#define A_FW_LEN 0x8004014
+#define A_BOOT_VER 0x8004018
+#define A_CRC_DATA 0x800401C
+#define A_DHCP 0x800401E
+//*******************************
+#define A_LOGIN A_DHCP+2
+#define A_PASSWORD A_LOGIN+16 
+#define A_DNS A_PASSWORD+16
+#define A_WEB_PORT A_DNS+4 
+#define A_SNMP A_WEB_PORT+4 
+#define A_HTTP_IP A_SNMP+4
+#define A_ON_MESS A_HTTP_IP+2
+#define A_OFF_MESS A_ON_MESS+32
+#define A_FLAG_EN_MAN A_OFF_MESS+32
+#define A_FLAG_EN_WEB A_FLAG_EN_MAN+1
+#define A_FLAG_EN_RASP A_FLAG_EN_WEB+1
+#define A_FLAG_EN_WATCHMAN A_FLAG_EN_RASP+1
+#define A_EMAIL_ERR A_FLAG_EN_WATCHMAN+1
+#define A_D_TIME A_EMAIL_ERR+32
+
+#define A_RD1_TIME A_D_TIME+40
+
+#define A_IP_PING A_RD1_TIME+12
+#define A_TIME_SEND A_IP_PING+4
+#define A_TIME_READ A_TIME_SEND+2
+#define A_N_RERID A_TIME_READ+2
+#define A_TIME_RESET A_N_RERID+2
+#define A_DELAY_PING A_TIME_RESET+2
+#define A_SOST_RESET A_DELAY_PING+2
+#define A_N_PING A_SOST_RESET+1
+#define A_IP_NTP1 A_N_PING+2
+#define A_IP_NTP2 A_IP_NTP1+4
+#define A_PORT_NTP A_IP_NTP2+4
+#define A_NAME_SMTP A_PORT_NTP+2
+#define A_PORT_SNMP A_NAME_SMTP+32
+#define A_LOGIN_SMTP A_PORT_SNMP+2
+#define A_PASSWORD_SMTP A_LOGIN_SMTP+16
+#define A_GEOM_NAME A_PASSWORD_SMTP+16  
+#define A_ID_MAC A_GEOM_NAME+32        
+#define A_NAME_DEV A_ID_MAC+8
+#define A_CALL_DATA A_NAME_DEV+16
+#define A_IP_SNMP A_CALL_DATA+16
+#define A_NTP_CIRCL A_IP_SNMP+4 
+#define A_TYPE_OUT A_NTP_CIRCL+1
+#define A_RESV V_TYPE_OUT+1
+    
+    
+    
+    
+    
+#define A_CRC_LOG 0x8004800
+#define A_LOG A_CRC_LOG+2
+#define A_START_APP 0x8005000
+#define A_FW_APP 0x8005004
+#define A_HTTP_DUMP 0x8005000
+#define A_END_APP     ((uint32_t)0x08020000) 
+
+#define BOOT_VER_FW 0X00010001

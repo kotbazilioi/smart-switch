@@ -12,15 +12,15 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
-        <CStepIntDis>_ 0</CStepIntDis>
-        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
-        <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
         <stlinkserialNo>3817010011144D43574D4E00</stlinkserialNo>
         <stlinkfoundProbes />
+        <stlinkResetStyle>0</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
+        <CStepIntDis>_ 0</CStepIntDis>
+        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>4264237831</Checksum>
+        <Checksum>3362339911</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -65,33 +65,37 @@
         <ITMlogFile>$PROJ_DIR$\ITM.log</ITMlogFile>
     </SWOTraceHWSettings>
     <struct_types>
-        <Fmt0>FLASH_EraseInitTypeDef-NbPages	4	0</Fmt0>
-        <Fmt1>FLASH_EraseInitTypeDef-PageAddress	4	0</Fmt1>
-        <Fmt2>FLASH_EraseInitTypeDef-TypeErase	4	0</Fmt2>
-        <Fmt3>FW_data_t-V_CRC_APP	4	0</Fmt3>
-        <Fmt4>FW_data_t-V_CRC_BOOT	4	0</Fmt4>
-        <Fmt5>FW_data_t-V_CRC_DATA	4	0</Fmt5>
-        <Fmt6>FW_data_t-V_NTP_CIRCL	3	0</Fmt6>
-        <Fmt7>RTC_DateTypeDef-Date	3	0</Fmt7>
-        <Fmt8>RTC_DateTypeDef-Month	3	0</Fmt8>
-        <Fmt9>RTC_DateTypeDef-WeekDay	3	0</Fmt9>
-        <Fmt10>RTC_DateTypeDef-Year	3	0</Fmt10>
-        <Fmt11>RTC_TimeTypeDef-Hours	3	0</Fmt11>
-        <Fmt12>RTC_TimeTypeDef-Minutes	3	0</Fmt12>
-        <Fmt13>RTC_TimeTypeDef-Seconds	3	0</Fmt13>
-        <Fmt14>ip4_addr_t-addr	4	0</Fmt14>
-        <Fmt15>ip_addr_t-addr	4	0</Fmt15>
-        <Fmt16>log_reple_t-day	3	0</Fmt16>
-        <Fmt17>log_reple_t-dweek	3	0</Fmt17>
-        <Fmt18>log_reple_t-month	3	0</Fmt18>
-        <Fmt19>log_reple_t-reple_hours	3	0</Fmt19>
-        <Fmt20>log_reple_t-reple_minuts	3	0</Fmt20>
-        <Fmt21>log_reple_t-reple_seconds	3	0</Fmt21>
-        <Fmt22>log_reple_t-type_event	3	0</Fmt22>
-        <Fmt23>log_reple_t-year	3	0</Fmt23>
-        <Fmt24>logs_t-CRC16	4	0</Fmt24>
-        <Fmt25>struct snmp_obj_id-len	3	0</Fmt25>
-        <Fmt26>struct snmp_request-source_port	3	0</Fmt26>
+        <Fmt0>BlockLink_t-xBlockSize	4	0</Fmt0>
+        <Fmt1>FLASH_EraseInitTypeDef-NbPages	4	0</Fmt1>
+        <Fmt2>FLASH_EraseInitTypeDef-PageAddress	4	0</Fmt2>
+        <Fmt3>FLASH_EraseInitTypeDef-TypeErase	4	0</Fmt3>
+        <Fmt4>FW_data_t-V_CRC_APP	4	0</Fmt4>
+        <Fmt5>FW_data_t-V_CRC_BOOT	4	0</Fmt5>
+        <Fmt6>FW_data_t-V_CRC_DATA	4	0</Fmt6>
+        <Fmt7>FW_data_t-V_NTP_CIRCL	3	0</Fmt7>
+        <Fmt8>RTC_DateTypeDef-Date	3	0</Fmt8>
+        <Fmt9>RTC_DateTypeDef-Month	3	0</Fmt9>
+        <Fmt10>RTC_DateTypeDef-WeekDay	3	0</Fmt10>
+        <Fmt11>RTC_DateTypeDef-Year	3	0</Fmt11>
+        <Fmt12>RTC_TimeTypeDef-Hours	3	0</Fmt12>
+        <Fmt13>RTC_TimeTypeDef-Minutes	3	0</Fmt13>
+        <Fmt14>RTC_TimeTypeDef-Seconds	3	0</Fmt14>
+        <Fmt15>ip4_addr_t-addr	4	0</Fmt15>
+        <Fmt16>ip_addr_t-addr	4	0</Fmt16>
+        <Fmt17>log_reple_t-day	3	0</Fmt17>
+        <Fmt18>log_reple_t-dweek	3	0</Fmt18>
+        <Fmt19>log_reple_t-month	3	0</Fmt19>
+        <Fmt20>log_reple_t-reple_hours	3	0</Fmt20>
+        <Fmt21>log_reple_t-reple_minuts	3	0</Fmt21>
+        <Fmt22>log_reple_t-reple_seconds	3	0</Fmt22>
+        <Fmt23>log_reple_t-type_event	3	0</Fmt23>
+        <Fmt24>log_reple_t-year	3	0</Fmt24>
+        <Fmt25>logs_t-CRC16	4	0</Fmt25>
+        <Fmt26>struct icmp_echo_hdr-chksum	4	0</Fmt26>
+        <Fmt27>struct icmp_echo_hdr-id	4	0</Fmt27>
+        <Fmt28>struct in_addr-s_addr	4	0</Fmt28>
+        <Fmt29>struct snmp_obj_id-len	3	0</Fmt29>
+        <Fmt30>struct snmp_request-source_port	3	0</Fmt30>
     </struct_types>
     <array_types>
         <Fmt0>u32_t[50]	4	0</Fmt0>
@@ -109,13 +113,15 @@
         <Fmt7>{W}1:dat	4	0</Fmt7>
         <Fmt8>{W}1:data[451]	4	0</Fmt8>
         <Fmt9>{W}1:destination	4	0</Fmt9>
-        <Fmt10>{W}1:event	3	0</Fmt10>
-        <Fmt11>{W}1:ip_mass[0]	3	0</Fmt11>
-        <Fmt12>{W}1:ip_mass[2]	3	0</Fmt12>
-        <Fmt13>{W}1:ip_mass[3]	3	0</Fmt13>
-        <Fmt14>{W}1:reple	3	0</Fmt14>
-        <Fmt15>{W}1:result	3	0</Fmt15>
-        <Fmt16>{W}1:status_dns	4	0</Fmt16>
+        <Fmt10>{W}1:err	4	0</Fmt10>
+        <Fmt11>{W}1:event	3	0</Fmt11>
+        <Fmt12>{W}1:ip_mass[0]	3	0</Fmt12>
+        <Fmt13>{W}1:ip_mass[2]	3	0</Fmt13>
+        <Fmt14>{W}1:ip_mass[3]	3	0</Fmt14>
+        <Fmt15>{W}1:reple	3	0</Fmt15>
+        <Fmt16>{W}1:result	3	0</Fmt16>
+        <Fmt17>{W}1:status_dns	4	0</Fmt17>
+        <Fmt18>{W}1:sum	4	0</Fmt18>
     </watch_formats>
     <Trace2>
         <Enabled>0</Enabled>
@@ -162,24 +168,10 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
-    <DisassembleMode>
-        <mode>1</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Core\Src\html_page.c}.0.1" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1297.29" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1270.30" 0 0 1 "" 0 "" 0</Bp2>
-        <Count>3</Count>
-    </Breakpoints2>
-    <LogFile>
+    <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
-        <Category>_ 0</Category>
-    </LogFile>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
+    </TermIOLog>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>3</Mode>
@@ -193,8 +185,28 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <TermIOLog>
+    <DisassembleMode>
+        <mode>1</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\sockets.c}.1583.3" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\sockets.c}.746.21" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_DATA" "optval" 0 0 0 0 4294967295</Bp2>
+        <Bp3>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\sockets.c}.2216.9" 0 0 1 "" 0 "" 0</Bp3>
+        <Bp4>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\sockets.c}.2333.7" 0 0 1 "" 0 "" 0</Bp4>
+        <Bp5>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\sockets.c}.788.7" 0 0 1 "" 0 "" 0</Bp5>
+        <Bp6>_ 0 "EMUL_DATA" "WEBSERVER_THREAD_PRIO" 0 0 0 0 4294967295</Bp6>
+        <Bp7>_ 0 "EMUL_DATA" "IO_CNTRL" 0 0 0 0 4294967295</Bp7>
+        <Bp8>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\api_msg.c}.723.3" 0 0 1 "" 0 "" 0</Bp8>
+        <Count>9</Count>
+    </Breakpoints2>
+    <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
-    </TermIOLog>
+        <Category>_ 0</Category>
+    </LogFile>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
 </settings>
