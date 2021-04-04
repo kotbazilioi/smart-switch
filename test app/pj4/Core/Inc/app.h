@@ -28,3 +28,4 @@ extern osThreadId logs_task_nameHandle;
 extern osThreadId  IO_CNTRLHandle;
 extern osThreadId rasp_task_id;
 extern   uint8_t flag_err_dates;
+extern uint8_t flag_set_ip;

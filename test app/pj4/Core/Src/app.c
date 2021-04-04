@@ -1,5 +1,5 @@
 #include "app.h"
-
+#include "ntp.h"
 #define logoff_time 200*10
 
 osThreadId defaultTaskHandle;

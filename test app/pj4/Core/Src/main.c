@@ -33,7 +33,9 @@
 #include "ping.h"
 #include "hard_config.h"
 #include "app.h"
+#include "ntp.h"
 #include <stdio.h>
+#define QUEUE_SIZE (uint32_t) 1    
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define VECT_TAB_OFFSET 0x08005000
@@ -70,7 +72,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-
+osMessageQId timeout_Queue;
 HeapRegion_t pxHeapRegions_f107;
 /* USER CODE BEGIN PV */
 
@@ -178,6 +180,15 @@ int main(void)
  
   osThreadDef(rasp_task, rasp_task, osPriorityLow, 0, 256);
  rasp_task_id = osThreadCreate(osThread(rasp_task), NULL);
+ 
+ 
+ osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
+
+timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL);
+
+
+ osThreadDef(ntp_thread, ntp_thread, osPriorityLow, 0, 256);
+ ntp_task_id = osThreadCreate(osThread(ntp_thread), NULL);
 // 
  
   

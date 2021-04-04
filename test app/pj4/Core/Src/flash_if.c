@@ -447,7 +447,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
       
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
-     FW_data.V_IP_CONFIG[2]=0;
+     FW_data.V_IP_CONFIG[2]=3;
      FW_data.V_IP_CONFIG[3]=21;
      
      FW_data.V_IP_MASK[0]=255;
@@ -457,8 +457,8 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      
      FW_data.V_IP_GET[0]=192;
      FW_data.V_IP_GET[1]=168;
-     FW_data.V_IP_GET[2]=0;
-     FW_data.V_IP_GET[3]=100; 
+     FW_data.V_IP_GET[2]=3;
+     FW_data.V_IP_GET[3]=1; 
    
      FW_data.V_FW1_VER[0]=0;
      FW_data.V_FW1_VER[1]=0;
@@ -501,15 +501,15 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_DELAY_PING = 9999;
      FW_data.V_SOST_RESET = 0;
      FW_data.V_N_PING = 255;
-     FW_data.V_IP_NTP1[0]=62;//     62.117.76.142
-     FW_data.V_IP_NTP1[1]=117;
-     FW_data.V_IP_NTP1[2]=76;
-     FW_data.V_IP_NTP1[3]=142;
+     FW_data.V_IP_NTP1[0]=85;//    85.21.78.23
+     FW_data.V_IP_NTP1[1]=21;
+     FW_data.V_IP_NTP1[2]=78;
+     FW_data.V_IP_NTP1[3]=23;
      
-     FW_data.V_IP_NTP2[0]=192; //192.43.244.18
-     FW_data.V_IP_NTP2[1]=43; //192.43.244.18
-     FW_data.V_IP_NTP2[2]=244; //192.43.244.18
-     FW_data.V_IP_NTP2[3]=18; //192.43.244.18
+     FW_data.V_IP_NTP2[0]=194; 
+     FW_data.V_IP_NTP2[1]=190; 
+     FW_data.V_IP_NTP2[2]=168; 
+     FW_data.V_IP_NTP2[3]=1; 
      FW_data.V_PORT_NTP  = 123;
      memset((uint8_t*)&FW_data.V_NAME_SMTP,0,16);
      memcpy((uint8_t*)&FW_data.V_NAME_SMTP, (uint8_t *)"Name SNMP Server",16);
@@ -541,7 +541,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_IP_SNMP[3]=152;
      FW_data.V_TYPE_OUT=0;
      
-     FW_data.V_NTP_CIRCL = 0;
+     FW_data.V_NTP_CIRCL = 4;
      
      FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),24);     
      FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
