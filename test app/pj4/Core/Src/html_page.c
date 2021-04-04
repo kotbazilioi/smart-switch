@@ -2,6 +2,7 @@
 #include "html_page.h"
 #include "flash_if.h"
 #include "LOGS.h"
+#include "app.h"
 uint32_t ct_logoff_time;
 uint8_t flag_logon=0;
 
@@ -11,6 +12,7 @@ const char model_dev[]="UniPing port";
 char str2[512]={0};
 char str3[512]={0};
 char str4[128]={0};
+extern RTC_HandleTypeDef hrtc;
 unsigned char key_http[30]="asfasdvas";
 int key_http_len = 10;
 char HTTP401[]={0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x34,0x30,0x31,0x20,0x55,0x6e,0x61,   //HTTP/1.1 401 Una
@@ -56,10 +58,9 @@ static const char http_html_style[] =
     "background: #F6FCF9;" /* Цвет фона */
     //"color: #fff;" /* Цвет текста */
    "}"
-"    lf {"
+   "h1 {"
 	"font-family: Tahoma;"//Courier;" /* Гарнитура шрифта */
 	"src: url(fonts/Courier.ttf);" /* Путь к файлу со шрифтом */
-///////////////	"font-family: Courier, 'Comic Sans MS', cursive;"
         "text-align: center;"
           "font-size: 16pt;"
     "}"
@@ -79,7 +80,16 @@ static const char http_html_style[] =
 	"font-size: 10pt;"
         "text-align: center;"
       "}"
-        
+      "h4 {"
+       "font-family: Tahoma;"
+       // "text-decoration:  underline 1px solid green;"
+      //  "border-bottom: 2px  solid Seagreen;"/* Параметры линии под текстом */
+        "font-weight: normal;" /* Убираем жирное начертание */
+      //  "padding-bottom: 1px;" /* Расстояние от текста до линии */          
+	"font-size: 10pt;"
+          "position: absolute;"
+          "right: 11% ;"
+      "}"
 
          
    "display: inline-block;"
@@ -404,7 +414,7 @@ return 0;
 //<button type="button" name="Save_power" formtarget="_self" onclick="Save_Power()" >Save Power </button>	
 
 //sprintf(str1,"<button type=\"submit\" form=\"%s\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>",id,name,value,text);
-sprintf(str1,"<button type=\"submit\" name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>",name,value,text);
+sprintf(str1,"<button type=\"submit\"  name=\"%s\" formtarget=\"_self\" value=\"%s\">%s</button>",name,value,text);
 return 0;
 }
 
@@ -434,17 +444,221 @@ return 0;
  {  
    if (ck==1)
    {
-      sprintf(str1,"<p><select name=\"%s\"><option selected >ON</option><option>OFF</option></select></p>",name);
+      sprintf(str1,"<select name=\"%s\"><option selected >ON</option><option>OFF</option></select>",name);
    }
    else
    {
    
-      sprintf(str1,"<p><select name=\"%s\"><option  >ON</option><option selected >OFF</option></select></p>",name);
+      sprintf(str1,"<select name=\"%s\"><option  >ON</option><option selected >OFF</option></select>",name);
    }
  }
+ 
+ uint16_t set_menu3 (char* str1,char* mes1,char* mes2,char* mes3,char* name,uint8_t ck)
+ {  
+   if (ck==0)
+   {
+      sprintf(str1,"<select  name=\"%s\"><option selected >%s</option><option >%s</option><option>%s</option></select>",name,mes1,mes2,mes3);
+   }
+   if (ck==1)
+   {
    
+      sprintf(str1,"<select   name=\"%s\"><option >%s</option><option selected >%s</option><option>%s</option></select>",name,mes1,mes2,mes3);
+   }
+   if (ck==2)
+   {
    
-
+      sprintf(str1,"<select   name=\"%s\"><option  >%s</option><option >%s</option><option selected >%s</option></select>",name,mes1,mes2,mes3);
+   }
+ }
+//#define RTC_WEEKDAY_MONDAY             ((uint8_t)0x01)
+//#define RTC_WEEKDAY_TUESDAY            ((uint8_t)0x02)
+//#define RTC_WEEKDAY_WEDNESDAY          ((uint8_t)0x03)
+//#define RTC_WEEKDAY_THURSDAY           ((uint8_t)0x04)
+//#define RTC_WEEKDAY_FRIDAY             ((uint8_t)0x05)
+//#define RTC_WEEKDAY_SATURDAY           ((uint8_t)0x06)
+//#define RTC_WEEKDAY_SUNDAY             ((uint8_t)0x00)
+ uint16_t set_menu10 (char* str1,char* name,uint8_t ck)
+ {  
+   if (ck==RTC_WEEKDAY_MONDAY)
+   {
+      sprintf(str1,"<select  name=\"%s\"><option selected >ПН</option>"
+              "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_TUESDAY)
+   {
+   
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option selected>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_WEDNESDAY)
+   {
+   sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option selected>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_THURSDAY)
+   {
+     sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option selected>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_FRIDAY)
+   {
+   
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option selected>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_SATURDAY)
+   {
+   
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option selected>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==RTC_WEEKDAY_SUNDAY)
+   {
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option selected>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==7)
+   {
+   
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option selected>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==8)
+   {
+   
+      sprintf(str1,"<select  name=\"%s\"><option  >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option selected>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   } else
+   {
+   if (ck==9)
+   {
+      sprintf(str1,"<select  name=\"%s\"><option >ПН</option>"
+               "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option selected>П3</option>"
+               "</select>",name);
+   }
+   else
+   {
+   sprintf(str1,"<select  name=\"%s\"><option selected >ПН</option>"
+              "<option>ВТ</option>"
+               "<option>СР</option>"
+               "<option>ЧТ</option>"
+               "<option>ПТ</option>"
+               "<option>СБ</option>"
+               "<option>ВС</option>"
+               "<option>П1</option>"
+               "<option>П2</option>"
+               "<option>П3</option>"
+               "</select>",name);
+   
+   }
+   
+ }
+ }
+ }
+ }
+ }
+ }
+ }
+ }
+ }
+ }
  uint16_t set_checkbox_bot (char* str1,char* name,char* value,char* mess,char* id)
 { 
 
@@ -480,6 +694,508 @@ sprintf(str1,"<tr><td style=\"width: 80%; text-align: left ;border-bottom: 1px s
 return len;
 
 }
+
+
+uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+
+uint16_t len;
+sprintf(str2,"<b><tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №1");
+strcat(str1,str2);  
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №2");
+strcat(str1,str2); 
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №3");
+strcat(str1,str2); 
+
+
+sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr></b>" ,"Как в пред. день нед.");
+strcat(str1,str2);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+uint16_t set_table_rasp_zag2 (char* str1,char* str2,char* name)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+
+uint16_t len;
+sprintf(str2,"<b><tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №4");
+strcat(str1,str2);  
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №5");
+strcat(str1,str2); 
+
+    
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Тайм");
+strcat(str1,str2);  
+        
+
+
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","слот №6");
+strcat(str1,str2); 
+
+
+sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr></b>" ,"Как в пред. день нед.");
+strcat(str1,str2);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+
+//
+//uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+//{ 
+/////<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+//
+//
+//uint16_t len;
+//sprintf(str2,"<b><tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+//strcat(str1,str2);
+//
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2);  
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2); 
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2); 
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2); 
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2); 
+//
+//    
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Вкл");
+//strcat(str1,str2);  
+//        
+//
+//
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s","Выкл");
+//strcat(str1,str2); 
+//
+//
+//sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr></b>" ,"Как в пред. день нед.");
+//strcat(str1,str2);
+////          
+////        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+////              ,value);
+//return len;
+//
+//}
+//
+//
+//
+//
+//uint16_t set_table_rasp_str (char* str1,char* str2,char* name,char* val_name,char* value,V_D_TIME_type* time,uint8_t N)
+//{ 
+/////<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+//
+//char str_data[250];
+//uint16_t len;
+//sprintf(str2,"<tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+//strcat(str1,str2);
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,0,time[N].time_data[0].on_swich_h,time[N].time_data[0].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,0,time[N].time_data[0].off_swich_h,time[N].time_data[0].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,1,time[N].time_data[1].on_swich_h,time[N].time_data[1].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,1,time[N].time_data[1].off_swich_h,time[N].time_data[1].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2); 
+//
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,2,time[N].time_data[2].on_swich_h,time[N].time_data[2].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,2,time[N].time_data[2].off_swich_h,time[N].time_data[2].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2); 
+//
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,3,time[N].time_data[3].on_swich_h,time[N].time_data[3].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,3,time[N].time_data[3].off_swich_h,time[N].time_data[3].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2); 
+//
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,4,time[N].time_data[4].on_swich_h,time[N].time_data[4].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,4,time[N].time_data[4].off_swich_h,time[N].time_data[4].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2); 
+//
+//
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,0,N,5,time[N].time_data[5].on_swich_h,time[N].time_data[5].on_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2);  
+//        
+//
+//sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%d:%d\">",val_name,1,N,5,time[N].time_data[5].off_swich_h,time[N].time_data[5].off_swich_m);        
+//sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+//strcat(str1,str2); 
+//
+//
+//sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>" ,value);
+//strcat(str1,str2);
+////          
+////        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+////              ,value);
+//return len;
+//
+//}
+
+char data_time[3]={0};
+char* dtimeh (uint8_t m )
+{   data_time[0]=0;
+    data_time[1]=0;
+    data_time[2]=0;
+    data_time[0]=(m/10)+0x30;
+    if (data_time[0]>0x39)
+    {
+      data_time[0]=0x39;
+    }
+    data_time[1]=(m-(data_time[0]-0x30)*10)+0x30;
+    if (data_time[1]>0x39)
+    {
+      data_time[1]=0x39;
+    }
+    data_time[2]=0;
+    return data_time;
+  }
+
+
+char data_time1[3]={0};
+char* dtime  (uint8_t m )
+{   data_time1[0]=0;
+    data_time1[1]=0;
+    data_time1[2]=0;
+    data_time1[0]=(m/10)+0x30;
+    if (data_time1[0]>0x39)
+    {
+      data_time1[0]=0x39;
+    }
+    data_time1[1]=(m-(data_time1[0]-0x30)*10)+0x30;
+    if (data_time1[1]>0x39)
+    {
+      data_time1[1]=0x39;
+    }
+    data_time1[2]=0;
+    return data_time1;
+  }
+uint16_t set_table_rasp_str_1 (char* str1,char* str2,char* name,char* val_name,char* value,V_D_TIME_type* time,uint8_t N)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+char str_data[250];
+uint16_t len;
+sprintf(str2,"<tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\"  value=\"%s:%s\">",val_name,0,N,3,dtimeh(time[N].time_data[3].on_swich_h),dtime(time[N].time_data[3].on_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\"  value=\"%s:%s\">",val_name,1,N,3,dtimeh(time[N].time_data[3].off_swich_h),dtime(time[N].time_data[3].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2); 
+
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,4,dtimeh(time[N].time_data[4].on_swich_h),dtime(time[N].time_data[4].on_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,4,dtimeh(time[N].time_data[4].off_swich_h),dtime(time[N].time_data[4].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2); 
+
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,5,dtimeh(time[N].time_data[5].on_swich_h),dtime(time[N].time_data[5].on_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,5,dtimeh(time[N].time_data[5].off_swich_h),dtime(time[N].time_data[5].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2); 
+
+
+sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>" ,value);
+strcat(str1,str2);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+uint16_t set_table_rasp_str (char* str1,char* str2,char* name,char* val_name,char* value,V_D_TIME_type* time,uint8_t N)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+char str_data[250];
+uint16_t len;
+sprintf(str2,"<tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,0,dtimeh(time[N].time_data[0].on_swich_h),dtime(time[N].time_data[0].on_swich_m));        
+
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,0,dtimeh(time[N].time_data[0].off_swich_h),dtime(time[N].time_data[0].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2);  
+
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,1,dtimeh(time[N].time_data[1].on_swich_h),dtime(time[N].time_data[1].on_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,1,dtimeh(time[N].time_data[1].off_swich_h),dtime(time[N].time_data[1].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2); 
+
+
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,2,dtimeh(time[N].time_data[2].on_swich_h),dtime(time[N].time_data[2].on_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+strcat(str1,str2);  
+        
+
+sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,2,dtimeh(time[N].time_data[2].off_swich_h),dtime(time[N].time_data[2].off_swich_m));        
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+strcat(str1,str2); 
+
+
+
+sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>" ,value);
+strcat(str1,str2);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+
+uint16_t set_table_podm_day_str1 (char* str1,char* str2,char* name,char* val_name,V_RD_DATA_type* time)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+  char str_data[300]={0};
+  char str_data1[20]={0};
+uint8_t i;
+uint16_t len;
+sprintf(str2,"<tr><td style=\"width: 3%; text-align: left ;  border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+for (i=0;i<5;i++)
+{
+  
+sprintf(str_data1,"%s%d" ,val_name,i);
+set_menu10(str_data,str_data1,time->restore_day[i]);
+sprintf(str2,"<td style=\"width: 3%; text-align: center ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+strcat(str1,str2);  
+}       
+
+len=strlen(str1);
+
+return len;
+
+}
+
+
+uint16_t set_table_podm_day_str2 (char* str1,char* str2,char* name,char* val_name,V_RD_DATA_type* time)
+{ 
+///   set_table_podm_day_str2(str1,str2,"Подмена","V_RD_TIME","",&(FW_data.V_RD_TIME),0);
+
+  char str_data[300]={0};
+  char str_data1[20]={0};
+uint8_t i;
+uint16_t len;
+
+
+for (i=5;i<10;i++)
+{
+//uint16_t set_menu10 (char* str1,char* name,uint8_t ck
+  
+sprintf(str_data1,"%s%d" ,val_name,i);
+set_menu10(str_data,str_data1,time->restore_day[i]);
+sprintf(str2,"<td style=\"width: 3%; text-align: center ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+strcat(str1,str2);  
+}       
+
+
+
+sprintf(str2,"</tr>");
+strcat(str1,str2);
+//len=strlen(str1);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+
+
+
+
+uint16_t set_table_podm_str (char* str1,char* str2,char* name,char* val_name,char* value,V_RD_DATA_type* time,uint8_t N)
+{ 
+///<tr><td style="width: 90%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB;  "></td><td style="width: 10%; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; "></td></tr> 
+
+char str_data[150];
+uint8_t i;
+uint16_t len;
+uint16_t year,month,day;
+sprintf(str2,"<tr><td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s" ,name);
+strcat(str1,str2);
+
+for (i=0;i<10;i++)
+{
+  year=time->data[i].year+2000;
+  month=time->data[i].month+1;
+  day=time->data[i].day+1;
+  
+  sprintf(str_data,"<input type=\"date\" name=\"%s%d%d\" value=\"%d-%s-%s\">",val_name,N,i,year,dtimeh(month),dtime(day));        
+//sprintf(str_data,"<input type=\"date\" name=\"%s%d%d\" value=\"2021-02-12\">",val_name,N,i);//,time->data[i].year+2000,time->data[i].month+1,time->data[i].day+1);        
+sprintf(str2,"<td style=\"width: 3%; text-align: center ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s",str_data);
+strcat(str1,str2);  
+}       
+
+
+
+sprintf(str2,"</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>" ,value);
+strcat(str1,str2);
+//          
+//        "</td><td style=\"width: 3%; font-size: 10pt; text-align: center;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">%s</td></tr>"
+//              ,value);
+return len;
+
+}
+
+
+
 //uint16_t set_submit (char* str1,char* name,char* value)
 //{
 //
@@ -512,20 +1228,22 @@ uint32_t costr_page2(char* str1)
   set_open_block(str2,"body");
   strcat(str1,str2);
   
-  set_open_block(str2,"ul");
-  strcat(str1,str2);
+//  set_open_block(str2,"ul");
+//  strcat(str1,str2);
   
-  
-  set_open_block(str2,"lf");
-  strcat(str1,str2);
+//  
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
   
  
-  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",0,FW_data.V_FW1_VER);
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
   strcat(str1,str2);
     
-  reset_open_block(str2,"lf");
-  strcat(str1,str2);
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
   
+    set_br(str2,1);
+  strcat(str1,str2);
   
   
   set_open_block(str2,"h2");
@@ -555,8 +1273,8 @@ uint32_t costr_page2(char* str1)
   reset_open_block(str2,"h2");
   strcat(str1,str2);
 
-  reset_open_block(str2,"ul");
-  strcat(str1,str2);
+//  reset_open_block(str2,"ul");
+//  strcat(str1,str2);
   
   
   
@@ -956,17 +1674,18 @@ uint32_t costr_page3(char* str1)
   strcat(str1,str2);
   
   
-  set_open_block(str2,"lf");
-  strcat(str1,str2);
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
   
  
-  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",0,FW_data.V_FW1_VER);
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
   strcat(str1,str2);
     
-  reset_open_block(str2,"lf");
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+      set_br(str2,1);
   strcat(str1,str2);
-  
-  
   
   set_open_block(str2,"h2");
   strcat(str1,str2);
@@ -1672,17 +2391,18 @@ uint32_t costr_page8(char* str1)
   strcat(str1,str2);
   
   
-  set_open_block(str2,"lf");
-  strcat(str1,str2);
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
   
  
-  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",0,FW_data.V_FW1_VER);
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
   strcat(str1,str2);
     
-  reset_open_block(str2,"lf");
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+      set_br(str2,1);
   strcat(str1,str2);
-  
-  
   
   set_open_block(str2,"h2");
   strcat(str1,str2);
@@ -1782,17 +2502,18 @@ uint32_t costr_watchdog1(char* str1)
   strcat(str1,str2);
   
   
-  set_open_block(str2,"lf");
-  strcat(str1,str2);
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
   
  
-  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h4",0,FW_data.V_FW1_VER);
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
   strcat(str1,str2);
-    
-  reset_open_block(str2,"lf");
+//    
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+      set_br(str2,1);
   strcat(str1,str2);
-  
-  
   
   set_open_block(str2,"h2");
   strcat(str1,str2);
@@ -2221,3 +2942,1207 @@ uint32_t costr_watchdog4(char* str1)
        while(len>3000){}
   return len;
 };
+
+
+uint32_t costr_rasp_page1(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+      set_br(str2,1);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+  
+  set_link(str2,"Журнал ","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+////
+////  set_open_block(str2,"form action='/' method='GET'");
+////  strcat(str1,str2);
+ //    len=strlen(str1);
+  
+  
+  
+  set_open_block(str2,"form id=\"sets1\" action='/' method='POST'");
+ strcat(str1,str2);
+  
+//  set_open_block(str2,"ul");
+//  strcat(str1,str2);
+ set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>СТАТУС</b");
+  strcat(str1,str2);
+  
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+
+  //uint16_t set_text_area  (char* str1,char* name, uint8_t n,uint8_t c, uint8_t r,uint8_t* dat)
+   HAL_RTC_GetDate (&hrtc,&dates,RTC_FORMAT_BIN);
+   HAL_RTC_GetTime (&hrtc,&times,RTC_FORMAT_BIN);
+  
+//   reple->reple_hours = times.Hours;
+//   reple->reple_minuts = times.Minutes;
+//   reple->reple_seconds = times.Seconds;
+//   reple->dweek = dates.WeekDay;
+//   reple->day = dates.Date;
+//   reple->month = dates.Month;
+   //reple->year = 2000+dates.Year;
+  
+
+   
+   
+
+   
+  // set_text_input(str3,"name_dev",16,FW_data.V_Name_dev); 
+   
+   sprintf(str3,"%d.%d.%d  %d:%d:%d    ",dates.Date,dates.Month,2000+dates.Year,times.Hours,times.Minutes,times.Seconds);
+   set_table_string(str2,"Локальное время в устройстве",str3);
+   strcat(str1,str2);
+   
+   sprintf(str3,"UTC %d",FW_data.V_NTP_CIRCL);
+   set_table_string(str2,"Сдвиг локального времени",str3);  
+   strcat(str1,str2);
+   
+   if (status_NTP_activ==0)
+   {
+      sprintf(str3,"Синхронизация времени по NTP не выполнена");
+   }
+   else
+    {
+       sprintf(str3,"Синхронизация времени по NTP выполнена");
+    }
+   set_table_string(str2,"Статус NTP",str3);  
+   strcat(str1,str2);
+   
+//   set_submit(str3,"save_geo","1","Сохранить");
+//   set_table_string(str2,"Сохранить общие настройки ",str3);  
+//   strcat(str1,str2);
+   reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+   
+  
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+ uint32_t costr_rasp_page2(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+    set_br(str2,2);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>НАСТРОЙКА</b");
+  strcat(str1,str2);
+  
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+
+  
+   memset (str3,0, sizeof(str3));
+
+   set_checkonoff (str3,"V_FLAG_EN_RASP",FW_data.V_FLAG_EN_RASP);// (char* str1,char* name,uint8_t ck)
+   set_table_string(str2,"Включить режим 'Расписание'",str3);
+   strcat(str1,str2);
+   len=strlen(str1); 
+   
+    memset (str3,0, sizeof(str3));
+
+  // uint16_t set_menu3 (char* str1,char* mes1,char* mes2,char* mes3,char* name,uint8_t ck)
+     
+   set_menu3(str3,"Игнорировать сбой","Вкл Постоянно ","Выкл Постоянно","V_SOST_ERR_RASP",FW_data.V_SOST_ERR_RASP);  
+   set_table_string(str2,"Состояние реле при сбое установки часов",str3);
+   strcat(str1,str2);
+   len=strlen(str1); 
+   
+   if (flag_err_dates==0)
+   {
+     set_table_string(str2,"Ошибка настройки времени","Отсутствует");
+   }
+   else
+   {
+     set_table_string(str2,"Ошибка настройки времени","Ошибка активна");
+   }
+     
+   strcat(str1,str2);
+   len=strlen(str1); 
+   
+   set_submit(str3,"save_rasp_sec1","1","Применить изменения",0);
+   set_table_string(str2,"",str3);  
+   strcat(str1,str2);
+   
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+   
+   
+   
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+  
+ 
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+
+  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+//Rasp SEC1-3 d1-d7
+ uint32_t costr_rasp_page3(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+  set_open_block(str2,"form id=\"sets2\" action='/' method='POST'");
+ // set_open_block(str2,"<form method=\"post\" enctype=\"multipart/x-www-form-urlencoded\">");
+ strcat(str1,str2);
+ 
+ 
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+    set_br(str2,2);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>НЕДЕЛЬНОЕ РАССПИСАНИЕ</b");
+  strcat(str1,str2);
+  
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+   
+//uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+   set_table_rasp_zagl(str1,str2," ");
+   
+   
+  
+   
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+
+
+ uint32_t costr_rasp_page4(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+
+ memset (str3,0, sizeof(str3));
+  // set_checkbox (str4,"V_D_d0","1","C",FW_data.V_D_TIME[0].set_up_day);
+   set_table_rasp_str(str1,str2,"ПН","V_DT"," ",FW_data.V_D_TIME,0);
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+   
+   
+   
+
+ uint32_t costr_rasp_page5(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d1","1","C",FW_data.V_D_TIME[1].set_up_day);
+   set_table_rasp_str(str1,str2,"ВТ","V_DT",str4,FW_data.V_D_TIME,1);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page6(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d2","1","C",FW_data.V_D_TIME[2].set_up_day);
+   set_table_rasp_str(str1,str2,"СР","V_DT",str4,FW_data.V_D_TIME,2);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page7(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d3","1","C",FW_data.V_D_TIME[3].set_up_day);
+   set_table_rasp_str(str1,str2,"ЧТ","V_DT",str4,FW_data.V_D_TIME,3);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page8(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d4","1","C",FW_data.V_D_TIME[4].set_up_day);
+   set_table_rasp_str(str1,str2,"ПТ","V_DT",str4,FW_data.V_D_TIME,4);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page9(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d5","1","C",FW_data.V_D_TIME[5].set_up_day);
+   set_table_rasp_str(str1,str2,"СБ","V_DT",str4,FW_data.V_D_TIME,5);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+ uint32_t costr_rasp_page10(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d6","1","C",FW_data.V_D_TIME[6].set_up_day);
+   set_table_rasp_str(str1,str2,"ВС","V_DT",str4,FW_data.V_D_TIME,6);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page11(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+  
+  
+   
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+//     set_br(str2,1);
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"save_rasp_sec1","1","Применить изменения",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+      set_br(str2,3);
+  strcat(str1,str2);
+  
+ 
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+//
+//  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  
+  len=strlen(str1);
+
+       while(len>3000){}
+  return len;
+};
+
+
+
+//RASP SEC4-6* d1-d7*************************************************************
+
+ uint32_t costr_rasp_page12(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+  set_open_block(str2,"form id=\"sets3\" action='/' method='POST'");
+ // set_open_block(str2,"<form method=\"post\" enctype=\"multipart/x-www-form-urlencoded\">");
+ strcat(str1,str2);
+ 
+// 
+//   set_open_block(str2,"h2");
+//  strcat(str1,str2);
+//  
+//    set_br(str2,2);
+//  strcat(str1,str2);
+//
+//  set_open_block(str2,"b>НЕДЕЛЬНОЕ РАССПИСАНИЕ</b");
+//  strcat(str1,str2);
+//  
+//  set_br(str2,1);
+//  strcat(str1,str2);
+//  
+//  reset_open_block(str2,"h2");
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+   
+//uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+   set_table_rasp_zag2(str1,str2," ");
+   
+   
+  
+   
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+
+ uint32_t costr_rasp_page13(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+
+ memset (str3,0, sizeof(str3));
+ //  set_checkbox (str4,"V_D_d0","1","C",FW_data.V_D_TIME[0].set_up_day);
+   set_table_rasp_str_1(str1,str2,"ПН","V_DT"," ",FW_data.V_D_TIME,0);
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+   
+   
+   
+
+ uint32_t costr_rasp_page14(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d1","1","C",FW_data.V_D_TIME[1].set_up_day);
+   set_table_rasp_str_1(str1,str2,"ВТ","V_DT",str4,FW_data.V_D_TIME,1);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page15(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d2","1","C",FW_data.V_D_TIME[2].set_up_day);
+   set_table_rasp_str_1(str1,str2,"СР","V_DT",str4,FW_data.V_D_TIME,2);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page16(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d3","1","C",FW_data.V_D_TIME[3].set_up_day);
+   set_table_rasp_str_1(str1,str2,"ЧТ","V_DT",str4,FW_data.V_D_TIME,3);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page17(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d4","1","C",FW_data.V_D_TIME[4].set_up_day);
+   set_table_rasp_str_1(str1,str2,"ПТ","V_DT",str4,FW_data.V_D_TIME,4);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page18(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d5","1","C",FW_data.V_D_TIME[5].set_up_day);
+   set_table_rasp_str_1(str1,str2,"СБ","V_DT",str4,FW_data.V_D_TIME,5);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+ uint32_t costr_rasp_page19(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+   set_checkbox (str4,"V_D_d6","1","C",FW_data.V_D_TIME[6].set_up_day);
+   set_table_rasp_str_1(str1,str2,"ВС","V_DT",str4,FW_data.V_D_TIME,6);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+
+
+ uint32_t costr_rasp_page20(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+  
+  
+   
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+//     set_br(str2,1);
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"save_rasp_sec2","1","Применить изменения",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+        set_br(str2,3);
+  strcat(str1,str2);
+  
+ 
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+
+  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  
+  len=strlen(str1);
+
+       while(len>3000){}
+  return len;
+};
+
+// RASP SEC1-3 P1-3
+
+ uint32_t costr_rasp_page21(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+  set_open_block(str2,"form id=\"sets4\" action='/' method='POST'");
+ // set_open_block(str2,"<form method=\"post\" enctype=\"multipart/x-www-form-urlencoded\">");
+ strcat(str1,str2);
+ 
+ 
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+   
+//uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+   set_table_rasp_zagl(str1,str2," ");
+   
+   
+  
+   
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page22(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+ //  set_checkbox (str4,"V_D_TIME[7].set_up_day","1","C",FW_data.V_D_TIME[7].set_up_day);
+   set_table_rasp_str(str1,str2,"П1","V_DT","",FW_data.V_D_TIME,7);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page23(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+  // set_checkbox (str4,"V_D_TIME[8].set_up_day","1","C",FW_data.V_D_TIME[8].set_up_day);
+   set_table_rasp_str(str1,str2,"П2","V_DT","",FW_data.V_D_TIME,8);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page24(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+//   set_checkbox (str4,"V_D_TIME[9].set_up_day","1","C",FW_data.V_D_TIME[9].set_up_day);
+   set_table_rasp_str(str1,str2,"П3","V_DT","",FW_data.V_D_TIME,9);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page25(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+  
+  
+   
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+//     set_br(str2,1);
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"save_rasp_sec3","1","Применить изменения",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  set_br(str2,3);
+  strcat(str1,str2);
+  
+ 
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+
+  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  
+  len=strlen(str1);
+
+       while(len>3000){}
+  return len;
+};
+
+// RASP SEC4-6 P1-3
+
+ uint32_t costr_rasp_page26(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+  set_open_block(str2,"form id=\"sets4\" action='/' method='POST'");
+ // set_open_block(str2,"<form method=\"post\" enctype=\"multipart/x-www-form-urlencoded\">");
+ strcat(str1,str2);
+ 
+ 
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+   
+//uint16_t set_table_rasp_zagl (char* str1,char* str2,char* name)
+   set_table_rasp_zag2(str1,str2," ");
+   
+   
+  
+   
+   
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page27(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+ //  set_checkbox (str4,"V_D_TIME[7].set_up_day","1","C",FW_data.V_D_TIME[7].set_up_day);
+   set_table_rasp_str_1(str1,str2,"П1","V_DT","",FW_data.V_D_TIME,7);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page28(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+  // set_checkbox (str4,"V_D_TIME[8].set_up_day","1","C",FW_data.V_D_TIME[8].set_up_day);
+   set_table_rasp_str_1(str1,str2,"П2","V_DT","",FW_data.V_D_TIME,8);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page29(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+//   set_checkbox (str4,"V_D_TIME[9].set_up_day","1","C",FW_data.V_D_TIME[9].set_up_day);
+   set_table_rasp_str_1(str1,str2,"П3","V_DT","",FW_data.V_D_TIME,9);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+  
+
+ uint32_t costr_rasp_page30(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+  
+  
+   
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+//     set_br(str2,1);
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"save_rasp_sec4","1","Применить изменения",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+    set_br(str2,3);
+  strcat(str1,str2);
+  
+ 
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+
+  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  
+  len=strlen(str1);
+
+       while(len>3000){}
+  return len;
+};
+
+
+//sec4-6 p1-3
+
+
+ uint32_t costr_rasp_page31(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   set_open_block(str2,"form id=\"sets4\" action='/' method='POST'");
+ strcat(str1,str2);
+ 
+ 
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+    set_br(str2,2);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>ПОДМЕНА ПРАЗДНИКОВ</b");
+  strcat(str1,str2);
+  
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+     
+   memset (str3,0, sizeof(str3));
+
+   set_table_podm_str(str1,str2,"Дата","V_RD_DATA_DAY","",&(FW_data.V_RD_DATA),0);
+ 
+   len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+ uint32_t costr_rasp_page32(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+//   set_checkbox (str4,"V_D_TIME[9].set_up_day","1","C",FW_data.V_D_TIME[9].set_up_day);
+   len=set_table_podm_day_str1(str1,str2,"Подм.","V_RD_DATA_PODM",&(FW_data.V_RD_DATA));
+ 
+
+       while(len>3000){}
+  return len;
+};
+
+ uint32_t costr_rasp_page33(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+   
+   memset (str3,0, sizeof(str3));
+//   set_checkbox (str4,"V_D_TIME[9].set_up_day","1","C",FW_data.V_D_TIME[9].set_up_day);
+   set_table_podm_day_str2(str1,str2,"Подм.","V_RD_DATA_PODM",&(FW_data.V_RD_DATA));
+   
+  reset_open_block(str2,"h3");
+  strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+//     set_br(str2,1);
+//  strcat(str1,str2);
+  
+  set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"save_rasp_sec5","1","Применить изменения",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+  
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+
+

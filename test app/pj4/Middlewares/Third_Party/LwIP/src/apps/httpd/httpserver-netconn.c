@@ -20,7 +20,7 @@
   * 3. Neither the name of STMicroelectronics nor the names of other 
   *    contributors to this software may be used to endorse or promote products 
   *    derived from this software without specific written permission.
-  * 4. This software, including modifications and/or derivative works of this 
+  * 4. This software, including modificatios and/or derivative works of this 
   *    software, must execute solely and exclusively on microcontroller or
   *    microprocessor devices manufactured by or for STMicroelectronics.
   * 5. Redistribution and use of this software other than as permitted under 
@@ -456,7 +456,7 @@ jamp_to_app();
 typedef struct post_data_t
  {
    char name[32];
-   char data[32];
+   char data[128];
  
    uint8_t len_par;
  }post_data_t;
@@ -764,6 +764,155 @@ void param_run(post_data_t* post_data,uint8_t index)
               FW_data.V_WEB_PORT=port_n;
             }
           }
+    
+     else if (strncmp((char*)post_data->name,"V_D_d",5) == 0)
+          {
+                FW_data.V_D_TIME[post_data->name[5]-0x30].set_up_day=1;
+          }
+     else if (strncmp((char*)post_data->name,"V_DT",4) == 0)
+          {
+            uint8_t u_d=0;
+            uint8_t slot=0;
+            uint8_t n_day=0;
+            u_d=post_data->name[4]-0x30;
+            n_day=post_data->name[5]-0x30;
+            slot=post_data->name[6]-0x30;
+            if ((u_d==0)&&(slot==0)&&(n_day==0))
+            {
+              FW_data.V_D_TIME[0].set_up_day=0;
+              FW_data.V_D_TIME[1].set_up_day=0;
+              FW_data.V_D_TIME[2].set_up_day=0;
+              FW_data.V_D_TIME[3].set_up_day=0;
+              FW_data.V_D_TIME[4].set_up_day=0;
+              FW_data.V_D_TIME[5].set_up_day=0;
+              FW_data.V_D_TIME[6].set_up_day=0;
+            }
+            if(u_d==0)
+            {
+              FW_data.V_D_TIME[n_day].time_data[slot].on_swich_h=(post_data->data[0]-0x30)*10+(post_data->data[1]-0x30);
+              if (FW_data.V_D_TIME[n_day].time_data[slot].on_swich_h>61)
+                {
+                 FW_data.V_D_TIME[n_day].time_data[slot].on_swich_h=61;
+                }
+              FW_data.V_D_TIME[n_day].time_data[slot].on_swich_m=(post_data->data[5]-0x30)*10+(post_data->data[6]-0x30);  
+              if (FW_data.V_D_TIME[n_day].time_data[slot].on_swich_m>61)
+                {
+                 FW_data.V_D_TIME[n_day].time_data[slot].on_swich_m=61;
+                }
+            }
+            else
+            {
+              FW_data.V_D_TIME[n_day].time_data[slot].off_swich_h=(post_data->data[0]-0x30)*10+(post_data->data[1]-0x30);
+              if (FW_data.V_D_TIME[n_day].time_data[slot].off_swich_h>61)
+                {
+                 FW_data.V_D_TIME[n_day].time_data[slot].off_swich_h=61;
+                }
+              
+              FW_data.V_D_TIME[n_day].time_data[slot].off_swich_m=(post_data->data[5]-0x30)*10+(post_data->data[6]-0x30);                
+              if (FW_data.V_D_TIME[n_day].time_data[slot].off_swich_m>61)
+                {
+                 FW_data.V_D_TIME[n_day].time_data[slot].off_swich_m=61;
+                }
+            }
+
+          }
+     else if (strncmp((char*)post_data->name,"V_FLAG_EN_RASP", sizeof("V_FLAG_EN_RASP")) == 0)
+          {
+           if (strncmp((char*)post_data->data,"ON", sizeof("ON")) == 0)
+            {
+              FW_data.V_FLAG_EN_RASP=1;
+            }
+           else
+            {
+              FW_data.V_FLAG_EN_RASP=0;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_SOST_ERR_RASP", sizeof("V_SOST_ERR_RASP")) == 0)
+          {
+           if (strncmp((char*)post_data->data,"%D0%91%D0%B3", 11) == 0)
+            {
+              FW_data.V_SOST_ERR_RASP=0;
+            }
+           if (strncmp((char*)post_data->data,"%D0%92%D0%BA%", 11) == 0)
+            {
+              FW_data.V_SOST_ERR_RASP=1;
+            }           
+            if (strncmp((char*)post_data->data,"%D0%92%D1%8B%", 11) == 0)
+            {
+              FW_data.V_FLAG_EN_RASP=2;
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_RD_DATA_DAY", 12) == 0)
+          {
+            uint8_t u_d=0;
+            u_d=post_data->name[14]-0x30;
+            FW_data.V_RD_DATA.data[u_d].year = (post_data->data[2]-0x30)*10+(post_data->data[3]-0x30);
+            FW_data.V_RD_DATA.data[u_d].month=(post_data->data[5]-0x30)*10+(post_data->data[6]-0x30)-1;
+            FW_data.V_RD_DATA.data[u_d].day=(post_data->data[8]-0x30)*10+(post_data->data[9]-0x30)-1;  
+            if (FW_data.V_RD_DATA.data[u_d].year>61)
+              {
+                FW_data.V_RD_DATA.data[u_d].year =61;
+              }
+            
+            if (FW_data.V_RD_DATA.data[u_d].day>61)
+              {
+                FW_data.V_RD_DATA.data[u_d].day =61;
+              }
+            if (FW_data.V_RD_DATA.data[u_d].month>61)
+              {
+                FW_data.V_RD_DATA.data[u_d].month =61;
+              }
+          }
+
+     else if (strncmp((char*)post_data->name,"V_RD_DATA_PODM", 12) == 0)
+          {
+            uint8_t u_d=0;
+            u_d=post_data->name[14]-0x30;
+             if (strncmp((char*)post_data->data,"%D0%9F%D0%9D",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_MONDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%92%D0%A2",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_TUESDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%A1%D0%A0",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_WEDNESDAY;
+            }            
+            if (strncmp((char*)post_data->data,"%D0%A7%D0%A2",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_THURSDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%9F%D0%A2",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_FRIDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%A1%D0%91",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_SATURDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%92%D0%A1",12) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=RTC_WEEKDAY_SUNDAY;
+            }
+            if (strncmp((char*)post_data->data,"%D0%9F1",7) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=7;
+            }
+            if (strncmp((char*)post_data->data,"%D0%9F2",7) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=8;
+            }
+            if (strncmp((char*)post_data->data,"%D0%9F3",7) == 0)
+            {
+              FW_data.V_RD_DATA.restore_day[u_d]=9;
+            }
+            
+          
+          }
+    
+    
     else if (strncmp((char*)post_data->name,"login", sizeof("login")) == 0)
           {
            // FW_data.V_Name_dev
@@ -906,7 +1055,7 @@ void param_run(post_data_t* post_data,uint8_t index)
               FW_data.V_TYPE_OUT=port_n;
             }
           }
-    else if (strncmp((char*)post_data->name,"save_all", sizeof("save_all")) == 0)
+    else if ((strncmp((char*)post_data->name,"save_all", sizeof("save_all")) == 0)||(strncmp((char*)post_data->name,"save_rasp_sec", sizeof("save_rasp_sec")-2) == 0))
           {
             if (post_data->data[0]==0x31)
               {
@@ -1114,11 +1263,111 @@ post_data_t elem_post_data;
                 vTaskDelay(20);
             }
           break;
-           case 7:
+           case 7:  //rasp.html
             {
-              fs_open(&file, "/404.html"); 
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-              fs_close(&file);
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page1((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page2((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page3((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page4((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                 len_buf_list=costr_rasp_page5((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                 len_buf_list=costr_rasp_page6((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                 len_buf_list=costr_rasp_page7((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                 len_buf_list=costr_rasp_page8((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                 len_buf_list=costr_rasp_page9((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+              
+                len_buf_list=costr_rasp_page10((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page11((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page12((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page13((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               
+                len_buf_list=costr_rasp_page14((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page15((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page16((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page17((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page18((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page19((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page20((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page21((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page22((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page23((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page24((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page25((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page26((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page27((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page28((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page29((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page30((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page31((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               len_buf_list=costr_rasp_page32((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+                len_buf_list=costr_rasp_page33((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               vTaskDelay(10);
+               
             }
           break;
            case 8:
@@ -1141,14 +1390,16 @@ static void http_server_serve(struct netconn *conn1)
 {
    
  //post_data_t post_data[32];
-  struct netbuf *inbuf;//=(struct netbuf*)pvPortMalloc(1500);
+ // struct netbuf *inbuf;//=(struct netbuf*)pvPortMalloc(1500);
   err_t recv_err;
-  char* buf;
+ 
    u16_t buflen;
 
 
         char* buf_page=(char*)pvPortMalloc(3000); 
-//   char buf_page[3000];
+        char* buf=buf_page;
+        struct netbuf *inbuf;//=( struct netbuf *)(buf_page+1500);//=(struct netbuf*)pvPortMalloc(1500);
+
 
   
  
@@ -1240,13 +1491,19 @@ static void http_server_serve(struct netconn *conn1)
                page_sost=2;
                page_html_swich(page_n,conn1,buf_page);
              }
+             else if (strncmp((char const *)buf,"GET /rasp.html",14)==0)
+             {
+               page_n=7;
+               page_sost=4;
+               page_html_swich(page_n,conn1,buf_page);
+             }            
             else if (strncmp((char const *)buf,"GET /settings.html",14)==0)
               {
                page_n=5;
                page_sost=3;
                page_html_swich(page_n,conn1,buf_page);
               }
-            else if (strncmp((char const *)buf,"GET /img/netping.gif",17)==0)
+            else if ((strncmp((char const *)buf,"GET /img/netping.gif",17)==0)||(strncmp((char const *)buf,"GET /favicon.ico",16)==0))
             {
               page_n=1;
               page_html_swich(page_n,conn1,buf_page);
@@ -1289,6 +1546,13 @@ static void http_server_serve(struct netconn *conn1)
                                 vTaskDelay(20);
                                 page_html_swich(page_n,conn1,buf_page);
                                }
+                              if(page_sost==4)
+                               {
+                                parser_post(buf,buflen,page_sost);
+                                page_n=7;
+                                vTaskDelay(20);
+                                page_html_swich(page_n,conn1,buf_page);
+                               }
                             }            
                     }
               }
@@ -1299,6 +1563,8 @@ static void http_server_serve(struct netconn *conn1)
   }
 //vTaskDelay(100);
   vPortFree(buf_page);
+  
+   netbuf_delete(inbuf);
  //   netbuf_delete(buf_page);
   /* Close the connection (server closes in HTTP) */
   netconn_close(conn1);
@@ -1306,7 +1572,7 @@ static void http_server_serve(struct netconn *conn1)
   /* Delete the buffer (netconn_recv gives us ownership,
    so we have to make sure to deallocate the buffer) */
  // vPortFree(inbuf);
-  netbuf_delete(inbuf);
+
 
           
 }
@@ -1360,7 +1626,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL,1*1024, osPriorityHigh);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL,2*512, osPriorityHigh);
 }
 
 /**

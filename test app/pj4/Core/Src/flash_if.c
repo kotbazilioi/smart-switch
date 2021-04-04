@@ -47,6 +47,7 @@ uint8_t flag_global_save_log;
 uint8_t flag_global_swich_out;
 uint8_t flag_global_boot_mode;
 uint8_t flag_global_reset_mode;
+uint8_t status_NTP_activ;
 log_reple_t start_time;
 log_reple_t real_time;
 file_data_t data_file;
@@ -484,12 +485,14 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      memset((uint8_t*)&FW_data.V_OFF_MESS,0,32);
      memcpy((uint8_t*)&FW_data.V_OFF_MESS, (uint8_t *)"Power swich OFF", 15);
      FW_data.V_FLAG_EN_MAN =1;
-     FW_data.V_FLAG_EN_RASP =1;
+     FW_data.V_FLAG_EN_RASP =0;
      FW_data.V_FLAG_EN_WEB =1;
-     FW_data.V_FLAG_EN_WATCHMAN =1;
+     FW_data.V_FLAG_EN_WATCHMAN =0;
      memset((uint8_t*)&FW_data.V_EMAIL_ERR,0,32);
-     memset((uint8_t*)&FW_data.V_D_TIME,0,40);
-     memset((uint8_t*)&FW_data.V_RD_TIME,0,12);
+     memset((uint8_t*)&FW_data.V_D_TIME,61,sizeof(FW_data.V_D_TIME));
+     memset((uint8_t*)&FW_data.V_RD_DATA,61,sizeof(FW_data.V_RD_DATA));
+     
+     
      FW_data.V_IP_PING_TIME = 9999;
      FW_data.V_TIME_SEND = 9999;
      FW_data.V_TIME_READ = 9999;

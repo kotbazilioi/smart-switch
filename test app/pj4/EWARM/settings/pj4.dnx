@@ -14,13 +14,13 @@
     <StLinkDriver>
         <stlinkserialNo>3817010011144D43574D4E00</stlinkserialNo>
         <stlinkfoundProbes />
-        <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <stlinkResetStyle>0</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>3362339911</Checksum>
+        <Checksum>3772034279</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -80,26 +80,33 @@
         <Fmt12>RTC_TimeTypeDef-Hours	3	0</Fmt12>
         <Fmt13>RTC_TimeTypeDef-Minutes	3	0</Fmt13>
         <Fmt14>RTC_TimeTypeDef-Seconds	3	0</Fmt14>
-        <Fmt15>ip4_addr_t-addr	4	0</Fmt15>
-        <Fmt16>ip_addr_t-addr	4	0</Fmt16>
-        <Fmt17>log_reple_t-day	3	0</Fmt17>
-        <Fmt18>log_reple_t-dweek	3	0</Fmt18>
-        <Fmt19>log_reple_t-month	3	0</Fmt19>
-        <Fmt20>log_reple_t-reple_hours	3	0</Fmt20>
-        <Fmt21>log_reple_t-reple_minuts	3	0</Fmt21>
-        <Fmt22>log_reple_t-reple_seconds	3	0</Fmt22>
-        <Fmt23>log_reple_t-type_event	3	0</Fmt23>
-        <Fmt24>log_reple_t-year	3	0</Fmt24>
-        <Fmt25>logs_t-CRC16	4	0</Fmt25>
-        <Fmt26>struct icmp_echo_hdr-chksum	4	0</Fmt26>
-        <Fmt27>struct icmp_echo_hdr-id	4	0</Fmt27>
-        <Fmt28>struct in_addr-s_addr	4	0</Fmt28>
-        <Fmt29>struct snmp_obj_id-len	3	0</Fmt29>
-        <Fmt30>struct snmp_request-source_port	3	0</Fmt30>
+        <Fmt15>data_swich_elem-day	3	0</Fmt15>
+        <Fmt16>data_swich_elem-month	3	0</Fmt16>
+        <Fmt17>data_swich_elem-year	3	0</Fmt17>
+        <Fmt18>day_swich_elem-off_swich_h	3	0</Fmt18>
+        <Fmt19>day_swich_elem-off_swich_m	3	0</Fmt19>
+        <Fmt20>day_swich_elem-on_swich_h	3	0</Fmt20>
+        <Fmt21>day_swich_elem-on_swich_m	3	0</Fmt21>
+        <Fmt22>ip4_addr_t-addr	4	0</Fmt22>
+        <Fmt23>ip_addr_t-addr	4	0</Fmt23>
+        <Fmt24>log_reple_t-day	3	0</Fmt24>
+        <Fmt25>log_reple_t-dweek	3	0</Fmt25>
+        <Fmt26>log_reple_t-month	3	0</Fmt26>
+        <Fmt27>log_reple_t-reple_hours	3	0</Fmt27>
+        <Fmt28>log_reple_t-reple_minuts	3	0</Fmt28>
+        <Fmt29>log_reple_t-reple_seconds	3	0</Fmt29>
+        <Fmt30>log_reple_t-type_event	3	0</Fmt30>
+        <Fmt31>log_reple_t-year	3	0</Fmt31>
+        <Fmt32>logs_t-CRC16	4	0</Fmt32>
+        <Fmt33>struct icmp_echo_hdr-chksum	4	0</Fmt33>
+        <Fmt34>struct icmp_echo_hdr-id	4	0</Fmt34>
+        <Fmt35>struct in_addr-s_addr	4	0</Fmt35>
+        <Fmt36>struct snmp_obj_id-len	3	0</Fmt36>
+        <Fmt37>struct snmp_request-source_port	3	0</Fmt37>
     </struct_types>
     <array_types>
         <Fmt0>u32_t[50]	4	0</Fmt0>
-        <Fmt1>uint8_t[10]	4	0</Fmt1>
+        <Fmt1>uint8_t[10]	3	0</Fmt1>
         <Fmt2>uint8_t[4]	3	0</Fmt2>
     </array_types>
     <watch_formats>
@@ -168,23 +175,6 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
-    <DriverProfiling>
-        <Enabled>0</Enabled>
-        <Mode>3</Mode>
-        <Graph>0</Graph>
-        <Symbiont>0</Symbiont>
-        <Exclusions />
-    </DriverProfiling>
-    <CallStackLog>
-        <Enabled>0</Enabled>
-    </CallStackLog>
-    <CallStackStripe>
-        <ShowTiming>1</ShowTiming>
-    </CallStackStripe>
     <DisassembleMode>
         <mode>1</mode>
     </DisassembleMode>
@@ -200,6 +190,10 @@
         <Bp8>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\api\api_msg.c}.723.3" 0 0 1 "" 0 "" 0</Bp8>
         <Count>9</Count>
     </Breakpoints2>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -209,4 +203,17 @@
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Mode>3</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+        <Exclusions />
+    </DriverProfiling>
+    <CallStackLog>
+        <Enabled>0</Enabled>
+    </CallStackLog>
+    <CallStackStripe>
+        <ShowTiming>1</ShowTiming>
+    </CallStackStripe>
 </settings>

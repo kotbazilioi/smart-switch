@@ -248,6 +248,31 @@ typedef struct
 } logs_t;
 
 typedef struct 
+{
+ uint8_t on_swich_m;
+ uint8_t on_swich_h;
+ uint8_t off_swich_m;
+ uint8_t off_swich_h;
+} day_swich_elem;
+typedef struct 
+{
+ uint8_t day;
+ uint8_t month;
+ uint8_t year;
+} data_swich_elem;
+typedef struct 
+{
+ day_swich_elem time_data[6];
+ uint8_t set_up_day;
+} V_D_TIME_type;
+
+typedef struct 
+{
+ data_swich_elem data[10];
+ uint8_t restore_day[10];
+} V_RD_DATA_type;
+
+typedef struct 
 { 
 uint16_t  V_CRC_APP  ;
 ////#define A_CRC_APP 0x8004000
@@ -300,21 +325,10 @@ uint8_t V_FLAG_EN_WATCHMAN;
 ////#define A_FLAG_EN_WATCHMAN 0x800408E
 uint8_t V_EMAIL_ERR[32];
 ////#define A_EMAIL_ERR 0x800408F
-uint16_t V_D_TIME[10][2];
-////#define A_D1_TIME 0x80040AF
-////#define A_D2_TIME 0x80040B3
-////#define A_D3_TIME 0x80040B7
-////#define A_D4_TIME 0x80040BB
-////#define A_D5_TIME 0x80040BF
-////#define A_D6_TIME 0x80040C3
-////#define A_D7_TIME 0x80040C7
-////#define A_D8_TIME 0x80040CB
-////#define A_D9_TIME 0x80040CF
-////#define A_D10_TIME 0x80040D3
-uint16_t V_RD_TIME[3][2];
-////#define A_RD1_TIME 0x80040D7
-////#define A_RD2_TIME 0x80040DB
-////#define A_RD3_TIME 0x80040DF
+V_D_TIME_type V_D_TIME[10]; //260
+
+V_RD_DATA_type V_RD_DATA; //78
+
 uint16_t V_IP_PING_TIME;
 ////#define A_IP_PING_TIME 0x80040E3
 uint16_t V_TIME_SEND;
@@ -370,8 +384,9 @@ uint16_t V_MAX_REPID_PING;
 uint16_t V_TIME_RESET_PULSE;
 uint16_t V_PAUSE_RESET_TO_REPID;
 uint16_t V_MAX_RESEND_PACET_RESET;
+uint8_t V_SOST_ERR_RASP;
 
-uint8_t V_resv[1638];
+uint8_t V_resv[1399];
 
 ////#define A_RESV 0x800413B
 logs_t V_logs_struct;
@@ -400,6 +415,7 @@ extern uint8_t flag_global_load_def;
 extern uint8_t flag_global_swich_out;
 extern uint8_t flag_global_boot_mode;
 extern uint8_t flag_global_reset_mode;
+extern uint8_t status_NTP_activ;
 extern uint16_t HTTPD_SERVER_PORT;
 #endif  /* __FLASH_IF_H */
 typedef  void (*pFunction)(void);

@@ -220,6 +220,7 @@ timeout++;
   lwip_setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 // sockets[0]->conn->recv_timeout=1000;
   while (1) {
+      vTaskDelay(300);
     if (FW_data.V_EN_WATCHDOG==1)
     {
   if ((FW_data.V_EN_WATCHDOG_CN_A==1)&&(en_ping_a==0))

@@ -57,16 +57,17 @@
 #define LWIP_RAW  1
 #define LWIP_UDP 1
 #define LWIP_SOCKET  1
-//#define  LWIP_DEBUG 1
+#define  LWIP_DEBUG 1
 //#define  LWIP_PLATFORM_DIAG 1
 
 #define LWIP_SO_RCVTIMEO 1 
 #define LWIP_SO_SNDTIMEO 1
 #define LWIP_SO_SNDRCVTIMEO_NONSTANDARD 1   
-#define MEMP_OVERFLOW_CHECK             1   
+#define MEMP_OVERFLOW_CHECK             3   
 #define LWIP_SO_RCVBUF                  1   
-   
-   
+#define LWIP_DBG_MIN_LEVEL					LWIP_DBG_LEVEL_ALL
+#define LWIP_DBG_TYPES_ON						LWIP_DBG_ON  
+#define IP_REASSEMBLY    1
 /**
  * @defgroup lwip_opts Options (lwipopts.h)
  * @ingroup lwip
@@ -508,7 +509,7 @@
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool.
  */
 #if !defined PBUF_POOL_SIZE || defined __DOXYGEN__
-#define PBUF_POOL_SIZE                  16
+#define PBUF_POOL_SIZE                  20/////////////////////16
 #endif
 
 /** MEMP_NUM_API_MSG: the number of concurrently active calls to various

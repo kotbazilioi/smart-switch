@@ -304,9 +304,9 @@ PACK_STRUCT_END
 #if TCP_SND_BUF < (2 * TCP_MSS)
   #error "lwip_sanity_check: WARNING: TCP_SND_BUF must be at least as much as (2 * TCP_MSS) for things to work smoothly. If you know what you are doing, define LWIP_DISABLE_TCP_SANITY_CHECKS to 1 to disable this error."
 #endif
-#if TCP_SND_QUEUELEN < (2 * (TCP_SND_BUF / TCP_MSS))
-  #error "lwip_sanity_check: WARNING: TCP_SND_QUEUELEN must be at least as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. If you know what you are doing, define LWIP_DISABLE_TCP_SANITY_CHECKS to 1 to disable this error."
-#endif
+//#if TCP_SND_QUEUELEN < (2 * (TCP_SND_BUF / TCP_MSS))
+//  #error "lwip_sanity_check: WARNING: TCP_SND_QUEUELEN must be at least as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. If you know what you are doing, define LWIP_DISABLE_TCP_SANITY_CHECKS to 1 to disable this error."
+//#endif
 #if TCP_SNDLOWAT >= TCP_SND_BUF
   #error "lwip_sanity_check: WARNING: TCP_SNDLOWAT must be less than TCP_SND_BUF. If you know what you are doing, define LWIP_DISABLE_TCP_SANITY_CHECKS to 1 to disable this error."
 #endif

@@ -1199,6 +1199,9 @@
             <group>
                 <name>Core</name>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\app.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Core\Src\base64.c</name>
                 </file>
                 <file>
@@ -1209,6 +1212,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\freertos.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\hard_config.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\html_page.c</name>
