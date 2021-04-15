@@ -47,6 +47,7 @@ uint8_t flag_global_save_log;
 uint8_t flag_global_swich_out;
 uint8_t flag_global_boot_mode;
 uint8_t flag_global_reset_mode;
+uint8_t flag_my_smtp_test;
 uint8_t status_NTP_activ;
 log_reple_t start_time;
 log_reple_t real_time;
@@ -511,13 +512,29 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_IP_NTP2[2]=168; 
      FW_data.V_IP_NTP2[3]=1; 
      FW_data.V_PORT_NTP  = 123;
-     memset((uint8_t*)&FW_data.V_NAME_SMTP,0,16);
-     memcpy((uint8_t*)&FW_data.V_NAME_SMTP, (uint8_t *)"Name SNMP Server",16);
+     memset((uint8_t*)&FW_data.V_NAME_SMTP,0,32);
+     memcpy((uint8_t*)&FW_data.V_NAME_SMTP, (uint8_t *)"Name SNMP Server",32);
      FW_data.V_PORT_SNMP = 162;
-     memset((uint8_t*)&FW_data.V_LOGIN_SMTP,0,16);
+     memset((uint8_t*)&FW_data.V_LOGIN_SMTP,0,32);
      memcpy((uint32_t*)&FW_data.V_LOGIN_SMTP, (uint32_t *)"admin", 5);
-     memset((uint8_t*)&FW_data.V_PASSWORD_SMTP,0,16);
+     memset((uint8_t*)&FW_data.V_PASSWORD_SMTP,0,32);
      memcpy((uint32_t*)&FW_data.V_PASSWORD_SMTP, (uint32_t *)"admin", 5);
+     FW_data.V_FLAG_EMAIL_PORT=25;
+     
+     memset((uint8_t*)&FW_data.V_EMAIL_ADDR,0,32);
+     memcpy((uint32_t*)&FW_data.V_EMAIL_ADDR, (uint32_t *)"", 5);
+
+     memset((uint8_t*)&FW_data.V_EMAIL_FROM,0,32);
+     memcpy((uint32_t*)&FW_data.V_EMAIL_FROM, (uint32_t *)"", 5);
+
+     memset((uint8_t*)&FW_data.V_EMAIL_TO,0,32);
+     memcpy((uint32_t*)&FW_data.V_EMAIL_TO, (uint32_t *)"", 5);
+
+
+
+     
+     
+     
      memcpy((uint32_t*)&FW_data.V_GEOM_NAME, (uint32_t *)"Moscow office", 13);    
      
     FW_data.V_ID_MAC[0] =   00;//(uint16_t)idBase0[0];
@@ -535,6 +552,12 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     FW_data.V_logs_struct.CRC16 = 0;
     memset((uint8_t*)&FW_data.V_logs_struct.log_reple,0,2000);
      
+     FW_data.V_IP_SYSL[0]=0;//     62.117.76.142
+     FW_data.V_IP_SYSL[1]=0;
+     FW_data.V_IP_SYSL[2]=0;
+     FW_data.V_IP_SYSL[3]=0;
+    
+    
      FW_data.V_IP_SNMP[0]=192;//     62.117.76.142
      FW_data.V_IP_SNMP[1]=168;
      FW_data.V_IP_SNMP[2]=0;

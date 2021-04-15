@@ -1,4 +1,6 @@
 #include <stdint.h>
+void swich_mess_event_en (uint8_t event,char* mess);
+uint32_t costr_page_hdr(char* str1,uint32_t len_data);
 uint32_t costr_page2_1(char* str1);
 uint32_t costr_page6_1 (char* str1);
 uint32_t costr_page7_1 (char* str1);
@@ -50,8 +52,14 @@ uint32_t costr_rasp_page29(char* str1);
 uint32_t costr_rasp_page30(char* str1);
 uint32_t costr_rasp_page31(char* str1);
 uint32_t costr_rasp_page32(char* str1);
+
+uint32_t costr_email_page1(char* str1);
+uint32_t costr_email_page2(char* str1);
+uint32_t costr_email_page3(char* str1);
 //uint32_t costr_rasp_page34(char* str1);
 //uint32_t costr_rasp_page35(char* str1);
+extern const char http_html_200[];
+extern const char http_html_200_end[];
 extern uint32_t ct_logoff_time;
 extern uint8_t flag_logon;
 extern unsigned char key_http[30];

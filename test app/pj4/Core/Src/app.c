@@ -1,7 +1,9 @@
 #include "app.h"
 #include "ntp.h"
+#include "syslog.h"
+#include "smtp.h"
 #define logoff_time 200*10
-
+char mess_smtp[256]={0}; 
 osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
 osThreadId logs_task_nameHandle;
@@ -52,7 +54,15 @@ ip4_addr_t ipdns1;
   
   http_server_netconn_init();
   ping_init();
+  IP4_ADDR(&ip_syslog, FW_data.V_IP_SYSL[0], FW_data.V_IP_SYSL[1], FW_data.V_IP_SYSL[2], FW_data.V_IP_SYSL[3]);    
+  syslog_init(local_syslog_ctx,ip_syslog);
+  //smtp_send_mail_int();
   /* Infinite loop */
+         snmp_ex_init();
+        /* definition and creation of LED_task */
+ 
+ 
+ 
   for(;;)
   {
     osDelay(1);
@@ -91,7 +101,8 @@ ip4_addr_t ipdns1;
       
      
 //        {}
-       snmp_ex_init();
+
+// 
       
       }
 //    ipdns1=*(dns_getserver (0));
@@ -247,7 +258,7 @@ void LED_task(void const * argument)
       }
   ///   GET_reple(SWICH_ON_WEB,&reple1);
      HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
-    
+  
     if ((FW_data.V_EN_WATCHDOG==1)&&(flag_delay_ping==0))
     {      
       if (FW_data.V_TYPE_LOGIC==0)
@@ -396,13 +407,24 @@ void LED_task(void const * argument)
 }
 void logs_task(void const * argument)
 {
+  osDelay(5000);
+  form_reple_to_save(POWER_ON);
+  GET_reple(0,&start_time);
   /* USER CODE BEGIN logs_task */
   /* Infinite loop */
   for(;;)
   {
+    if (flag_my_smtp_test==1)
+      {
+        my_smtp_test();
+        flag_my_smtp_test=0;
+      }
     if (flag_global_save_log==1)
       {
+        memset (mess_smtp,0,128);       
         save_reple_log(reple_to_save);
+        decode_reple(mess_smtp, &reple_to_save);  
+        send_smtp_mess(mess_smtp);
         flag_global_save_log=0;
       }
      if ((flag_global_save_data==1)&&(flag_global_save_log==0))

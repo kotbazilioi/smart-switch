@@ -58,6 +58,7 @@
 #define LWIP_UDP 1
 #define LWIP_SOCKET  1
 #define  LWIP_DEBUG 1
+//#define LWIP_ERROR 1
 //#define  LWIP_PLATFORM_DIAG 1
 
 #define LWIP_SO_RCVTIMEO 1 
@@ -68,6 +69,13 @@
 #define LWIP_DBG_MIN_LEVEL					LWIP_DBG_LEVEL_ALL
 #define LWIP_DBG_TYPES_ON						LWIP_DBG_ON  
 #define IP_REASSEMBLY    1
+//#define DNS_LOCAL_HOSTLIST              1
+//#ifndef DNS_SERVER_ADDRESS
+//#define DNS_SERVER_ADDRESS(ipaddr)        (ip4_addr_set_u32(ipaddr, ipaddr_addr("192.168.3.1"))) /* resolver1.opendns.com */
+//#endif
+//#define DNS_LOOKUP_LOCAL_EXTERN(x) extern err_t my_lookup_function(const char *name, ip_addr_t *addr, u8_t dns_addrtype)
+#define DNS_LOCAL_HOSTLIST              1
+#define DNS_LOCAL_HOSTLIST_INIT {DNS_LOCAL_HOSTLIST_ELEM("host_ip4", IPADDR4_INIT_BYTES(1,2,3,4))}
 /**
  * @defgroup lwip_opts Options (lwipopts.h)
  * @ingroup lwip

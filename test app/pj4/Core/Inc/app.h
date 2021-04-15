@@ -29,3 +29,4 @@ extern osThreadId  IO_CNTRLHandle;
 extern osThreadId rasp_task_id;
 extern   uint8_t flag_err_dates;
 extern uint8_t flag_set_ip;
+extern char mess_smtp[256]; 

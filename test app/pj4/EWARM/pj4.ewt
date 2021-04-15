@@ -1235,6 +1235,9 @@
                     <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\ping\ping.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\smtp.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_ex.c</name>
                 </file>
                 <file>
@@ -1245,6 +1248,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Core\Src\stm32f1xx_it.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\syslog.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\Middlewares\Third_Party\LwIP\src\apps\udpecho\udpecho.c</name>

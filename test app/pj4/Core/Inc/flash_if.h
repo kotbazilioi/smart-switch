@@ -351,13 +351,13 @@ uint8_t V_IP_NTP2[4];
 ////#define A_IP_NTP2 0x80040F5
 uint16_t V_PORT_NTP;
 ////#define A_PORT_NTP 0x80040F9
-char V_NAME_SMTP[16];
+char V_NAME_SMTP[32];
 ////#define A_NAME_SNMP 0x80040FB
 uint16_t V_PORT_SNMP;
 ////#define A_PORT_SNMP 0x800411B
-char V_LOGIN_SMTP[16];
+char V_LOGIN_SMTP[32];
 ////#define A_LOGIN_SNMP 0x800411D
-char V_PASSWORD_SMTP[16];
+char V_PASSWORD_SMTP[32];
 ////#define A_PASSWORD_SNMP 0x800412B
 char V_GEOM_NAME[32];
 uint8_t V_ID_MAC[8];
@@ -385,8 +385,20 @@ uint16_t V_TIME_RESET_PULSE;
 uint16_t V_PAUSE_RESET_TO_REPID;
 uint16_t V_MAX_RESEND_PACET_RESET;
 uint8_t V_SOST_ERR_RASP;
+uint8_t V_IP_SYSL[4];
+uint8_t V_FLAG_EN_EMAIL;
+uint8_t V_FLAG_DEF_EMAIL;
 
-uint8_t V_resv[1399];
+uint16_t V_FLAG_EMAIL_PORT;
+char V_EMAIL_ADDR[32];
+char V_EMAIL_FROM[32];
+char V_EMAIL_TO[32];
+char V_EMAIL_CC1[32];
+char V_EMAIL_CC2[32];
+char V_EMAIL_CC3[32];
+
+
+uint8_t V_resv[1167];
 
 ////#define A_RESV 0x800413B
 logs_t V_logs_struct;
@@ -415,6 +427,7 @@ extern uint8_t flag_global_load_def;
 extern uint8_t flag_global_swich_out;
 extern uint8_t flag_global_boot_mode;
 extern uint8_t flag_global_reset_mode;
+extern uint8_t flag_my_smtp_test;
 extern uint8_t status_NTP_activ;
 extern uint16_t HTTPD_SERVER_PORT;
 #endif  /* __FLASH_IF_H */

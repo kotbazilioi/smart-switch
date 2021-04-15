@@ -2,6 +2,7 @@
 #include <string.h>
 #include "LOGS.h"
 #include "flash_if.h"
+#include "syslog.h"
 log_reple_t reple_to_save;
 
  RTC_DateTypeDef dates;
@@ -70,9 +71,25 @@ void decode_reple (char* out,log_reple_t* reple)
   swich_mess_event(  reple->type_event,out_small);
   strcat(out,out_small);
 }
+void decode_reple_en (char* out,log_reple_t* reple)
+{
+  char out_small[128]={0};
+//  memset()
+  sprintf(out_small,"%d.%d.%d  %d:%d:%d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
+  strcat(out,out_small);
+   memset(out_small,0,128);
+  swich_mess_event_en(  reple->type_event,out_small);
+  strcat(out,out_small);
+}
+
+
 void form_reple_to_save (uint8_t event)
 {
+  char mess_syslog[128]={0};
+
   GET_reple (event,&reple_to_save);
+  decode_reple_en(mess_syslog, &reple_to_save);  
+  syslog_printf(mess_syslog);
   flag_global_save_log=1;
 }
 

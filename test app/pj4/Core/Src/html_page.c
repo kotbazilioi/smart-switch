@@ -25,30 +25,66 @@ static const char http_logs_hdr[]="<style> textarea { width: 90%;height:400px;re
 static const char http_logs_area[]="<p><textarea name=\"comment\" align=\"center\" readonly rows=\"10\" cols=\"2\" align=\"center\" disabled >";
 static const char http_logs_end[] ="</textarea></p>  </center>";
 static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
+
+
+const char http_html_200[] = {
+/* /404.html (10 chars) */
+//0x2f,0x32,0x30,0x30,0x2e,0x68,0x74,0x6d,0x6c,0x00,0x00,0x00,
+
+/* HTTP header */
+/* "HTTP/1.1 200 OK
+" (17 bytes) */
+0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,
+0x0a,
+/* "Server: lwIP/1.3.1 (http://savannah.nongnu.org/projects/lwip)
+" (63 bytes) */
+0x53,0x65,0x72,0x76,0x65,0x72,0x3a,0x20,0x6c,0x77,0x49,0x50,0x2f,0x31,0x2e,0x33,
+0x2e,0x31,0x20,0x28,0x68,0x74,0x74,0x70,0x3a,0x2f,0x2f,0x73,0x61,0x76,0x61,0x6e,
+0x6e,0x61,0x68,0x2e,0x6e,0x6f,0x6e,0x67,0x6e,0x75,0x2e,0x6f,0x72,0x67,0x2f,0x70,
+0x72,0x6f,0x6a,0x65,0x63,0x74,0x73,0x2f,0x6c,0x77,0x69,0x70,0x29,0x0d,0x0a,
+/* "Content-Length: 3128
+" (18+ bytes) */
+0x43,0x6f,0x6e,0x74,0x65,0x6e,0x74,0x2d,0x4c,0x65,0x6e,0x67,0x74,0x68,0x3a,0x20,
+};
+const char http_html_200_end[] = {
+0x0d,0x0a,
+/* "Connection: Close
+" (19 bytes) */
+0x43,0x6f,0x6e,0x6e,0x65,0x63,0x74,0x69,0x6f,0x6e,0x3a,0x20,0x43,0x6c,0x6f,0x73,
+0x65,0x0d,0x0a,
+/* "Content-type: text/html
+
+" (27 bytes) */
+0x43,0x6f,0x6e,0x74,0x65,0x6e,0x74,0x2d,0x74,0x79,0x70,0x65,0x3a,0x20,0x74,0x65,
+0x78,0x74,0x2f,0x68,0x74,0x6d,0x6c,0x0d,0x0a,0x0d,0x0a
+};
   //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
-static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"404 error\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\<script\>"
+//static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+         "\<script\>"
 	  "var xhr\;"
            "var idTimer1\";"
 	   "function onload(){"
 	   "xhr = new (XMLHttpRequest);"
 	   "}"
-           
-	   "function swich1(){"
-           "xhr.open(\"GET\", \"swich?c=1\", true);"
-	   "xhr.responseType = \"text\";"
-	   "xhr.send(null);"
-	   "}"	
-	  "function swich2(){"
-	  "xhr.open(\"GET\", \"swich?c=2\", true);"
-	  "xhr.responseType = \"text\";"
-	  "xhr.send(null);"
-	  "}"
-	  "function swich3(){"
-	   "xhr.open(\"GET\", \"swich?c=3\", true);"
-	    "xhr.responseType = \"text\";"
-	    "xhr.send(null);"
-	  "}"
-"</script>";
+//           
+//	   "function swich1(){"
+//           "xhr.open(\"GET\", \"swich?c=1\", true);"
+//	   "xhr.responseType = \"text\";"
+//	   "xhr.send(null);"
+//	   "}"	
+//	  "function swich2(){"
+//	  "xhr.open(\"GET\", \"swich?c=2\", true);"
+//	  "xhr.responseType = \"text\";"
+//	  "xhr.send(null);"
+//	  "}"
+//	  "function swich3(){"
+//	   "xhr.open(\"GET\", \"swich?c=3\", true);"
+//	    "xhr.responseType = \"text\";"
+//	    "xhr.send(null);"
+//	  "}"
+"</script>"
+;
 
 
 static const char http_html_style[] = 
@@ -229,7 +265,117 @@ void swich_mess_event (uint8_t event,char* mess)
         }
 }
 
-
+void swich_mess_event_en (uint8_t event,char* mess)
+{
+ switch(event) {
+          case NO_RUN:
+            {
+              
+            }
+          break;
+          
+          case RESETL:
+            {
+              sprintf(mess,"The device has been reset.\n\r");
+            }
+          break;
+          case UPDATE_FW:
+            {
+              sprintf(mess,"Transferred to download mode\n\r");
+            }
+          break;
+          case SWICH_ON_WEB:
+            {
+              sprintf(mess,"Load from the web interface is enabled\n\r");
+            }
+          break;
+          case SWICH_OFF_WEB:
+            {
+              sprintf(mess,"The load from the web interface is turned off\n\r");
+            }
+          break;
+          case SWICH_TOLG_WEB:
+            {
+              sprintf(mess,"Impulse load dump was performed from the web interface\n\r");
+            }
+          break;
+           case SWICH_ON_SNMP:
+            {
+              sprintf(mess,"Load from SNMP interface is enabled\n\r");
+            }
+          break;
+          case SWICH_OFF_SNMP:
+            {
+              sprintf(mess,"Disabled load from SNMP interface\n\r");
+            }
+          break;
+          case SWICH_TOLG_SNMP:
+            {
+              sprintf(mess,"Pulse load shedding from SNMP interface has been performed\n\r");
+            }
+          break;
+          case SWICH_ON_RASP:
+            {
+              sprintf(mess,"Scheduled load is enabled\n\r");
+            }
+          break;
+          case SWICH_OFF_RASP:
+            {
+              sprintf(mess,"Disabled load on schedule\n\r");
+            }
+          break;
+          case SWICH_TOLG_RASP:
+            {
+              sprintf(mess,"Impulse reset of the load according to the schedule\n\r");
+            }
+          break;
+          case SWICH_ON_WATCH:
+            {
+              sprintf(mess,"Watchdog load included\n\r");
+            }
+          break;
+          case SWICH_OFF_WATCH:
+            {
+              sprintf(mess,"The watchdog load is turned off\n\r");
+            }
+          break;
+          case SWICH_TOLG_WATCH:
+            {
+              sprintf(mess,"Impulse load shedding by the watchman\n\r");
+            }
+          break;
+          case SWICH_ON_HTTP:
+            {
+              sprintf(mess,"HTTP API loading enabled\n\r");
+            }
+          break;
+          case SWICH_OFF_HTTP:
+            {
+              sprintf(mess,"Disabled loading via HTTP API\n\r");
+            }
+          break;
+          case SWICH_TOLG_HTTP:
+            {
+              sprintf(mess,"Pulse load shedding via HTTP API has been performed\n\r");
+            }
+          break;         
+          case POWER_ON:
+            {
+              sprintf(mess,"Power on the device\n\r");
+            }
+          break;
+          case LOAD_DEF_DATA:
+            {
+              sprintf(mess,"Loaded default settings\n\r");
+            }
+          break;
+          case SAVE_DATA_SETT:
+            {
+              sprintf(mess,"Saving device settings\n\r");
+            }
+          break;
+        }
+}
 
 uint32_t costr_pass(char* str1)
 {
@@ -351,10 +497,23 @@ uint16_t set_text_input (char* str1,char* name, uint8_t n,uint8_t* dat)
 
 
 //sprintf(str4,"%d.%d.%d.%d",dat[0],dat[1],dat[2],dat[3]);
-sprintf(str1,"<input name=\"%s\"  value=\"%s\" maxlength=\"%d\" >",name,dat,n);
+sprintf(str1,"<input size=\"%d\" name=\"%s\"  value=\"%s\" maxlength=\"%d\" >",n,name,dat,n);
 
 return 0;
 }
+uint16_t set_text_input_PW (char* str1,char* name, uint8_t n,uint8_t* dat)
+{ 
+////char str3[256];
+////char str4[64];
+////memset (str3,0, 256);
+
+
+//sprintf(str4,"%d.%d.%d.%d",dat[0],dat[1],dat[2],dat[3]);
+sprintf(str1,"<input type=\"password\" size=\"%d\" name=\"%s\"  value=\"%s\" maxlength=\"%d\" >",n,name,dat,n);
+
+return 0;
+}
+ //<input type="password" maxlength="25" size="40" name="password"></p>
 uint16_t set_intnum (char* str1,char* name,uint8_t size,char* value,uint32_t min,uint32_t  max)
 { 
 //<p><input type="number" size="3" name="num" min="1" max="10" value="1"></p>
@@ -1207,6 +1366,51 @@ return len;
 //}
 
 
+uint32_t costr_page_hdr(char* str1,uint32_t len_data)
+{
+  uint32_t len;
+    memset (str1,0, sizeof(str1)); 
+ 
+   
+    memcpy((uint8_t *)str1,(uint8_t*)http_html_200,120);
+    len=95;
+    if (len_data>9999)
+   {
+    str1[len+1]=(len_data/10000);
+    str1[len+2]=(len_data/1000)-str1[len+1]*10;
+    str1[len+3]=(len_data/100)-str1[len+1]*100-str1[len+2]*10;
+    str1[len+4]=(len_data/10)-str1[len+1]*1000-str1[len+2]*100-str1[len+3]*10;
+    str1[len+5]=(len_data)-str1[len+1]*10000-str1[len+2]*1000-str1[len+3]*100-str1[len+4]*10;
+    str1[len+1]=str1[len+1]+0x30;
+    str1[len+2]=str1[len+2]+0x30;
+    str1[len+3]=str1[len+3]+0x30;
+    str1[len+4]=str1[len+4]+0x30;
+    str1[len+5]=str1[len+5]+0x30;    
+    memcpy((uint8_t *)(str1+101),(uint8_t*)http_html_200_end,47);
+    len=149;
+   }
+   else
+   {
+    str1[len+1]=(len_data/1000);
+    str1[len+2]=(len_data/100)-str1[len+1]*10;
+    str1[len+3]=(len_data/10)-str1[len+1]*100-str1[len+2]*10;
+    str1[len+4]=(len_data)-str1[len+1]*1000-str1[len+2]*100-str1[len+3]*10;    
+    str1[len+1]=str1[len+1]+0x30;
+    str1[len+2]=str1[len+2]+0x30;
+    str1[len+3]=str1[len+3]+0x30;
+    str1[len+4]=str1[len+4]+0x30;    
+    memcpy((uint8_t *)(str1+100),(uint8_t*)http_html_200_end,47); 
+    len=148;
+    str1[len]=0;
+    str1[len+1]=0;
+   }
+    
+   len = strlen (str1);
+  return len;
+};
+   
+
+
 
 uint32_t costr_page2(char* str1)
 {
@@ -1643,7 +1847,9 @@ uint32_t costr_page4(char* str1)
     reset_open_block(str2,"form");
   strcat(str1,str2);
   
-  
+
+  reset_open_block(str2,"html");
+  strcat(str1,str2);
   
   
   
@@ -1756,11 +1962,11 @@ uint32_t costr_page3(char* str1)
    set_table_string(str2,"Имя устройства",str3);
    strcat(str1,str2);
    
-   set_text_input(str3,"geo_place",32,FW_data.V_GEOM_NAME);  
+   set_text_input(str3,"geo_place",16,FW_data.V_GEOM_NAME);  
    set_table_string(str2,"Место установки устройства",str3);  
    strcat(str1,str2);
    
-   set_text_input(str3,"call_data",32,FW_data.V_CALL_DATA);  
+   set_text_input(str3,"call_data",16,FW_data.V_CALL_DATA);  
    set_table_string(str2,"Контактные данные",str3);  
    strcat(str1,str2);
    
@@ -1857,30 +2063,33 @@ uint32_t costr_page5(char* str1)
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);  
    set_text_input(str3,"ip_addr",16,str4);  
-   set_table_string(str2,"IP адресс",str3);
+   set_table_string(str2,"IP адрес",str3);
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_MASK[0],FW_data.V_IP_MASK[1],FW_data.V_IP_MASK[2],FW_data.V_IP_MASK[3]);
-   set_text_input(str3,"mask_addr",32,str4);  
+   set_text_input(str3,"mask_addr",16,str4);  
    set_table_string(str2,"Маска подсети ",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_GET[0],FW_data.V_IP_GET[1],FW_data.V_IP_GET[2],FW_data.V_IP_GET[3]);
-   set_text_input(str3,"getway_addr",32,str4);  
+   set_text_input(str3,"getway_addr",16,str4);  
    set_table_string(str2,"Шлюз",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_DNS[0],FW_data.V_IP_DNS[1],FW_data.V_IP_DNS[2],FW_data.V_IP_DNS[3]);
-   set_text_input(str3,"dns_addr",32,str4);  
+   set_text_input(str3,"dns_addr",16,str4);  
    set_table_string(str2,"DNS сервер",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_WEB_PORT);
-   set_text_input(str3,"port_http",32,str4);  
+   set_text_input(str3,"port_http",16,str4);  
    set_table_string(str2,"Порт HTTP сервера",str3);  
    strcat(str1,str2);
    
-
+   sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_SYSL[0],FW_data.V_IP_SYSL[1],FW_data.V_IP_SYSL[2],FW_data.V_IP_SYSL[3]);
+   set_text_input(str3,"syslog_addr",16,str4);  
+   set_table_string(str2,"Адрес сервера SysLog сообщений",str3);  
+   strcat(str1,str2);
    
 //   set_submit(str3,"save_net","1","Сохранить");
 //   set_table_string(str2,"Сохранить настройки сети ",str3);  
@@ -1949,7 +2158,7 @@ uint32_t costr_page6(char* str1)
    set_table_string(str2,"Имя пользователя",str3);
    strcat(str1,str2);
    
-   set_text_input(str3,"password",32,FW_data.V_PASSWORD);  
+   set_text_input_PW(str3,"password",16,FW_data.V_PASSWORD);  
    set_table_string(str2,"Пароль",str3);  
    strcat(str1,str2);
    
@@ -1995,12 +2204,12 @@ uint32_t costr_page6(char* str1)
    strcat(str1,str2);    
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_SNMP[0],FW_data.V_IP_SNMP[1],FW_data.V_IP_SNMP[2],FW_data.V_IP_SNMP[3]);  
-   set_text_input(str3,"snmp_addr",32,str4);  
+   set_text_input(str3,"snmp_addr",16,str4);  
    set_table_string(str2,"Адрес для посылки Trap сообщений",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_PORT_SNMP);
-   set_text_input(str3,"port_snmp",32,str4);  
+   set_text_input(str3,"port_snmp",16,str4);  
    set_table_string(str2,"Порт SNMP агента",str3);  
    strcat(str1,str2);
       
@@ -2069,17 +2278,17 @@ uint32_t costr_page6(char* str1)
    strcat(str1,str2);    
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_NTP1[0],FW_data.V_IP_NTP1[1],FW_data.V_IP_NTP1[2],FW_data.V_IP_NTP1[3]);  
-   set_text_input(str3,"ntp1_addr",32,str4);  
+   set_text_input(str3,"ntp1_addr",16,str4);  
    set_table_string(str2,"NTP сервер 1",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d\.%d\.%d\.%d",FW_data.V_IP_NTP2[0],FW_data.V_IP_NTP2[1],FW_data.V_IP_NTP2[2],FW_data.V_IP_NTP2[3]);  
-   set_text_input(str3,"ntp2_addr",32,str4);  
+   set_text_input(str3,"ntp2_addr",16,str4);  
    set_table_string(str2,"NTP сервер 2",str3);  
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_NTP_CIRCL);
-   set_text_input(str3,"time_circl",32,str4);  
+   set_text_input(str3,"time_circl",16,str4);  
    set_table_string(str2,"Часовой пояс UTC:-12...+12 ",str3);  
    strcat(str1,str2);
       
@@ -2096,13 +2305,13 @@ uint32_t costr_page6(char* str1)
    
    
    sprintf(str4,"%d\.%d\.%d",real_time.day,real_time.month,real_time.year);  
-   set_text_input(str3,"dey_set",32,str4);  
+   set_text_input(str3,"dey_set",16,str4);  
    set_table_string(str2,"Текущая дата:",str3);  
    strcat(str1,str2);
    
    
    sprintf(str4,"%d\.%d\.%d",real_time.reple_hours,real_time.reple_minuts,real_time.reple_seconds);  
-   set_text_input(str3,"time_set",32,str4);  
+   set_text_input(str3,"time_set",16,str4);  
    set_table_string(str2,"Текущее время: ",str3);  
    strcat(str1,str2);
    
@@ -2357,7 +2566,9 @@ uint32_t costr_page7(char* str1)
 //   reset_open_block(str2,"dev");
 //  strcat(str1,str2);
   
-  
+
+  reset_open_block(str2,"html");
+  strcat(str1,str2);
   
   len=strlen(str1);
        while(len>3000){}
@@ -2475,6 +2686,9 @@ uint32_t costr_page9(char* str1)
   reset_open_block(str2,"form");
  strcat(str1,str2);
 
+
+  reset_open_block(str2,"html");
+  strcat(str1,str2);
   
   len=strlen(str1);
        while(len>3000){}
@@ -4088,7 +4302,8 @@ uint32_t costr_rasp_page1(char* str1)
    memset (str3,0, sizeof(str3));
 //   set_checkbox (str4,"V_D_TIME[9].set_up_day","1","C",FW_data.V_D_TIME[9].set_up_day);
    len=set_table_podm_day_str1(str1,str2,"Подм.","V_RD_DATA_PODM",&(FW_data.V_RD_DATA));
- 
+   
+
 
        while(len>3000){}
   return len;
@@ -4136,8 +4351,9 @@ uint32_t costr_rasp_page1(char* str1)
 
   reset_open_block(str2,"form");
   strcat(str1,str2);
-  
-  
+
+  reset_open_block(str2,"html");
+  strcat(str1,str2);
   
   len=strlen(str1);
        while(len>3000){}
@@ -4145,4 +4361,285 @@ uint32_t costr_rasp_page1(char* str1)
 };
 
 
+uint32_t costr_email_page1(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+  
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+      set_br(str2,1);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+  
+  set_link(str2,"Журнал ","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+
+  reset_open_block(str2,"ul");
+  strcat(str1,str2);
+
+  set_open_block(str2,"form id=\"sets1\" action='/' method='POST'");
+ strcat(str1,str2);
+
+   
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+    set_br(str2,2);
+  strcat(str1,str2);
+
+  set_open_block(str2,"b>НАСТРОЙКА SMTP ДЛЯ ИСХОДЯЩИХ E-MAIL СООБЩИЩЕНИЙ</b");
+  strcat(str1,str2);
+  
+  set_br(str2,1);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+  // Table   
+   set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 80%;border: 1px solid #ffffff;margin: auto;required\"><tbody");
+   strcat(str1,str2);    
+
+  
+   memset (str3,0, sizeof(str3));
+
+   set_checkonoff (str3,"V_FLAG_EN_EMAIL",FW_data.V_FLAG_EN_EMAIL);// (char* str1,char* name,uint8_t ck)
+   set_table_string(str2,"Включить отправку e-mail уведомлений ",str3);
+   strcat(str1,str2);
+   len=strlen(str1); 
+   
+    memset (str3,0, sizeof(str3));
+
+   set_checkbox (str3,"V_FLAG_DEF_EMAIL","1","1",FW_data.V_FLAG_DEF_EMAIL);// (char* str1,char* name,uint8_t ck)
+   set_table_string(str2,"Использовать SMTP сервер по умолчанию ",str3);
+   strcat(str1,str2);
+   len=strlen(str1); 
+   
+    memset (str3,0, sizeof(str3));
+
+
+
+  
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+
+ uint32_t costr_email_page2(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));  
+   
+
+ 
+   
+//uint16_t V_FLAG_EMAIL_PORT;
+//char V_EMAIL_ADDR[16];
+//char V_EMAIL_FROM[16];
+//char V_EMAIL_TO[16];
+//char V_EMAIL_CC1[16];
+//char V_EMAIL_CC2[16];
+//char V_EMAIL_CC3[16];
+  
+  
+    memset (str3,0, sizeof(str3));
+     
+     
+   set_text_input(str3,"V_EMAIL_ADDR",32,FW_data.V_EMAIL_ADDR);  
+   set_table_string(str2,"Адрес SMTP сервера",str3);
+   strcat(str1,str2);
+   
+    memset (str3,0, sizeof(str3));
+     
+     
+   //set_text_input(str3,"V_FLAG_EMAIL_PORT",16,FW_data.V_FLAG_EMAIL_PORT);  
+   
+    sprintf(str4,"%d",FW_data.V_FLAG_EMAIL_PORT);
+   set_intnum(str3,"V_FLAG_EMAIL_PORT",4,str4,1,65535);  
+   
+   
+   set_table_string(str2,"Порт SMTP сервера",str3);
+   strcat(str1,str2);
+   
+    memset (str3,0, sizeof(str3));
+     
+     
+   set_text_input(str3,"V_LOGIN_SMTP",32,FW_data.V_LOGIN_SMTP);  
+   set_table_string(str2,"Имя пользователя",str3);
+   strcat(str1,str2);
+   
+    memset (str3,0, sizeof(str3));
+   
+   set_text_input_PW(str3,"V_PASSWORD_SMTP",32,FW_data.V_PASSWORD_SMTP);  
+   set_table_string(str2,"Пароль",str3);  
+   strcat(str1,str2);
+   
+   
+    memset (str3,0, sizeof(str3));
+     
+     
+   set_text_input(str3,"V_EMAIL_FROM",32,FW_data.V_EMAIL_FROM);  
+   set_table_string(str2,"От кого (From:)",str3);
+   strcat(str1,str2);
+   
+    memset (str3,0, sizeof(str3));
+     
+     
+   set_text_input(str3,"V_EMAIL_TO",32,FW_data.V_EMAIL_TO);  
+   set_table_string(str2,"Кому (to:)",str3);
+   strcat(str1,str2);
+   
+     
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
+   
+ uint32_t costr_email_page3(char* str1)
+{
+  uint32_t len;
+  
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));    
+  
+     
+     
+   set_text_input(str3,"V_EMAIL_CC1",32,FW_data.V_EMAIL_CC1);  
+   set_table_string(str2,"Копия №1(cc:)",str3);
+   strcat(str1,str2);
+   
+   
+    memset (str3,0, sizeof(str3));
+     
+     
+   set_text_input(str3,"V_EMAIL_CC2",32,FW_data.V_EMAIL_CC2);  
+   set_table_string(str2,"Копия №2(cc:)",str3);
+   strcat(str1,str2);
+   
+  
+   
+    memset (str3,0, sizeof(str3));
+    
+    set_text_input(str3,"V_EMAIL_CC3",32,FW_data.V_EMAIL_CC3);  
+    set_table_string(str2,"Копия №3(cc:)",str3);
+    strcat(str1,str2);
+    
+    set_submit(str3,"save_rasp_sec5 ","1","Применить изменения",0);
+    set_table_string(str2,"",str3);  
+    strcat(str1,str2);
+
+   reset_open_block(str2,"h3");
+   strcat(str1,str2);
+   
+ 
+   reset_open_block(str2,"tbody");
+   strcat(str1,str2);
+  
+   reset_open_block(str2,"table");
+   strcat(str1,str2);
+   
+   
+
+   
+   
+
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  set_open_block(str2,"form id=\"sets1\" action='/' method='POST'");
+ strcat(str1,str2);
+  
+    set_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+    set_br(str2,1);
+  strcat(str1,str2);
+  
+  
+  set_submit(str3,"test_email","1","Тестовая отправка e-mail ",0);
+  strcat(str1,str3);
+   
+  set_br(str2,1);
+  strcat(str1,str2);
+   
+     reset_open_block(str2,"h4");
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"form");
+  strcat(str1,str2);
+  
+  
+//  reset_open_block(str2,"tbody"); 
+//  strcat(str1,str2); 
+//  
+//  reset_open_block(str2,"table");
+//  strcat(str1,str2);
+//  
+
+  
+//  reset_open_block(str2,"form");
+// strcat(str1,str2);
+
+  reset_open_block(str2,"html");
+  strcat(str1,str2);
+  
+  len=strlen(str1);
+       while(len>3000){}
+  return len;
+};
 

@@ -164,8 +164,12 @@ int main(void)
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 256);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
-  /* definition and creation of LED_task */
-  osThreadDef(LED_task, LED_task, osPriorityLow, 0, 256);
+  
+ osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
+
+timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL);
+ 
+   osThreadDef(LED_task, LED_task, osPriorityLow, 0, 256);
   LED_taskHandle = osThreadCreate(osThread(LED_task), NULL);
 
   osThreadDef(logs_task_name, logs_task, osPriorityLow, 0, 256);
@@ -181,20 +185,13 @@ int main(void)
   osThreadDef(rasp_task, rasp_task, osPriorityLow, 0, 256);
  rasp_task_id = osThreadCreate(osThread(rasp_task), NULL);
  
- 
- osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
 
-timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL);
 
 
  osThreadDef(ntp_thread, ntp_thread, osPriorityLow, 0, 256);
  ntp_task_id = osThreadCreate(osThread(ntp_thread), NULL);
-// 
- 
-  
   //void GET_reple (uint8_t event,log_reple_t* reple)
-   form_reple_to_save(POWER_ON);
-  GET_reple(0,&start_time);
+
   
   /* Start scheduler */
   osKernelStart();
