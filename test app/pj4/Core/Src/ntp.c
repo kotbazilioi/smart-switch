@@ -176,7 +176,7 @@ void ntp_receive_callback(struct netconn* conn, enum netconn_evt evt, u16_t len)
                     {
                       pbuf_copy_partial(buf->p, &receive_timestamp, 4, 40);
                       rx_secs = lwip_ntohl(receive_timestamp);
-                       LWIP_DEBUGF( PING_DEBUG, ("%10lu: %lu", time_count, rx_secs));
+                       //LWIP_DEBUGF( PING_DEBUG, ("%10lu: %lu", time_count, rx_secs));
                       
                       is_1900_based = ((rx_secs & 0x80000000) != 0);
                       t = is_1900_based ? (rx_secs - RANGE_SEC_1900_1970) : (rx_secs + RANGE_SEC_1970_2036);

@@ -3,18 +3,20 @@
 #include "syslog.h"
 #include "smtp.h"
 #define logoff_time 200*10
+
 char mess_smtp[256]={0}; 
 osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
 osThreadId logs_task_nameHandle;
 osThreadId  IO_CNTRLHandle;
 osThreadId rasp_task_id;
+osThreadId iwdt_task_id;
 uint8_t flag_set_ip=0;
 uint16_t ct_dns_time=0;
 uint8_t status_dns=0;
 V_D_TIME_type slot_day,slot_repars[10];
-  uint8_t flag_err_dates=0;
-
+uint8_t flag_err_dates=0;
+IWDG_HandleTypeDef  iwdt_hdr;
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
@@ -48,20 +50,15 @@ void StartDefaultTask(void const * argument)
 ip4_addr_t ipdns1;
   /* init code for LWIP */
   MX_LWIP_Init();
-  /* USER CODE BEGIN 5 */
-    //  udpecho_init();
+
   
   
   http_server_netconn_init();
   ping_init();
   IP4_ADDR(&ip_syslog, FW_data.V_IP_SYSL[0], FW_data.V_IP_SYSL[1], FW_data.V_IP_SYSL[2], FW_data.V_IP_SYSL[3]);    
   syslog_init(local_syslog_ctx,ip_syslog);
-  //smtp_send_mail_int();
-  /* Infinite loop */
-         snmp_ex_init();
-        /* definition and creation of LED_task */
- 
- 
+  snmp_ex_init();
+
  
   for(;;)
   {
@@ -464,7 +461,27 @@ void logs_task(void const * argument)
   }
   /* USER CODE END logs_task */
 }
-
+void iwdt_task(void const * argument)
+{
+   #if (IWDT_EN) 
+  // __HAL_RCC_LSI_ENABLE();
+   iwdt_hdr.Instance=IWDG;
+   iwdt_hdr.Init.Prescaler=255;
+   iwdt_hdr.Init.Reload=4*40;
+   HAL_IWDG_Init(&iwdt_hdr);
+  #endif
+ 
+   
+  while(1)
+  {
+      vTaskDelay(200);
+    #if (IWDT_EN) 
+    HAL_IWDG_Refresh(&iwdt_hdr);
+    #endif
+  }
+  
+}
+//LOCK_TCPIP_CORE();
 //#define RTC_WEEKDAY_MONDAY             ((uint8_t)0x01)
 //#define RTC_WEEKDAY_TUESDAY            ((uint8_t)0x02)
 //#define RTC_WEEKDAY_WEDNESDAY          ((uint8_t)0x03)
@@ -492,8 +509,6 @@ void rasp_task(void const * argument)
           {
             flag_err_dates=0;
           }
-//       if ((start_flag==0)||(old_WeekDay!=dates.WeekDay))
-//       {
          start_flag=1;
          old_WeekDay=dates.WeekDay;
         for (ct_slots=0;ct_slots<6;ct_slots++)
@@ -587,13 +602,6 @@ void rasp_task(void const * argument)
                      }
                 }
             }
-          
-            
-//          if (((slot_day.time_data[ct_slots].on_swich_h!=times.Hours)||(slot_day.time_data[ct_slots].on_swich_m!=times.Minutes))&&((slot_day.time_data[ct_slots].off_swich_h!=times.Hours)||(slot_day.time_data[ct_slots].off_swich_m!=times.Minutes)))
-//            {
-                   
-    //        }
-        
         }
         flag_set_out_fasp=0;        
 

@@ -17,10 +17,10 @@
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
+        <stlinkResetStrategy>0</stlinkResetStrategy>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>3337181170</Checksum>
+        <Checksum>1750542995</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -66,44 +66,53 @@
     </SWOTraceHWSettings>
     <struct_types>
         <Fmt0>BlockLink_t-xBlockSize	4	0</Fmt0>
-        <Fmt1>FLASH_EraseInitTypeDef-NbPages	4	0</Fmt1>
-        <Fmt2>FLASH_EraseInitTypeDef-PageAddress	4	0</Fmt2>
-        <Fmt3>FLASH_EraseInitTypeDef-TypeErase	4	0</Fmt3>
-        <Fmt4>FW_data_t-V_CRC_APP	4	0</Fmt4>
-        <Fmt5>FW_data_t-V_CRC_BOOT	4	0</Fmt5>
-        <Fmt6>FW_data_t-V_CRC_DATA	4	0</Fmt6>
-        <Fmt7>FW_data_t-V_NTP_CIRCL	3	0</Fmt7>
-        <Fmt8>RTC_DateTypeDef-Date	3	0</Fmt8>
-        <Fmt9>RTC_DateTypeDef-Month	3	0</Fmt9>
-        <Fmt10>RTC_DateTypeDef-WeekDay	3	0</Fmt10>
-        <Fmt11>RTC_DateTypeDef-Year	3	0</Fmt11>
-        <Fmt12>RTC_TimeTypeDef-Hours	3	0</Fmt12>
-        <Fmt13>RTC_TimeTypeDef-Minutes	3	0</Fmt13>
-        <Fmt14>RTC_TimeTypeDef-Seconds	3	0</Fmt14>
-        <Fmt15>data_swich_elem-day	3	0</Fmt15>
-        <Fmt16>data_swich_elem-month	3	0</Fmt16>
-        <Fmt17>data_swich_elem-year	3	0</Fmt17>
-        <Fmt18>day_swich_elem-off_swich_h	3	0</Fmt18>
-        <Fmt19>day_swich_elem-off_swich_m	3	0</Fmt19>
-        <Fmt20>day_swich_elem-on_swich_h	3	0</Fmt20>
-        <Fmt21>day_swich_elem-on_swich_m	3	0</Fmt21>
-        <Fmt22>ip4_addr_t-addr	4	0</Fmt22>
-        <Fmt23>ip_addr_t-addr	4	0</Fmt23>
-        <Fmt24>log_reple_t-day	3	0</Fmt24>
-        <Fmt25>log_reple_t-dweek	3	0</Fmt25>
-        <Fmt26>log_reple_t-month	3	0</Fmt26>
-        <Fmt27>log_reple_t-reple_hours	3	0</Fmt27>
-        <Fmt28>log_reple_t-reple_minuts	3	0</Fmt28>
-        <Fmt29>log_reple_t-reple_seconds	3	0</Fmt29>
-        <Fmt30>log_reple_t-type_event	3	0</Fmt30>
-        <Fmt31>log_reple_t-year	3	0</Fmt31>
-        <Fmt32>logs_t-CRC16	4	0</Fmt32>
-        <Fmt33>struct A_BLOCK_LINK-xBlockSize	4	0</Fmt33>
-        <Fmt34>struct icmp_echo_hdr-chksum	4	0</Fmt34>
-        <Fmt35>struct icmp_echo_hdr-id	4	0</Fmt35>
-        <Fmt36>struct in_addr-s_addr	4	0</Fmt36>
-        <Fmt37>struct snmp_obj_id-len	3	0</Fmt37>
-        <Fmt38>struct snmp_request-source_port	3	0</Fmt38>
+        <Fmt1>ETH_DMADescTypeDef-Buffer1Addr	4	0</Fmt1>
+        <Fmt2>ETH_DMADescTypeDef-Buffer2NextDescAddr	4	0</Fmt2>
+        <Fmt3>ETH_DMADescTypeDef-ControlBufferSize	4	0</Fmt3>
+        <Fmt4>ETH_DMADescTypeDef-Status	4	0</Fmt4>
+        <Fmt5>FLASH_EraseInitTypeDef-NbPages	4	0</Fmt5>
+        <Fmt6>FLASH_EraseInitTypeDef-PageAddress	4	0</Fmt6>
+        <Fmt7>FLASH_EraseInitTypeDef-TypeErase	4	0</Fmt7>
+        <Fmt8>FW_data_t-V_CRC_APP	4	0</Fmt8>
+        <Fmt9>FW_data_t-V_CRC_BOOT	4	0</Fmt9>
+        <Fmt10>FW_data_t-V_CRC_DATA	4	0</Fmt10>
+        <Fmt11>FW_data_t-V_NTP_CIRCL	3	0</Fmt11>
+        <Fmt12>HeapRegion_t-xSizeInBytes	3	0</Fmt12>
+        <Fmt13>IWDG_TypeDef-KR	4	0</Fmt13>
+        <Fmt14>IWDG_TypeDef-PR	4	0</Fmt14>
+        <Fmt15>IWDG_TypeDef-RLR	4	0</Fmt15>
+        <Fmt16>IWDG_TypeDef-SR	4	0</Fmt16>
+        <Fmt17>RTC_DateTypeDef-Date	3	0</Fmt17>
+        <Fmt18>RTC_DateTypeDef-Month	3	0</Fmt18>
+        <Fmt19>RTC_DateTypeDef-WeekDay	3	0</Fmt19>
+        <Fmt20>RTC_DateTypeDef-Year	3	0</Fmt20>
+        <Fmt21>RTC_TimeTypeDef-Hours	3	0</Fmt21>
+        <Fmt22>RTC_TimeTypeDef-Minutes	3	0</Fmt22>
+        <Fmt23>RTC_TimeTypeDef-Seconds	3	0</Fmt23>
+        <Fmt24>data_swich_elem-day	3	0</Fmt24>
+        <Fmt25>data_swich_elem-month	3	0</Fmt25>
+        <Fmt26>data_swich_elem-year	3	0</Fmt26>
+        <Fmt27>day_swich_elem-off_swich_h	3	0</Fmt27>
+        <Fmt28>day_swich_elem-off_swich_m	3	0</Fmt28>
+        <Fmt29>day_swich_elem-on_swich_h	3	0</Fmt29>
+        <Fmt30>day_swich_elem-on_swich_m	3	0</Fmt30>
+        <Fmt31>ip4_addr_t-addr	4	0</Fmt31>
+        <Fmt32>ip_addr_t-addr	4	0</Fmt32>
+        <Fmt33>log_reple_t-day	3	0</Fmt33>
+        <Fmt34>log_reple_t-dweek	3	0</Fmt34>
+        <Fmt35>log_reple_t-month	3	0</Fmt35>
+        <Fmt36>log_reple_t-reple_hours	3	0</Fmt36>
+        <Fmt37>log_reple_t-reple_minuts	3	0</Fmt37>
+        <Fmt38>log_reple_t-reple_seconds	3	0</Fmt38>
+        <Fmt39>log_reple_t-type_event	3	0</Fmt39>
+        <Fmt40>log_reple_t-year	3	0</Fmt40>
+        <Fmt41>logs_t-CRC16	4	0</Fmt41>
+        <Fmt42>struct A_BLOCK_LINK-xBlockSize	4	0</Fmt42>
+        <Fmt43>struct icmp_echo_hdr-chksum	4	0</Fmt43>
+        <Fmt44>struct icmp_echo_hdr-id	4	0</Fmt44>
+        <Fmt45>struct in_addr-s_addr	4	0</Fmt45>
+        <Fmt46>struct snmp_obj_id-len	3	0</Fmt46>
+        <Fmt47>struct snmp_request-source_port	3	0</Fmt47>
     </struct_types>
     <array_types>
         <Fmt0>u32_t[50]	4	0</Fmt0>
@@ -114,27 +123,28 @@
         <Fmt0>{W}1:ERR_CONN	4	0</Fmt0>
         <Fmt1>{W}1:ERR_INPROGRESS	4	0</Fmt1>
         <Fmt2>{W}1:ERR_MEM	4	0</Fmt2>
-        <Fmt3>{W}1:RESETL	3	0</Fmt3>
-        <Fmt4>{W}1:SNMP_ERR_GENERROR	3	0</Fmt4>
-        <Fmt5>{W}1:SWICH_ON_HTTP	3	0</Fmt5>
-        <Fmt6>{W}1:crc	4	0</Fmt6>
-        <Fmt7>{W}1:crc_in	4	0</Fmt7>
-        <Fmt8>{W}1:ct_char	3	0</Fmt8>
-        <Fmt9>{W}1:ct_find_a	3	0</Fmt9>
-        <Fmt10>{W}1:ct_pass	3	0</Fmt10>
-        <Fmt11>{W}1:dat	4	0</Fmt11>
-        <Fmt12>{W}1:data[451]	4	0</Fmt12>
-        <Fmt13>{W}1:destination	4	0</Fmt13>
-        <Fmt14>{W}1:err	4	0</Fmt14>
-        <Fmt15>{W}1:event	3	0</Fmt15>
-        <Fmt16>{W}1:ip_mass[0]	3	0</Fmt16>
-        <Fmt17>{W}1:ip_mass[2]	3	0</Fmt17>
-        <Fmt18>{W}1:ip_mass[3]	3	0</Fmt18>
-        <Fmt19>{W}1:len	3	0</Fmt19>
-        <Fmt20>{W}1:reple	3	0</Fmt20>
-        <Fmt21>{W}1:result	3	0</Fmt21>
-        <Fmt22>{W}1:status_dns	4	0</Fmt22>
-        <Fmt23>{W}1:sum	4	0</Fmt23>
+        <Fmt3>{W}1:MEMP_MAX	3	0</Fmt3>
+        <Fmt4>{W}1:RESETL	3	0</Fmt4>
+        <Fmt5>{W}1:SNMP_ERR_GENERROR	3	0</Fmt5>
+        <Fmt6>{W}1:SWICH_ON_HTTP	3	0</Fmt6>
+        <Fmt7>{W}1:crc	4	0</Fmt7>
+        <Fmt8>{W}1:crc_in	4	0</Fmt8>
+        <Fmt9>{W}1:ct_char	3	0</Fmt9>
+        <Fmt10>{W}1:ct_find_a	3	0</Fmt10>
+        <Fmt11>{W}1:ct_pass	3	0</Fmt11>
+        <Fmt12>{W}1:dat	4	0</Fmt12>
+        <Fmt13>{W}1:data[451]	4	0</Fmt13>
+        <Fmt14>{W}1:destination	4	0</Fmt14>
+        <Fmt15>{W}1:err	4	0</Fmt15>
+        <Fmt16>{W}1:event	3	0</Fmt16>
+        <Fmt17>{W}1:ip_mass[0]	3	0</Fmt17>
+        <Fmt18>{W}1:ip_mass[2]	3	0</Fmt18>
+        <Fmt19>{W}1:ip_mass[3]	3	0</Fmt19>
+        <Fmt20>{W}1:len	3	0</Fmt20>
+        <Fmt21>{W}1:reple	3	0</Fmt21>
+        <Fmt22>{W}1:result	3	0</Fmt22>
+        <Fmt23>{W}1:status_dns	4	0</Fmt23>
+        <Fmt24>{W}1:sum	4	0</Fmt24>
     </watch_formats>
     <Trace2>
         <Enabled>0</Enabled>
@@ -185,7 +195,8 @@
         <mode>1</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Count>0</Count>
+        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\LWIP\Target\ethernetif.c}.446.3" 0 0 1 "" 0 "" 0</Bp0>
+        <Count>1</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>

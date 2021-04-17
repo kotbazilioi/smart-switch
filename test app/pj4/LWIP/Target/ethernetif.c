@@ -30,6 +30,7 @@
 #include "cmsis_os.h"
 #include "lwip/tcpip.h"
 #include "flash_if.h"
+extern size_t xFreeBytesRemaining;
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
 
@@ -444,10 +445,17 @@ static struct pbuf * low_level_input(struct netif *netif)
 
   if (len > 0)
   {
-    /* We allocate a pbuf chain of pbufs from the Lwip buffer pool */
-    p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
-  }
 
+      if (xFreeBytesRemaining >MIN_memory)
+       {
+        p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
+       }
+      else
+       {
+        return NULL;
+       }
+
+  }
   if (p != NULL)
   {
     dmarxdesc = heth.RxFrameInfos.FSRxDesc;
@@ -476,6 +484,11 @@ static struct pbuf * low_level_input(struct netif *netif)
       bufferoffset = bufferoffset + byteslefttocopy;
     }
   }
+//  else
+//  {
+//    while (1){}
+//  }
+    
 
     /* Release descriptors to DMA */
     /* Point to first descriptor */

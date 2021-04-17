@@ -14,19 +14,23 @@
 #include <stdio.h>
 
 
+#define IWDT_EN 1
+
 void StartDefaultTask(void const * argument);
 void LED_task(void const * argument);
 void logs_task(void const * argument);
 void IO_CNRL_APP(void const * argument);
 void set_out_port(uint8_t sost,uint8_t canal);
 void rasp_task(void const * argument);
-
+void iwdt_task(void const * argument);
 
 extern osThreadId defaultTaskHandle;
 extern osThreadId LED_taskHandle;
 extern osThreadId logs_task_nameHandle;
 extern osThreadId  IO_CNTRLHandle;
 extern osThreadId rasp_task_id;
-extern   uint8_t flag_err_dates;
+extern osThreadId iwdt_task_id;
+extern IWDG_HandleTypeDef  iwdt_hdr;
+extern uint8_t flag_err_dates;
 extern uint8_t flag_set_ip;
 extern char mess_smtp[256]; 

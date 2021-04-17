@@ -95,13 +95,13 @@ mem_trim(void *mem, mem_size_t size)
  * allow these defines to be overridden.
  */
 #ifndef mem_clib_free
-#define mem_clib_free free
+#define mem_clib_free vPortFree//free
 #endif
 #ifndef mem_clib_malloc
-#define mem_clib_malloc malloc
+#define mem_clib_malloc pvPortMalloc //malloc
 #endif
 #ifndef mem_clib_calloc
-#define mem_clib_calloc calloc
+#define mem_clib_calloc pvPortMalloc// calloc
 #endif
 
 #if LWIP_STATS && MEM_STATS
@@ -744,12 +744,24 @@ mem_malloc_adjust_lfree:
 #endif /* MEM_USE_POOLS */
 
 #if MEM_LIBC_MALLOC && (!LWIP_STATS || !MEM_STATS)
+////////void *
+////////mem_calloc(mem_size_t count, mem_size_t size)
+////////{
+////////  return mem_clib_calloc(count, size);
+////////}
 void *
 mem_calloc(mem_size_t count, mem_size_t size)
 {
-  return mem_clib_calloc(count, size);
-}
+  void *p;
 
+  /* allocate 'count' objects of size 'size' */
+  p = mem_malloc(count * size);
+  if (p) {
+    /* zero the memory */
+    memset(p, 0, (size_t)count * (size_t)size);
+  }
+  return p;
+}
 #else /* MEM_LIBC_MALLOC && (!LWIP_STATS || !MEM_STATS) */
 /**
  * Contiguously allocates enough space for count objects that are size bytes

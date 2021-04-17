@@ -57,23 +57,31 @@
 #define LWIP_RAW  1
 #define LWIP_UDP 1
 #define LWIP_SOCKET  1
-#define  LWIP_DEBUG 1
-//#define LWIP_ERROR 1
-//#define  LWIP_PLATFORM_DIAG 1
+//#define  LWIP_DEBUG 1
+//#define PING_DEBUG     LWIP_DBG_ON
+    
+//#define LWIP_DEBUGF(debug, message) do { \
+//                               if ( \
+//                                   ((debug) & LWIP_DBG_ON) && \
+//                                   ((debug) & LWIP_DBG_TYPES_ON) && \
+//                                   ((s16_t)((debug) & LWIP_DBG_MASK_LEVEL) >= LWIP_DBG_MIN_LEVEL)) { \
+//                                 LWIP_PLATFORM_DIAG(message); \
+//                                 if ((debug) & LWIP_DBG_HALT) { \
+//                                   while(1); \
+//                                 } \
+//                               } \
+//                             } while(0)
+   
+
 
 #define LWIP_SO_RCVTIMEO 1 
 #define LWIP_SO_SNDTIMEO 1
 #define LWIP_SO_SNDRCVTIMEO_NONSTANDARD 1   
-#define MEMP_OVERFLOW_CHECK             3   
 #define LWIP_SO_RCVBUF                  1   
-#define LWIP_DBG_MIN_LEVEL					LWIP_DBG_LEVEL_ALL
-#define LWIP_DBG_TYPES_ON						LWIP_DBG_ON  
+//#define LWIP_DBG_MIN_LEVEL					LWIP_DBG_LEVEL_ALL
+//#define LWIP_DBG_TYPES_ON						LWIP_DBG_ON  
 #define IP_REASSEMBLY    1
-//#define DNS_LOCAL_HOSTLIST              1
-//#ifndef DNS_SERVER_ADDRESS
-//#define DNS_SERVER_ADDRESS(ipaddr)        (ip4_addr_set_u32(ipaddr, ipaddr_addr("192.168.3.1"))) /* resolver1.opendns.com */
-//#endif
-//#define DNS_LOOKUP_LOCAL_EXTERN(x) extern err_t my_lookup_function(const char *name, ip_addr_t *addr, u8_t dns_addrtype)
+
 #define DNS_LOCAL_HOSTLIST              1
 #define DNS_LOCAL_HOSTLIST_INIT {DNS_LOCAL_HOSTLIST_ELEM("host_ip4", IPADDR4_INIT_BYTES(1,2,3,4))}
 /**
@@ -517,7 +525,7 @@
  * PBUF_POOL_SIZE: the number of buffers in the pbuf pool.
  */
 #if !defined PBUF_POOL_SIZE || defined __DOXYGEN__
-#define PBUF_POOL_SIZE                  20/////////////////////16
+#define PBUF_POOL_SIZE                  16
 #endif
 
 /** MEMP_NUM_API_MSG: the number of concurrently active calls to various

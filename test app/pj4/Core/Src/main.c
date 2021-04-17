@@ -36,6 +36,7 @@
 #include "ntp.h"
 #include <stdio.h>
 #define QUEUE_SIZE (uint32_t) 1    
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define VECT_TAB_OFFSET 0x08005000
@@ -89,6 +90,7 @@ HeapRegion_t pxHeapRegions_f107;
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
+uint32_t sets = PBUF_POOL_BUFSIZE;
 
 /**
   * @brief  The application entry point.
@@ -97,7 +99,7 @@ HeapRegion_t pxHeapRegions_f107;
 int main(void)
 {
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET;
-  
+  sets++;
 //void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions )
  FLASH_If_Init();
   /* USER CODE END 2 */
@@ -120,14 +122,15 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
 
+ 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
 
   
    pxHeapRegions_f107.pucStartAddress=(uint8_t*)(__segment_begin( "HEAP"));
-  pxHeapRegions_f107.xSizeInBytes= (size_t)((unsigned char *)__segment_end( "HEAP") - (unsigned char *)__segment_begin( "HEAP")); 
- 
+//  pxHeapRegions_f107.xSizeInBytes= 0x2000ffff/*(size_t)((unsigned char *)__segment_end( "HEAP")*/ - (unsigned char *)__segment_begin( "HEAP")); 
+   pxHeapRegions_f107.xSizeInBytes= (size_t)((unsigned char *)0x2000ffff - (unsigned char *)__segment_begin( "HEAP")); 
 //  pxHeapRegions_f107->pucStartAddress = (uint8_t*)(__segment_begin( "HEAP"));
 //  pxHeapRegions_f107->xSizeInBytes = (size_t)((unsigned char *)__segment_end( "HEAP") - (unsigned char *)__segment_begin( "HEAP")); 
   vPortDefineHeapRegions(&pxHeapRegions_f107);
@@ -161,41 +164,44 @@ int main(void)
   
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 256);
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, DEFAULT_THREAD_STACKSIZE);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   
- osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
+  osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
 
-timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL);
+  timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL);
  
-   osThreadDef(LED_task, LED_task, osPriorityLow, 0, 256);
+   osThreadDef(LED_task, LED_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   LED_taskHandle = osThreadCreate(osThread(LED_task), NULL);
 
-  osThreadDef(logs_task_name, logs_task, osPriorityLow, 0, 256);
+  osThreadDef(logs_task_name, logs_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   logs_task_nameHandle = osThreadCreate(osThread(logs_task_name), NULL);
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
   /* definition and creation of IO_CNTRL */
- osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, 256);
+ osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
  IO_CNTRLHandle = osThreadCreate(osThread(IO_CNTRL), NULL);
  
- 
-  osThreadDef(rasp_task, rasp_task, osPriorityLow, 0, 256);
- rasp_task_id = osThreadCreate(osThread(rasp_task), NULL);
- 
+
+  osThreadDef(rasp_task, rasp_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
+  rasp_task_id = osThreadCreate(osThread(rasp_task), NULL);
+  
+#ifdef IWDT_EN  
+  osThreadDef(iwdt_task, iwdt_task, osPriorityRealtime, 0, DEFAULT_THREAD_STACKSIZE);
+  iwdt_task_id = osThreadCreate(osThread(iwdt_task), NULL); 
+#endif
 
 
-
- osThreadDef(ntp_thread, ntp_thread, osPriorityLow, 0, 256);
+ osThreadDef(ntp_thread, ntp_thread, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
  ntp_task_id = osThreadCreate(osThread(ntp_thread), NULL);
   //void GET_reple (uint8_t event,log_reple_t* reple)
 
   
   /* Start scheduler */
   osKernelStart();
-
+ 
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

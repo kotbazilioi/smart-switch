@@ -23,6 +23,7 @@
 #include "task.h"
 #include "main.h"
 #include "lwip/opt.h"
+#include "ping.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
