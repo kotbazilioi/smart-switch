@@ -1271,16 +1271,18 @@ post_data_t elem_post_data;
               //156 - end
               //107 - length  
               netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+               vTaskDelay(delay_send);
               fs_close(&file);
-              vTaskDelay(delay_send);
+             
             }
           break;
           case 2:
             {
               fs_open(&file, "/pass.html"); 
               netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-              fs_close(&file);
               vTaskDelay(delay_send);
+              fs_close(&file);
+              
             }
           break;
           case 3:
@@ -1305,19 +1307,7 @@ post_data_t elem_post_data;
           break;
            case 4:
             {
-//                fs_open(&file, "/404.html"); 
-//                netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
-//                fs_close(&file);
-              
-              
-//              len_buf_list=costr_page2((char*)buf_list);
-//              len_buf_list=len_buf_list+costr_page2_1((char*)buf_list);
-//              len_buf_list=len_buf_list+costr_page4((char*)buf_list);              
-//              len_buf_list=len_buf_list+strlen(http_html_200);               
-//              len_buf_list=len_buf_list+strlen(http_html_200_end);    
-//              len_buf_list=costr_page_hdr((char*)buf_list,148);
-//              
-//              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);     
+
                     
                vTaskDelay(delay_send);
                len_buf_list=costr_page2((char*)buf_list);
@@ -1329,7 +1319,10 @@ post_data_t elem_post_data;
                  
                len_buf_list=costr_page4((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+               vTaskDelay(delay_send);
                
+                len_buf_list=costr_page4_1((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
                      
                vTaskDelay(delay_send);
             }
@@ -1523,8 +1516,9 @@ post_data_t elem_post_data;
               {
               fs_open(&file, "/404.html"); 
               netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+               vTaskDelay(delay_send);
               fs_close(&file);
-              vTaskDelay(delay_send);
+             
               }
           }
  }
@@ -1538,7 +1532,7 @@ static void http_server_serve(struct netconn *conn1)
  
    u16_t buflen;
 
-
+  
        
         char* buf;
         struct netbuf *inbuf;//=( struct netbuf *)(buf_page+1500);//=(struct netbuf*)pvPortMalloc(1500);
@@ -1559,7 +1553,7 @@ static void http_server_serve(struct netconn *conn1)
   {
     if (netconn_err(conn1) == ERR_OK) 
     {
-       char* buf_page=(char*)pvPortMalloc(3000); 
+     char* buf_page=(char*)pvPortMalloc(3000); 
       netbuf_data(inbuf, (void**)&buf, &buflen);
       
         if (flag_logon==1)
@@ -1615,9 +1609,10 @@ static void http_server_serve(struct netconn *conn1)
                       if (page_sost==1)
                            {
                              page_n=4;
-                             page_html_swich(page_n,conn1,buf_page);
-                             vTaskDelay(20);
+                            
                              parser_post(buf,buflen,page_sost);
+                              page_html_swich(page_n,conn1,buf_page);
+                              vTaskDelay(20);
                            }         
                          
                              if (page_sost==3)
@@ -1716,14 +1711,18 @@ static void http_server_serve(struct netconn *conn1)
         
       
      }
-      vTaskDelay(4*delay_send);
+    
+     vTaskDelay(4*delay_send);
+    
      vPortFree(buf_page);
+   
     }
      
   }
 //vTaskDelay(100);
  
    vTaskDelay(4*delay_send);
+    
    netbuf_delete(inbuf);
  //   netbuf_delete(buf_page);
   /* Close the connection (server closes in HTTP) */
@@ -1775,6 +1774,10 @@ static void http_server_netconn_thread(void *arg)
            /* delete connection */
           netconn_delete(newconn);          
         }
+        else
+          {
+            while(1){}
+          }
 
             
       }
@@ -1790,7 +1793,7 @@ static void http_server_netconn_thread(void *arg)
   */
 void http_server_netconn_init()
 {
-  sys_thread_new("HTTP", http_server_netconn_thread, NULL,2*512, osPriorityHigh);
+  sys_thread_new("HTTP", http_server_netconn_thread, NULL,2*512, osPriorityAboveNormal);
 }
 
 /**

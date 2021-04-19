@@ -30,6 +30,10 @@
 #include "cmsis_os.h"
 #include "lwip/tcpip.h"
 #include "flash_if.h"
+#include "html_page.h"
+#include "base64.h"
+#include "LOGS.h"
+#include "smtp.h"
 extern size_t xFreeBytesRemaining;
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
@@ -449,10 +453,16 @@ static struct pbuf * low_level_input(struct netif *netif)
       if (xFreeBytesRemaining >MIN_memory)
        {
         p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
+       
        }
       else
        {
-        return NULL;
+         form_reple_to_save(RESETL);
+          //   flag_global_reset_mode=1;
+         save_reple_log(reple_to_save);
+         flag_global_save_log=0;
+         vTaskDelay(100);
+         jamp_to_app();
        }
 
   }
@@ -542,6 +552,7 @@ void ethernetif_input(void const * argument)
           {
             pbuf_free(p);
           }
+
         }
         UNLOCK_TCPIP_CORE();
       } while(p!=NULL);

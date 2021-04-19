@@ -3,7 +3,8 @@
 #include "syslog.h"
 #include "smtp.h"
 #define logoff_time 200*10
-
+extern size_t xFreeBytesRemaining;
+extern size_t xMinimumEverFreeBytesRemaining;
 char mess_smtp[256]={0}; 
 osThreadId defaultTaskHandle;
 osThreadId LED_taskHandle;
@@ -255,7 +256,17 @@ void LED_task(void const * argument)
       }
   ///   GET_reple(SWICH_ON_WEB,&reple1);
      HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
-  
+     osDelay(50);
+     HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
+      osDelay(100);
+     HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
+      osDelay(50);
+     HAL_GPIO_TogglePin (LED_RED_GPIO_Port, LED_RED_Pin);
+#if (LWIP_DEBUG)  
+     printf("xFreeBytesRemaining=%d   ",xFreeBytesRemaining);
+     printf("xMinimumEverFreeBytesRemaining=%d\n\r",xMinimumEverFreeBytesRemaining);
+#endif
+     
     if ((FW_data.V_EN_WATCHDOG==1)&&(flag_delay_ping==0))
     {      
       if (FW_data.V_TYPE_LOGIC==0)
@@ -397,7 +408,7 @@ void LED_task(void const * argument)
     }
     
 
-     osDelay(100);
+     osDelay(400);
      
   }
   /* USER CODE END Task_HAL1 */
@@ -464,20 +475,22 @@ void logs_task(void const * argument)
 void iwdt_task(void const * argument)
 {
    #if (IWDT_EN) 
-  // __HAL_RCC_LSI_ENABLE();
+   __HAL_RCC_LSI_ENABLE();
    iwdt_hdr.Instance=IWDG;
    iwdt_hdr.Init.Prescaler=255;
-   iwdt_hdr.Init.Reload=4*40;
+   iwdt_hdr.Init.Reload=1*159;
    HAL_IWDG_Init(&iwdt_hdr);
   #endif
  
    
   while(1)
   {
-      vTaskDelay(200);
+     
     #if (IWDT_EN) 
     HAL_IWDG_Refresh(&iwdt_hdr);
     #endif
+
+     vTaskDelay(200);
   }
   
 }
@@ -608,6 +621,6 @@ void rasp_task(void const * argument)
       
       }
      vTaskDelay(60*1000);
-  
+
   }
 }

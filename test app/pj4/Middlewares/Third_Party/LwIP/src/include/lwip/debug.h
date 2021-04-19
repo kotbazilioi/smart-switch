@@ -36,6 +36,8 @@
  */
 #ifndef LWIP_HDR_DEBUG_H
 #define LWIP_HDR_DEBUG_H
+#define LWIP_NOASSERT 1
+
 
 #include "lwip/arch.h"
 #include "lwip/opt.h"

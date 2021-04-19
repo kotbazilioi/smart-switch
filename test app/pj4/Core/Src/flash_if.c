@@ -29,6 +29,7 @@
 #include "stm32f1xx_hal_def.h"
 #include "stm32_hal_legacy.h"
 #include "stm32f1xx_hal_gpio.h"
+#include  "stm32f1xx_hal_eth.h"
 #include <string.h>
 #include <stdint.h>
 #include "crc16.h"
@@ -70,7 +71,7 @@ uint32_t *idBase3 = (uint32_t*)(UID_BASE + 0x08);
   
   
 
-////__root const uint16_t  CRC_APP  @ A_CRC_APP;
+//__root const uint16_t  CRC_APP  @ A_CRC_APP;
 ////__root const uint16_t  CRC_BOOT  @ A_CRC_DATA_BOOT;
 ////__root const uint8_t IP_CONFIG[4] @ A_IP_ADRESS;
 ////
@@ -80,7 +81,7 @@ uint32_t *idBase3 = (uint32_t*)(UID_BASE + 0x08);
 ////
 ////__root const uint8_t FW_VER[4] @ A_FW_VER ;
 ////
-////__root const uint32_t FW_LEN @ A_FW_LEN ;
+//__root const uint32_t FW_LEN @ A_FW_LEN ;
 ////
 ////__root const uint8_t BOOT_VER[4] @ A_BOOT_VER;
 ////__root const char LOG[2000] @ A_LOG;
@@ -347,7 +348,7 @@ void jamp_to_app (void)
   flag_app_start=0;
  }
 }
- 
+ extern ETH_HandleTypeDef heth;
 void jamp_to_boot (void)
 {
   uint32_t addr_met =0x08000000;
@@ -356,11 +357,17 @@ void jamp_to_boot (void)
   HAL_SuspendTick();
   __disable_irq();
   GPIO_InitTypeDef GPIO_InitStruct = {0};
- if ((data_met!=0xFFFFFFFF)&&(data_met!=0))
- {
- // HAL_ETH_DeInit(&hetho);
- /// HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
-
+// if ((data_met!=0xFFFFFFFF)&&(data_met!=0))
+// {
+ 
+//  ETH_MACReceptionDisable(&heth);
+//  ETH_DMATransmissionDisable(&heth);
+//  ETH_DMAReceptionDisable(&heth);
+  HAL_ETH_Stop(&heth);
+   HAL_ETH_DeInit(&heth);  
+//  HAL_ETH_MspDeInit(&heth);
+  //HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
+__HAL_RCC_LSI_DISABLE();
      /*Configure GPIO pin : PHY_RST_Pin */
   GPIO_InitStruct.Pin = PHY_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
@@ -389,7 +396,7 @@ void jamp_to_boot (void)
   uint32_t jumpAddress = *((volatile uint32_t*)(0x08000000 + 4));
   pFunction Jump_To_Application = (pFunction) jumpAddress;
   Jump_To_Application();
- }
+// }
 
 }
 
@@ -408,7 +415,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
   if (N_sector==1)
     {
     blok=1;
-    start_addr=0x8004800;
+    start_addr=A_CRC_LOG;
     
     }
     else
@@ -444,7 +451,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
       
       uint8_t load_def_data(void)
       {
-           FW_data.V_CRC_APP=0;
+        FW_data.V_CRC_APP=*((uint16_t *)A_CRC_APP);
       
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
@@ -465,8 +472,8 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_FW1_VER[1]=0;
      FW_data.V_FW1_VER[2]=0;
      FW_data.V_FW1_VER[3]=1;
-     FW_data.V_FW1_LEN=0;
-     FW_data.V_BOOT_VER = BOOT_VER_FW;
+     FW_data.V_FW1_LEN=*((uint32_t *)A_FW_LEN);
+     FW_data.V_BOOT_VER = *((uint32_t *)A_BOOT_VER);
      FW_data.V_CRC_DATA = 0;
      FW_data.V_DHCP = 0;
       memset((uint8_t*)&FW_data.V_LOGIN,0,16);
@@ -548,7 +555,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     memcpy((uint8_t*)&FW_data.V_Name_dev,(uint8_t *)"DKSF 59",7);    
     memcpy((uint8_t*)&FW_data.V_CALL_DATA,(uint8_t *)"netping.ru",10);   
     
-    memset((uint8_t*)&FW_data.V_resv,0,1659);
+//    memset((uint8_t*)&FW_data.V_resv,0,1659);
     FW_data.V_logs_struct.CRC16 = 0;
     memset((uint8_t*)&FW_data.V_logs_struct.log_reple,0,2000);
      
@@ -566,7 +573,7 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      
      FW_data.V_NTP_CIRCL = 4;
      
-     FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),24);     
+     FW_data.V_CRC_BOOT=*((uint16_t *)A_CRC_DATA_BOOT);  
      FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
      FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
      

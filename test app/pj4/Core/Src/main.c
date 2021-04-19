@@ -39,7 +39,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#define VECT_TAB_OFFSET 0x08005000
+
 
 /* USER CODE END Includes */
 

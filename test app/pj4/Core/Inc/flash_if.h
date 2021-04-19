@@ -28,8 +28,9 @@
 /* Exported constants --------------------------------------------------------*/
 
 /* Base address of the Flash sectors */
-#define ADDR_START_APP     ((uint32_t)0x08005000) 
-#define ADDR_END_APP     ((uint32_t)0x08020000) 
+#define ADDR_START_APP     ((uint32_t)0x08007000) 
+#define VECT_TAB_OFFSET ADDR_START_APP
+#define ADDR_END_APP     ((uint32_t)0x08040000) 
 
 ////#define A_CRC_APP 0X8004000
 ////#define A_CRC_BOOT 0X8004002
@@ -43,17 +44,17 @@
 
 #define A_START_BOOT 0x08000000
 #define A_BOOT_FW 0x08000004
-#define A_CRC_APP 0x8004000
-#define A_CRC_DATA_BOOT 0x8004002
+#define A_CRC_APP 0x8005000
+#define A_CRC_DATA_BOOT 0x8005002
 //*******************************
-#define A_IP_ADRESS 0x8004004
-#define A_IP_MASK 0x8004008
-#define A_GET_ADRESS 0x800400c
-#define A_FW_VER 0x8004010
-#define A_FW_LEN 0x8004014
-#define A_BOOT_VER 0x8004018
-#define A_CRC_DATA 0x800401C
-#define A_DHCP 0x800401E
+#define A_IP_ADRESS 0x8005004
+#define A_IP_MASK 0x8005008
+#define A_GET_ADRESS 0x800500c
+#define A_FW_VER 0x8005010
+#define A_FW_LEN 0x8005014
+#define A_BOOT_VER 0x8005018
+#define A_CRC_DATA 0x800501C
+#define A_DHCP 0x800501E
 //*******************************
 #define A_LOGIN A_DHCP+2
 #define A_PASSWORD A_LOGIN+16 
@@ -100,12 +101,12 @@
     
     
     
-#define A_CRC_LOG 0x8004800
+#define A_CRC_LOG 0x8005800
 #define A_LOG A_CRC_LOG+2
-#define A_START_APP 0x8005000
-#define A_FW_APP 0x8005004
-#define A_HTTP_DUMP 0x8005000
-#define A_END_APP     ((uint32_t)0x08020000) 
+#define A_START_APP ADDR_START_APP
+#define A_FW_APP 0x8007004
+//#define A_HTTP_DUMP 0x8007000
+#define A_END_APP     ((uint32_t)0x08040000) 
 
 #define BOOT_VER_FW 0X00010001
 
