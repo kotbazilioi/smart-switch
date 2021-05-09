@@ -514,7 +514,7 @@ sprintf(str1,"<input type=\"password\" size=\"%d\" name=\"%s\"  value=\"%s\" max
 return 0;
 }
  //<input type="password" maxlength="25" size="40" name="password"></p>
-uint16_t set_intnum (char* str1,char* name,uint8_t size,char* value,uint32_t min,uint32_t  max)
+uint16_t set_intnum (char* str1,char* name,uint8_t size,char* value,int32_t min,int32_t  max)
 { 
 //<p><input type="number" size="3" name="num" min="1" max="10" value="1"></p>
 uint16_t len;
@@ -2109,8 +2109,14 @@ uint32_t costr_page5(char* str1)
    set_table_string(str2,"DNS сервер",str3);  
    strcat(str1,str2);
    
+      
+//   sprintf(str4,"%d",FW_data.V_T_SEND_PING);
+//   set_intnum(str3,"V_T_SEND_PING",3,str4,10,300);  
+   
+   
    sprintf(str4,"%d",FW_data.V_WEB_PORT);
-   set_text_input(str3,"port_http",16,str4);  
+ //  set_text_input(str3,"port_http",16,str4); 
+     set_intnum (str3,"port_http",5,str4,1,65635); 
    set_table_string(str2,"Порт HTTP сервера",str3);  
    strcat(str1,str2);
    
@@ -2237,7 +2243,7 @@ uint32_t costr_page6(char* str1)
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_PORT_SNMP);
-   set_text_input(str3,"port_snmp",16,str4);  
+   set_intnum(str3,"port_snmp",5,str4,1,65635);  
    set_table_string(str2,"Порт SNMP агента",str3);  
    strcat(str1,str2);
       
@@ -2316,7 +2322,7 @@ uint32_t costr_page6(char* str1)
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_NTP_CIRCL);
-   set_text_input(str3,"time_circl",16,str4);  
+   set_intnum(str3,"time_circl",2,str4,-12,+12);  
    set_table_string(str2,"Часовой пояс UTC:-12...+12 ",str3);  
    strcat(str1,str2);
       
@@ -2903,7 +2909,7 @@ uint32_t costr_watchdog2(char* str1)
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_T_SEND_PING);
-   set_intnum(str3,"V_T_SEND_PING",3,str4,10,301);  
+   set_intnum(str3,"V_T_SEND_PING",3,str4,10,300);  
    set_table_string(str2,"Период опроса пингов 10-300с",str3);  
    strcat(str1,str2);
    

@@ -1,11 +1,79 @@
 #include "hard_config.h"
+#include "app.h"
+#include "main.h"
 RTC_HandleTypeDef hrtc;
 
 
+/////**
+////  * @brief System Clock Configuration
+////  * @retval None
+////  */
+/////**
+////  * @brief System Clock Configuration
+////  * @retval None
+////  */
+////void SystemClock_Config(void)
+////{
+////  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+////  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+////  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+////
+////  /** Initializes the RCC Oscillators according to the specified parameters
+////  * in the RCC_OscInitTypeDef structure.
+////  */
+////  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
+////  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+////  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV6;
+////  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+////  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+////  RCC_OscInitStruct.Prediv1Source = RCC_PREDIV1_SOURCE_PLL2;
+////  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+////  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+////  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL5;
+////  RCC_OscInitStruct.PLL2.PLL2State = RCC_PLL2_ON;
+////  RCC_OscInitStruct.PLL2.PLL2MUL = RCC_PLL2_MUL16;
+////  RCC_OscInitStruct.PLL2.HSEPrediv2Value = RCC_HSE_PREDIV2_DIV4;
+////  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+////  {
+////    Error_Handler();
+////  }
+////  /** Initializes the CPU, AHB and APB buses clocks
+////  */
+////  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+////                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+////  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+////  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+////  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+////  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+////
+////  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
+////  {
+////    Error_Handler();
+////  }
+////  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RTC;
+////  PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+////  PeriphClkInit.PLLI2S.PLLI2SMUL = RCC_PLLI2S_MUL16;
+////  PeriphClkInit.PLLI2S.HSEPrediv2Value = RCC_HSE_PREDIV2_DIV4;
+////  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+////  {
+////    Error_Handler();
+////  }
+////  HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_PLL3CLK, RCC_MCODIV_1);
+////  /** Configure the Systick interrupt time
+////  */
+////  __HAL_RCC_HSE_PREDIV2_CONFIG(RCC_HSE_PREDIV2_DIV4);
+////  /** Configure the Systick interrupt time
+////  */
+////  __HAL_RCC_PLLI2S_CONFIG(RCC_PLLI2S_MUL16);
+////  /** Configure the Systick interrupt time
+////  */
+////  __HAL_RCC_PLLI2S_ENABLE();
+////}
 /**
   * @brief System Clock Configuration
   * @retval None
   */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -17,16 +85,16 @@ void SystemClock_Config(void)
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV8;
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV4;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.Prediv1Source = RCC_PREDIV1_SOURCE_PLL2;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL8;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL6;
   RCC_OscInitStruct.PLL2.PLL2State = RCC_PLL2_ON;
-  RCC_OscInitStruct.PLL2.PLL2MUL = RCC_PLL2_MUL10;
-  RCC_OscInitStruct.PLL2.HSEPrediv2Value = RCC_HSE_PREDIV2_DIV5;
+  RCC_OscInitStruct.PLL2.PLL2MUL = RCC_PLL2_MUL12;
+  RCC_OscInitStruct.PLL2.HSEPrediv2Value = RCC_HSE_PREDIV2_DIV3;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -37,8 +105,8 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
   {
@@ -50,12 +118,10 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  HAL_RCC_MCOConfig(RCC_MCO, RCC_MCO1SOURCE_PLL2CLK, RCC_MCODIV_1);
   /** Configure the Systick interrupt time
   */
   __HAL_RCC_PLLI2S_ENABLE();
 }
-
 /**
   * @brief RTC Initialization Function
   * @param None
@@ -126,73 +192,54 @@ if (DateToUpdate.Year <20)
   */
 void MX_GPIO_Init(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+  
+   GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
+  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_RESET);
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(PHY_RST_GPIO_Port, PHY_RST_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(RELAY_TRIG_GPIO_Port, RELAY_TRIG_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RELAY_INT_A1_GPIO_Port, RELAY_INT_A1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, LED_RED_Pin, GPIO_PIN_RESET);
+  /*Configure GPIO pins : LED_RED_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LED_RED_GPIO_Port, &GPIO_InitStruct);
   
   GPIO_InitStruct.Pin = LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-  
-  //set_out_port(HAL_RTCEx_BKUPRead(&hrtc,1),1);
-  if (HAL_RTCEx_BKUPRead(&hrtc,1)==0)
-  {
-    if (FW_data.V_TYPE_OUT==0)
-    {
-      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
-    }
-    if (FW_data.V_TYPE_OUT==1)
-    {
-      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
-    }    
-  }
-  
-  if (HAL_RTCEx_BKUPRead(&hrtc,1)==1)
-  {
-    if (FW_data.V_TYPE_OUT==0)
-    {
-      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,1);    
-    }
-    if (FW_data.V_TYPE_OUT==1)
-    {
-      HAL_GPIO_WritePin(LED_GREEN_GPIO_Port,LED_GREEN_Pin,0);    
-    }    
-  }
-  
-  /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
- 
-  
-  /*Configure GPIO pin : PHY_RST_Pin */
-  GPIO_InitStruct.Pin = PHY_RST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_Init(PHY_RST_GPIO_Port, &GPIO_InitStruct);
-  
-   /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin;
+  HAL_GPIO_Init(LED_GREEN_GPIO_Port, &GPIO_InitStruct);
+
+
+
+  /*Configure GPIO pins : RELAY_INT_A1_Pin RELAY_TRIG_Pin */
+  GPIO_InitStruct.Pin = RELAY_TRIG_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(RELAY_TRIG_GPIO_Port, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = RELAY_INT_A1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(RELAY_INT_A1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : IN_SWICH_Pin */
+  GPIO_InitStruct.Pin = IN_SWICH_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(IN_SWICH_GPIO_Port, &GPIO_InitStruct);
 
 }
 

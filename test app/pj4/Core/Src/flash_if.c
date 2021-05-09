@@ -314,24 +314,24 @@ void jamp_to_app (void)
  /// HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
 
      /*Configure GPIO pin : PHY_RST_Pin */
-  GPIO_InitStruct.Pin = PHY_RST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_DeInit(PHY_RST_GPIO_Port, (uint32_t)&GPIO_InitStruct);
+//  GPIO_InitStruct.Pin = PHY_RST_Pin;
+//  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+//  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+//  HAL_GPIO_DeInit(PHY_RST_GPIO_Port, (uint32_t)&GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
-  GPIO_InitStruct.Pin = LED_GREEN_Pin|LED_RED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_DeInit(GPIOC, (uint32_t)&GPIO_InitStruct);
+//////////////////////////////////////////////////////////////////////////  GPIO_InitStruct.Pin = LED_GREEN_Pin|LED_RED_Pin;
+//////////////////////////////////////////////////////////////////////////  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//////////////////////////////////////////////////////////////////////////  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//////////////////////////////////////////////////////////////////////////  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+//////////////////////////////////////////////////////////////////////////  HAL_GPIO_DeInit(GPIOC, (uint32_t)&GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_DeInit(GPIOA, (uint32_t)&GPIO_InitStruct);
+//  /*Configure GPIO pin : PA8 */
+//  GPIO_InitStruct.Pin = GPIO_PIN_8;
+//  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+//  HAL_GPIO_DeInit(GPIOA, (uint32_t)&GPIO_InitStruct);
  // DeSystemClock_Config();
   HAL_RCC_DeInit();// Clock deinit
   HAL_DeInit();
@@ -369,24 +369,24 @@ void jamp_to_boot (void)
   //HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
 __HAL_RCC_LSI_DISABLE();
      /*Configure GPIO pin : PHY_RST_Pin */
-  GPIO_InitStruct.Pin = PHY_RST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
-  HAL_GPIO_DeInit(PHY_RST_GPIO_Port, (uint32_t)&GPIO_InitStruct);
+//  GPIO_InitStruct.Pin = PHY_RST_Pin;
+//  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+//  GPIO_InitStruct.Pull = GPIO_NOPULL;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
+//  HAL_GPIO_DeInit(PHY_RST_GPIO_Port, (uint32_t)&GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_GREEN_Pin LED_RED_Pin */
-  GPIO_InitStruct.Pin = LED_GREEN_Pin|LED_RED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_DeInit(GPIOC, (uint32_t)&GPIO_InitStruct);
+////////////////////////////////////////////////////////////  GPIO_InitStruct.Pin = LED_GREEN_Pin|LED_RED_Pin;
+////////////////////////////////////////////////////////////  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+////////////////////////////////////////////////////////////  GPIO_InitStruct.Pull = GPIO_NOPULL;
+////////////////////////////////////////////////////////////  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+////////////////////////////////////////////////////////////  HAL_GPIO_DeInit(GPIOC, (uint32_t)&GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_DeInit(GPIOA, (uint32_t)&GPIO_InitStruct);
+//  /*Configure GPIO pin : PA8 */
+//  GPIO_InitStruct.Pin = GPIO_PIN_8;
+//  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+//  HAL_GPIO_DeInit(GPIOA, (uint32_t)&GPIO_InitStruct);
  // DeSystemClock_Config();
   HAL_RCC_DeInit();// Clock deinit
   HAL_DeInit();

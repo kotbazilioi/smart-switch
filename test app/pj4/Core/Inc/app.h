@@ -15,7 +15,7 @@
 
 
 #define IWDT_EN 1
-
+void set_relay(uint8_t sost);
 void StartDefaultTask(void const * argument);
 void LED_task(void const * argument);
 void logs_task(void const * argument);

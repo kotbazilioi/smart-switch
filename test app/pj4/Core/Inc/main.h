@@ -30,9 +30,10 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 #include "debug.h"
+  #include "stm32f1xx_hal_rcc.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define STM32F107xC 1
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -59,12 +60,29 @@ extern RTC_HandleTypeDef hrtc;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define PHY_RST_Pin GPIO_PIN_14
-#define PHY_RST_GPIO_Port GPIOD
-#define LED_GREEN_Pin GPIO_PIN_6
-#define LED_GREEN_GPIO_Port GPIOC
+
 #define LED_RED_Pin GPIO_PIN_7
 #define LED_RED_GPIO_Port GPIOC
+
+
+
+#define LED_GREEN_Pin GPIO_PIN_8
+#define LED_GREEN_GPIO_Port GPIOC
+
+#define RELAY_INT_A1_Pin GPIO_PIN_9
+#define RELAY_INT_A1_GPIO_Port GPIOA
+
+#define RELAY_TRIG_Pin GPIO_PIN_15
+#define RELAY_TRIG_GPIO_Port GPIOA
+
+
+
+#define IN_SWICH_Pin GPIO_PIN_8
+#define IN_SWICH_GPIO_Port GPIOB
+
+
+
+
 #define USER_VECT_TAB_ADDRESS 1
 /* USER CODE BEGIN Private defines */
 

@@ -1018,13 +1018,13 @@ void HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_M
   gpio.Pull      = GPIO_NOPULL;
   gpio.Pin       = MCO1_PIN;
 
-  /* MCO1 Clock Enable */
-  MCO1_CLK_ENABLE();
-
-  HAL_GPIO_Init(MCO1_GPIO_PORT, &gpio);
-
-  /* Configure the MCO clock source */
-  __HAL_RCC_MCO1_CONFIG(RCC_MCOSource, RCC_MCODiv);
+//  /* MCO1 Clock Enable */
+//  MCO1_CLK_ENABLE();
+//
+//  HAL_GPIO_Init(MCO1_GPIO_PORT, &gpio);
+//
+//  /* Configure the MCO clock source */
+//  __HAL_RCC_MCO1_CONFIG(RCC_MCOSource, RCC_MCODiv);
 }
 
 /**

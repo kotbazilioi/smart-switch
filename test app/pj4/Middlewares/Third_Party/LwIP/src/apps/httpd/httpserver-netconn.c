@@ -62,7 +62,7 @@
 #include "LOGS.h"
 #include "smtp.h"
 
-#define delay_send 10
+#define delay_send 20
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
@@ -1522,7 +1522,7 @@ post_data_t elem_post_data;
               }
           }
  }
-// char buf_page[3000];
+ char buf_page[3000];
 static void http_server_serve(struct netconn *conn1) 
 {
    
@@ -1553,7 +1553,8 @@ static void http_server_serve(struct netconn *conn1)
   {
     if (netconn_err(conn1) == ERR_OK) 
     {
-     char* buf_page=(char*)pvPortMalloc(3000); 
+  //   char* buf_page=(char*)pvPortMalloc(3000); 
+      memset (buf_page,0,3000); 
       netbuf_data(inbuf, (void**)&buf, &buflen);
       
         if (flag_logon==1)
@@ -1658,6 +1659,7 @@ static void http_server_serve(struct netconn *conn1)
             else
               if ((strncmp((char const *)buf,"GET /index.html",15)==0)||(strncmp((char const *)buf,"GET / HTTP/1.1",14)==0))
              {
+               memset (buf_page,0,3000); 
                page_n=4;
                page_sost=1;
                page_html_swich(page_n,conn1,buf_page);
@@ -1714,7 +1716,7 @@ static void http_server_serve(struct netconn *conn1)
     
      vTaskDelay(4*delay_send);
     
-     vPortFree(buf_page);
+  //   vPortFree(buf_page);
    
     }
      
