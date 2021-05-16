@@ -34,6 +34,11 @@
 #include <stdint.h>
 #include "crc16.h"
 #include <stdio.h>
+    
+    
+
+
+    
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -439,19 +444,33 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
     return status;
 }
 
-      uint8_t save_data_flash(void)
-      {
-       FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),24);     
+uint8_t save_data_flash(void)
+ {
+       FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),12);     
        FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
        FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
        
        save_data_blok(0,(uint32_t*)&FW_data.V_CRC_APP);        
        memcpy((uint8_t *)(&FW_data.V_CRC_APP), (uint8_t *)A_CRC_APP, 2048);
       }
-      
-      uint8_t load_def_data(void)
-      {
-        FW_data.V_CRC_APP=*((uint16_t *)A_CRC_APP);
+ void Save_CRC_APP (void)
+{
+  uint32_t len =((uint32_t)*((uint32_t*)A_FW_LEN));
+  if (len !=0xffffffff)
+  {
+uint16_t crcapp=crc16_ccitt((uint8_t *)(uint8_t*)A_START_APP,len);
+
+ memcpy((uint32_t *)(&FW_data.V_CRC_APP), (uint32_t *)A_CRC_APP, 1024);
+ 
+ FW_data.V_CRC_APP=crcapp;
+ FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),12);    
+ save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
+  }
+}     
+uint8_t load_def_data(void)
+    {
+     Save_CRC_APP();
+     FW_data.V_CRC_APP=*((uint16_t *)A_CRC_APP);
       
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
@@ -467,11 +486,13 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      FW_data.V_IP_GET[1]=168;
      FW_data.V_IP_GET[2]=3;
      FW_data.V_IP_GET[3]=1; 
-   
-     FW_data.V_FW1_VER[0]=0;
-     FW_data.V_FW1_VER[1]=0;
-     FW_data.V_FW1_VER[2]=0;
-     FW_data.V_FW1_VER[3]=1;
+       
+
+     FW_data.V_FW1_VER[0]=Platform;
+     FW_data.V_FW1_VER[1]=rev;
+     FW_data.V_FW1_VER[2]=Assembly;
+     FW_data.V_FW1_VER[3]=Bild;
+
      FW_data.V_FW1_LEN=*((uint32_t *)A_FW_LEN);
      FW_data.V_BOOT_VER = *((uint32_t *)A_BOOT_VER);
      FW_data.V_CRC_DATA = 0;
@@ -573,10 +594,10 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
      
      FW_data.V_NTP_CIRCL = 4;
      
-     FW_data.V_CRC_BOOT=*((uint16_t *)A_CRC_DATA_BOOT);  
-     FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
-     FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);
-     
+       FW_data.V_CRC_BOOT=*((uint16_t *)A_CRC_DATA_BOOT);  
+       FW_data.V_logs_struct.CRC16 = crc16_ccitt((uint8_t*)&(FW_data.V_logs_struct.log_reple[0]),2000);
+       FW_data.V_CRC_DATA=crc16_ccitt((uint8_t*)&(FW_data.V_DHCP),2018);     
+       
        FW_data.V_TYPE_LOGIC=0;
        FW_data.V_EN_WATCHDOG=0;
        FW_data.V_EN_WATCHDOG_CN_A=1;
@@ -602,12 +623,9 @@ uint8_t save_data_blok (uint8_t N_sector,uint32_t* struct_to)
        FW_data.V_MAX_REPID_PING=8;
        FW_data.V_TIME_RESET_PULSE=12;
        FW_data.V_PAUSE_RESET_TO_REPID=15;
-       FW_data.V_MAX_RESEND_PACET_RESET=0;
-     
-     
-     
-     save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
-     
+       FW_data.V_MAX_RESEND_PACET_RESET=0;     
+       save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
+      
 
      
         return 1;
@@ -628,18 +646,11 @@ uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
       memcpy((void *)(&FW_data.V_logs_struct.log_reple[0]), (char *)A_LOG, 2000);
       return 0;
     }
+   
+     
+   
 }
-void Save_CRC_APP (void)
-{
-uint16_t crcapp=crc16_ccitt((uint8_t *)(uint8_t*)A_START_APP,(uint32_t)((uint32_t*)A_FW_LEN));
 
- memcpy((uint32_t *)(&FW_data.V_CRC_APP), (uint32_t *)A_CRC_APP, 1024);
- 
- FW_data.V_CRC_APP=crcapp;
- FW_data.V_CRC_BOOT=crc16_ccitt((uint8_t*)&(FW_data.V_IP_CONFIG[0]),24);    
- save_data_blok(3,(uint32_t*)&FW_data.V_CRC_APP); 
-
-}
 uint8_t Comp_CRC_APP(void)
 {
   uint16_t crcapp=crc16_ccitt((uint8_t*)A_START_APP,(uint32_t)((uint32_t*)A_FW_LEN));

@@ -26,6 +26,10 @@
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
+#define Platform 59
+#define rev 0
+#define Assembly 0
+#define Bild 1
 
 /* Base address of the Flash sectors */
 #define ADDR_START_APP     ((uint32_t)0x08007000) 

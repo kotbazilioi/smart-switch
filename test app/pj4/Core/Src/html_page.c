@@ -1557,13 +1557,13 @@ uint32_t costr_page2_1(char* str1)
    strcat(str1,str2);
    
    memset(str3,0,128);
-   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[0],FW_data.V_FW1_VER[1]);
+   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[2],FW_data.V_FW1_VER[3]);
  
    set_table_string(str2,"Версия ПО",str3);  
    strcat(str1,str2);
    
    memset(str3,0,128);
-   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[2],FW_data.V_FW1_VER[3]);
+   sprintf(str3,"v%d.%d",FW_data.V_FW1_VER[0],FW_data.V_FW1_VER[1]);
  
    set_table_string(str2,"Версия аппаратной платформы",str3);  
    strcat(str1,str2);
@@ -1583,7 +1583,7 @@ uint32_t costr_page2_1(char* str1)
    time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
    time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
    
-   ct_time++;
+   ct_time=1;
       if (time_run[ct_time]<0)
         {
           time_run[ct_time-1]--;
@@ -1766,11 +1766,11 @@ uint32_t costr_page4(char* str1)
    set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 78%; border: 1px solid #ffffff;margin: 0 8% 0 12%;\"><tbody");
    strcat(str1,str2);      
    data= HAL_RTCEx_BKUPRead(&hrtc,1);
-  if ((data==0)||(data==2))
+  if (data==0)
   {
    sprintf(str3,"%s",FW_data.V_OFF_MESS);
   }
-   if ((data==1)||(data==3))
+   if ((data==1)||(data==2))
   {
    sprintf(str3,"%s",FW_data.V_ON_MESS);
   }
@@ -1779,11 +1779,11 @@ uint32_t costr_page4(char* str1)
    strcat(str1,str2);
    
    
-   set_open_block(str3,"input name=\"output_set\"  type=\"radio\" value=\"0\"checked");
+   set_open_block(str3,"input name=\"output_set\"  type=\"radio\" value=\"1\"checked");
    set_table_string(str2,"Включить ключ",str3);  
    strcat(str1,str2);
 
-   set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"1\"");
+   set_open_block(str3,"input name=\"output_set\" type=\"radio\" value=\"0\"");
    set_table_string(str2,"Выключить ключ",str3);  
    strcat(str1,str2);
    
@@ -4677,3 +4677,133 @@ uint32_t costr_email_page1(char* str1)
   return len;
 };
 
+uint32_t costr_page_boot(char* str1)
+{
+  uint32_t len;
+  
+
+ // len=sizeof(str1)+1;
+  memset (str1,0, sizeof(str1)); 
+  memset (str2,0, sizeof(str2));
+  memset (str3,0, sizeof(str3));
+  memset (str4,0, sizeof(str4));
+  
+  
+  strcat(str1,http_html_start_constr);
+  
+
+  strcat(str1,http_html_style);
+  
+  set_open_block(str2,"body");
+  strcat(str1,str2);
+  
+//  set_open_block(str2,"ul");
+//  strcat(str1,str2);
+  
+//  
+//  set_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+ 
+  set_string_text(str2,"Интеллектуальная розетка DKST 59 v","h1",0,FW_data.V_FW1_VER);
+  strcat(str1,str2);
+    
+//  reset_open_block(str2,"h1");
+//  strcat(str1,str2);
+  
+    set_br(str2,1);
+  strcat(str1,str2);
+  
+  
+  set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"Главная","index.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Настройки ","settings.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Расписание ","rasp.html");
+  strcat(str1,str2);
+  
+  set_link(str2,"Сторож","watchdog.html");
+  strcat(str1,str2);
+  
+  
+  set_link(str2,"E-mail","email.html");
+  strcat(str1,str2);  
+
+  
+  set_link(str2,"Журнал","logs.html");
+  strcat(str1,str2);  
+    
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+    
+  set_open_block(str2,"ul");
+  strcat(str1,str2);
+  
+   set_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+  set_br(str2,3);
+  strcat(str1,str2);
+         
+
+  set_open_block(str2,"b>УСТРОЙСТВО В РЕЖИМЕ ЗАГРУЗКИ ОБНОВЛЕНИЯ ПО</b");
+  strcat(str1,str2);
+  
+   set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Запустите утилиту отправки файлов по TFTP протоколу </b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Адрес для загрузки:</b");
+  strcat(str1,str2);
+  
+  sprintf(str2,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Порт №: 69</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Размер блока: 512 байт</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>После обновления перейдите по ссылке на главную страницу</b");
+  strcat(str1,str2);
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  reset_open_block(str2,"h2");
+  strcat(str1,str2);
+  
+ 
+  
+  set_open_block(str2,"h3");
+  strcat(str1,str2);
+
+   
+   
+     len=strlen(str1);
+     while(len>3000){}
+     return len;
+};
+   
+  

@@ -26,6 +26,10 @@
 
 #pragma segment="HEAP"
 
+//******************************************************************//
+
+//******************************************************************//
+
 osMessageQId timeout_Queue;
 HeapRegion_t pxHeapRegions_f107;
 uint32_t sets = PBUF_POOL_BUFSIZE;
@@ -40,6 +44,15 @@ int main(void)
   sets++;
   FLASH_If_Init();
   load_struct_flash_data();
+  
+  
+  FW_data.V_FW1_VER[0]=Platform;
+  FW_data.V_FW1_VER[1]=rev;
+  FW_data.V_FW1_VER[2]=Assembly;
+  FW_data.V_FW1_VER[3]=Bild;
+  
+  
+  
   HAL_Init();
   SystemClock_Config();
   MX_GPIO_Init();

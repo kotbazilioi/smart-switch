@@ -1186,6 +1186,7 @@ void param_run(post_data_t* post_data,uint8_t index)
           // while(flag_global_save_log==1){vTaskDelay(10);};
            vTaskDelay(100);
            flag_global_boot_mode=1;
+           page_n=9;
           // jamp_to_boot();
           }
     else
@@ -1512,6 +1513,14 @@ post_data_t elem_post_data;
                vTaskDelay(delay_send);
             }
           break;                         
+             case 9:
+            {
+               vTaskDelay(delay_send);
+               len_buf_list=costr_page_boot((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+               vTaskDelay(delay_send);             
+            }
+          break; 
           default  :
               {
               fs_open(&file, "/404.html"); 
@@ -1618,29 +1627,33 @@ static void http_server_serve(struct netconn *conn1)
                          
                              if (page_sost==3)
                               {
+                                page_n=5;
                                parser_post(buf,buflen,page_sost);
-                               page_n=5;
+                               
                                vTaskDelay(20);
                                page_html_swich(page_n,conn1,buf_page);
                               }
                              if(page_sost==2)
                                {
+                                 page_n=3;
                                 parser_post(buf,buflen,page_sost);
-                                page_n=3;
+                                
                                 vTaskDelay(20);
                                 page_html_swich(page_n,conn1,buf_page);
                                }
                               if(page_sost==4)
                                {
+                                  page_n=7;
                                 parser_post(buf,buflen,page_sost);
-                                page_n=7;
+                               
                                 vTaskDelay(20);
                                 page_html_swich(page_n,conn1,buf_page);
                                }
                               if(page_sost==5)
                                {
+                                 page_n=8;
                                 parser_post(buf,buflen,page_sost);
-                                page_n=8;
+                                
                                 vTaskDelay(20);
                                 page_html_swich(page_n,conn1,buf_page);
                                }

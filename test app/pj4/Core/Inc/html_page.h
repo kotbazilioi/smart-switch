@@ -57,6 +57,8 @@ uint32_t costr_rasp_page32(char* str1);
 uint32_t costr_email_page1(char* str1);
 uint32_t costr_email_page2(char* str1);
 uint32_t costr_email_page3(char* str1);
+uint32_t costr_page_boot(char* str1);
+
 //uint32_t costr_rasp_page34(char* str1);
 //uint32_t costr_rasp_page35(char* str1);
 extern const char http_html_200[];
