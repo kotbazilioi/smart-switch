@@ -85,27 +85,8 @@ void StartDefaultTask(void const * argument)
        FW_data.V_IP_GET[2]=(gnetif.gw.addr&0x00ff0000)>>16;
        FW_data.V_IP_GET[3]=(gnetif.gw.addr&0xff000000)>>24;
        flag_set_ip=1;
-
-     //  struct ip_addr resolved;
-//   if (flag_set_ip==1)
-//      {
-//      status_dns= dns_gethostbyname("www.netsmartswich.com", (ip_addr_t*)&(gnetif.ip_addr.addr), (dns_found_callback) smtp_serverFound, NULL);
-//      }
-      
-     
-//        {}
-
-// 
-      
       }
-//    ipdns1=*(dns_getserver (0));
-//   FW_data.V_IP_DNS[0]=(ipdns1.addr&0x000000ff);
-//       FW_data.V_IP_DNS[1]=(ipdns1.addr&0x0000ff00)>>8;
-//       FW_data.V_IP_DNS[2]=(ipdns1.addr&0x00ff0000)>>16;
-//       FW_data.V_IP_DNS[3]=(ipdns1.addr&0xff000000)>>24;
-//   
   }
-  /* USER CODE END 5 */
 }
 void set_out_port(uint8_t sost,uint8_t canal)
 {
@@ -390,13 +371,6 @@ void logs_task(void const * argument)
       jamp_to_boot();
       flag_global_boot_mode=0;
      }
-//      if ((flag_global_reset_mode==1)&&(flag_global_save_log==0))
-//      { // load_def_data
-//        vTaskDelay(1000);
-//       jamp_to_app();
-//      
-//        flag_global_reset_mode=0;
-//      }
     osDelay(100);
   }
 }

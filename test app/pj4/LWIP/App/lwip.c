@@ -99,7 +99,11 @@ else
   ipaddr.addr = 0;
   netmask.addr = 0;
   gw.addr = 0;               
-                
+  netif_set_hostname(&gnetif,FW_data.V_Name_dev);
+  IP4_ADDR(&ipdns, FW_data.V_IP_DNS[0],FW_data.V_IP_DNS[1],FW_data.V_IP_DNS[2],FW_data.V_IP_DNS[3]);
+  dns_setserver (0,&ipdns);
+   IP4_ADDR(&ipdns, FW_data.V_IP_DNS[0],FW_data.V_IP_DNS[1],FW_data.V_IP_DNS[2],FW_data.V_IP_DNS[3]);
+  dns_setserver (1,&ipdns);              
 }
 
 

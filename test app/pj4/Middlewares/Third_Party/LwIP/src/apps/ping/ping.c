@@ -220,7 +220,7 @@ timeout++;
   lwip_setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 // sockets[0]->conn->recv_timeout=1000;
   while (1) {
-      vTaskDelay(300);
+      vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
     if (FW_data.V_EN_WATCHDOG==1)
     {
   if ((FW_data.V_EN_WATCHDOG_CN_A==1)&&(en_ping_a==0))
@@ -239,7 +239,7 @@ timeout++;
       LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
     }
     ping_data.timeout[0]=sys_now()-ping_time;
-    if (ping_data.timeout[0]<1000)
+    if (ping_data.timeout[0]<500)
       {
         ping_data.flag_err[0]=0;
         ct_cn_a=0;
@@ -261,7 +261,7 @@ timeout++;
       }
      
    }
-  vTaskDelay(100);
+  vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
   
    if ((FW_data.V_EN_WATCHDOG_CN_B==1)&&(en_ping_b==0))
   {
@@ -279,7 +279,7 @@ timeout++;
       LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
     }
     ping_data.timeout[1]=sys_now()-ping_time;
-    if (ping_data.timeout[1]<1000)
+    if (ping_data.timeout[1]<500)
       {
         ping_data.flag_err[1]=0;
         ct_cn_b=0;
@@ -299,7 +299,7 @@ timeout++;
         }
       }
   }
-   vTaskDelay(100);
+   vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
    if ((FW_data.V_EN_WATCHDOG_CN_C==1)&&(en_ping_c==0))
   {
     
@@ -317,7 +317,7 @@ timeout++;
       LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
     }
     ping_data.timeout[2]=sys_now()-ping_time;
-    if (ping_data.timeout[2]<1000)
+    if (ping_data.timeout[2]<500)
       {
         ping_data.flag_err[2]=0;
         ct_cn_c=0;
