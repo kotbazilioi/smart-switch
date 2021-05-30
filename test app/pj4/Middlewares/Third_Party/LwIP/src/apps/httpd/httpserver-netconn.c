@@ -61,7 +61,7 @@
 #include "base64.h"
 #include "LOGS.h"
 #include "smtp.h"
-
+#include "heap_5.h"
 #define delay_send 20
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -74,6 +74,54 @@ u32_t nPageHits = 0;
 char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,0x0a};
 uint8_t flag_req_logon=0;
   uint8_t page_n,page_sost=1;
+
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
+static const unsigned char PAGE_HEADER_200_OK[] = {
+  //"HTTP/1.1 200 OK"
+  0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x30,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,
+  0x0a,
+  //zero
+  0x00
+};
+static const unsigned char PAGE_HEADER_SERVER[] = {
+  //"Server: lwIP/1.3.1 (http://savannah.nongnu.org/projects/lwip)"
+  0x53,0x65,0x72,0x76,0x65,0x72,0x3a,0x20,0x6c,0x77,0x49,0x50,0x2f,0x31,0x2e,0x33,
+  0x2e,0x31,0x20,0x28,0x68,0x74,0x74,0x70,0x3a,0x2f,0x2f,0x73,0x61,0x76,0x61,0x6e,
+  0x6e,0x61,0x68,0x2e,0x6e,0x6f,0x6e,0x67,0x6e,0x75,0x2e,0x6f,0x72,0x67,0x2f,0x70,
+  0x72,0x6f,0x6a,0x65,0x63,0x74,0x73,0x2f,0x6c,0x77,0x69,0x70,0x29,0x0d,0x0a,
+  //zero
+  0x00
+};
+static const unsigned char PAGE_HEADER_CONTENT_TEXT[] = {
+  //"Content-type: text/html"
+  0x43,0x6f,0x6e,0x74,0x65,0x6e,0x74,0x2d,0x74,0x79,0x70,0x65,0x3a,0x20,0x74,0x65,
+  0x78,0x74,0x2f,0x68,0x74,0x6d,0x6c,0x0d,0x0a,0x0d,0x0a,
+  //zero
+  0x00
+};
+//*
+static const unsigned char PAGE_HEADER_CONTENT_STREAM[] = {
+  //"Content-Type: application/octet-stream"
+  0x43,0x6f,0x6e,0x74,0x65,0x6e,0x74,0x2d,0x54,0x79,0x70,0x65,0x3a,0x20,0x61,0x70,
+  0x70,0x6c,0x69,0x63,0x61,0x74,0x69,0x6f,0x6e,0x2f,0x6f,0x63,0x74,0x65,0x74,0x2d,
+  0x73,0x74,0x72,0x65,0x61,0x6d,0x0d,0x0a,
+  //zero
+  0x00
+};
+static const unsigned char PAGE_HEADER_LEN[] = {
+  //"Content-Length: "
+  0x43,0x6f,0x6e,0x74,0x65,0x6e,0x74,0x2d,0x4c,0x65,0x6e,0x67,0x74,0x68,0x3a,0x20,
+  //zero
+  0x00
+};
+static const unsigned char PAGE_HEADER_BYTES[] = {
+  //"Accept-Ranges: bytes"
+  0x41,0x63,0x63,0x65,0x70,0x74,0x2d,0x52,0x61,0x6e,0x67,0x65,0x73,0x3a,0x20,0x62,
+  0x79,0x74,0x65,0x73,0x0d,0x0a,0x0d,0x0a,
+  //zero
+  0x00
+};
 /**
   * @brief serve tcp connection  
   * @param conn: pointer on connection structure 
@@ -789,7 +837,7 @@ void param_run(post_data_t* post_data,uint8_t index)
             u_d=post_data->name[4]-0x30;
             n_day=post_data->name[5]-0x30;
             slot=post_data->name[6]-0x30;
-            if ((u_d==0)&&(slot==0)&&(n_day==0))
+            if ((u_d==0)&&((slot==0)||(slot==3))&&(n_day==0))
             {
               FW_data.V_D_TIME[0].set_up_day=0;
               FW_data.V_D_TIME[1].set_up_day=0;
@@ -1303,12 +1351,16 @@ post_data_t elem_post_data;
                vTaskDelay(delay_send);
                 len_buf_list=costr_watchdog5((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);       
-             vTaskDelay(delay_send);
+               vTaskDelay(delay_send);
+                
             }
           break;
            case 4:
             {
-
+               vTaskDelay(delay_send);
+               len_buf_list=costr_page2_hdr((char*)buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+             vTaskDelay(delay_send);
                     
                vTaskDelay(delay_send);
                len_buf_list=costr_page2((char*)buf_list);
@@ -1333,7 +1385,9 @@ post_data_t elem_post_data;
 ////               fs_open(&file, "/img/netping.gif");
 ////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
 ////              fs_close(&file);
-                    
+                
+               
+             
                vTaskDelay(delay_send);
                len_buf_list=costr_page3((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
@@ -1410,7 +1464,7 @@ post_data_t elem_post_data;
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page6((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
-            vTaskDelay(delay_send);
+               vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page7((char*)buf_list);
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
                vTaskDelay(delay_send);
@@ -1521,6 +1575,75 @@ post_data_t elem_post_data;
                vTaskDelay(delay_send);             
             }
           break; 
+             case 10:
+            {  
+              signed char time_run[6]={0};  
+              uint8_t ct_time;
+              GET_reple(0,&real_time);  
+              time_run[0]=real_time.year-start_time.year;
+              time_run[1]=real_time.month-start_time.month;
+              time_run[2]=real_time.day-start_time.day;
+              time_run[3]=real_time.reple_hours-start_time.reple_hours;
+              time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
+              time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
+              ct_time=1;
+              if (time_run[ct_time]<0)
+               {
+                time_run[ct_time-1]--;
+                time_run[ct_time]=time_run[ct_time]+12;          
+               }
+             ct_time++;
+             if (time_run[ct_time]<0)
+              {
+               time_run[ct_time-1]--;
+               time_run[ct_time]=time_run[ct_time]+30;          
+              }
+             ct_time++;
+             if (time_run[ct_time]<0)
+              {
+               time_run[ct_time-1]--;
+               time_run[ct_time]=time_run[ct_time]+24;          
+              }
+             ct_time++;
+             if (time_run[ct_time]<0)
+              {
+               time_run[ct_time-1]--;
+               time_run[ct_time]=time_run[ct_time]+60;          
+              }
+             ct_time++;
+             if (time_run[ct_time]<0)
+              {
+               time_run[ct_time-1]--;
+               time_run[ct_time]=time_run[ct_time]+60;          
+              }
+              sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.  %d ^ %d ",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5],xFreeBytesRemaining,xMinimumEverFreeBytesRemaining);
+              len_buf_list = strlen(buf_list);
+              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+              vTaskDelay(delay_send);             
+                     
+            }
+          break; 
+          case 11:
+            {  
+              uint8_t data;
+             data= HAL_RTCEx_BKUPRead(&hrtc,1);
+             if (data==0)
+              {
+               sprintf(buf_list,"%s%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,FW_data.V_OFF_MESS);
+              }
+             if ((data==1)||(data==2))
+              {
+               sprintf(buf_list,"%s%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,FW_data.V_ON_MESS);
+              }              
+              len_buf_list = strlen(buf_list);
+              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+              vTaskDelay(delay_send);             
+////              sprintf(buf_list,"%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+////              len_buf_list = strlen(buf_list);
+////              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+////              vTaskDelay(delay_send);  
+            }
+          break;
           default  :
               {
               fs_open(&file, "/404.html"); 
@@ -1531,7 +1654,12 @@ post_data_t elem_post_data;
               }
           }
  }
- char buf_page[3000];
+
+
+
+
+
+//char buf_page[3000];
 static void http_server_serve(struct netconn *conn1) 
 {
    
@@ -1562,7 +1690,7 @@ static void http_server_serve(struct netconn *conn1)
   {
     if (netconn_err(conn1) == ERR_OK) 
     {
-  //   char* buf_page=(char*)pvPortMalloc(3000); 
+     char* buf_page=(char*)pvPortMalloc(3000); 
       memset (buf_page,0,3000); 
       netbuf_data(inbuf, (void**)&buf, &buflen);
       
@@ -1589,7 +1717,7 @@ static void http_server_serve(struct netconn *conn1)
 
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
       key_http_len=strlen(buf_page);
-      
+#if (logon)
         if (strncmp(key_http,buf_page,key_http_len) != 0)
           {          
             len_buf_list=costr_pass((char*)buf_page);
@@ -1607,7 +1735,9 @@ static void http_server_serve(struct netconn *conn1)
               page_n=4;
             }
           }
-      
+#else
+ flag_logon=1;        
+#endif      
       
   if (flag_logon==1)    
   {
@@ -1712,6 +1842,16 @@ static void http_server_serve(struct netconn *conn1)
               page_n=1;
               page_html_swich(page_n,conn1,buf_page);
             }
+            else if (strncmp((char const *)buf,"GET /content.html",17)==0)
+            {
+              page_n=10;
+              page_html_swich(page_n,conn1,buf_page);
+            }
+              else if (strncmp((char const *)buf,"GET /content1.html",18)==0)
+            {
+              page_n=11;
+              page_html_swich(page_n,conn1,buf_page);
+            }
             else  
              {
               /* Load Error page */
@@ -1729,7 +1869,7 @@ static void http_server_serve(struct netconn *conn1)
     
      vTaskDelay(4*delay_send);
     
-  //   vPortFree(buf_page);
+     vPortFree(buf_page);
    
     }
      
@@ -1817,3 +1957,7 @@ void http_server_netconn_init()
   * @param  conn pointer on connection structure 
   * @retval None
   */
+void DynWebPageStr(struct netconn *conn)
+{
+ 
+}

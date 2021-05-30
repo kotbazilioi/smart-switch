@@ -8,6 +8,7 @@ uint32_t costr_page7_1 (char* str1);
 uint32_t costr_pass(char* str1);
 uint32_t costr_page1(char* str1);
 uint32_t costr_page2(char* str1);
+uint32_t costr_page2_hdr(char* str1);
 uint32_t costr_page3(char* str1);
 uint32_t costr_page4(char* str1);
 uint32_t costr_page4_1(char* str1);

@@ -182,22 +182,31 @@ void ntp_receive_callback(struct netconn* conn, enum netconn_evt evt, u16_t len)
                       t = is_1900_based ? (rx_secs - RANGE_SEC_1900_1970) : (rx_secs + RANGE_SEC_1970_2036);
                       tim1 = t + 60UL*60*TIMEZONE;
                       timestruct = localtime(&tim1);
-                      user_sTimeStructure.Hours = timestruct->tm_hour+FW_data.V_NTP_CIRCL;
-                      user_sTimeStructure.Minutes = timestruct->tm_min;
-                      user_sTimeStructure.Seconds = timestruct->tm_sec;
-                      if (HAL_RTC_SetTime(&hrtc, &user_sTimeStructure, RTC_FORMAT_BIN) != HAL_OK)
+                     
+                      if (((uint8_t) timestruct->tm_year % 100)>20)
                         {
-                         // _Error_Handler(__FILE__, __LINE__);
+                         user_sTimeStructure.Hours = timestruct->tm_hour+FW_data.V_NTP_CIRCL;
+                         user_sTimeStructure.Minutes = timestruct->tm_min;
+                         user_sTimeStructure.Seconds = timestruct->tm_sec;
+                         if (HAL_RTC_SetTime(&hrtc, &user_sTimeStructure, RTC_FORMAT_BIN) != HAL_OK)
+                          {
+                           // _Error_Handler(__FILE__, __LINE__);
+                          }
+                         user_sDateStructure.WeekDay = timestruct->tm_wday;
+                         user_sDateStructure.Month = timestruct->tm_mon + 1;
+                         user_sDateStructure.Date = timestruct->tm_mday;
+                         user_sDateStructure.Year = (uint8_t) timestruct->tm_year % 100;
+                         if (HAL_RTC_SetDate(&hrtc, &user_sDateStructure, RTC_FORMAT_BIN) != HAL_OK)
+                          {
+                          }
+                           status_NTP_activ=1;
                         }
-                      user_sDateStructure.WeekDay = timestruct->tm_wday;
-                      user_sDateStructure.Month = timestruct->tm_mon + 1;
-                      user_sDateStructure.Date = timestruct->tm_mday;
-                      user_sDateStructure.Year = (uint8_t) timestruct->tm_year % 100;
-                      if (HAL_RTC_SetDate(&hrtc, &user_sDateStructure, RTC_FORMAT_BIN) != HAL_OK)
+                      else
                         {
-                        //  _Error_Handler(__FILE__, __LINE__);
+                           status_NTP_activ=0;
                         }
-                      status_NTP_activ=1;
+                    
+                     
                          new_time_count = osKernelSysTick();
                          if(new_time_count - old_time_count < 3000)
                            {

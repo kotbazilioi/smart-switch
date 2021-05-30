@@ -9,9 +9,7 @@ uint8_t flag_logon=0;
 //const char Name_dev[]="DKST 59";
 const char contact_data[]="http://www.netping.ru/";
 const char model_dev[]="UniPing port";
-char str2[512]={0};
-char str3[512]={0};
-char str4[128]={0};
+
 extern RTC_HandleTypeDef hrtc;
 unsigned char key_http[30]="asfasdvas";
 int key_http_len = 10;
@@ -60,6 +58,46 @@ const char http_html_200_end[] = {
 };
   //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
 //static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+static const char http_html_start_constr_dy[] = 
+          "\<!DOCTYPE HTML>\n\r"
+          "<body onload=\"onload()\"\>\n\r"
+          "<html>\n\r"
+          "<head>\n\r"
+          "<title>NetPing</title>\n\r"
+          "<a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a>\n\r"
+          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+          "\n\r\<script\>\n\r"
+	  "var xhr,xhr1\;\n\r "
+           "var idTimer1,idTimer2\;\n\r "
+	   "function onload(){\n\r"
+	   "xhr = new (XMLHttpRequest); \n\r" 
+           "xhr1 = new (XMLHttpRequest); \n\r"   
+	   "}\n\r"
+           
+             
+           "setInterval(function Timer1(){\n\r"
+           "xhr.open(\"GET\", \"content.html?r=\" + Math.random(), true); \n\r"
+	   "xhr.responseType = \"text\"; \n\r"
+	   "xhr.onload = function (oEvent){\n\r"
+	   " document.getElementById('information').innerHTML = xhr.response; \n\r"
+	   "}\n\r"
+           "xhr.send(null); \n\r"
+    	   "idTimer1 = setTimeout(\"Timer1()\", 1000); \n\r"
+	   "},1000); \n\r"
+             
+             
+           "setInterval(function Timer2(){\n\r"
+           "xhr1.open(\"GET\", \"content1.html?r=\" + Math.random(), true); \n\r"
+	   "xhr1.responseType = \"text\"; \n\r"
+	   "xhr1.onload = function (oEvent){\n\r"
+	   " document.getElementById('information1').innerHTML = xhr1.response; \n\r"
+	   "}\n\r"            
+	   "xhr1.send(null); \n\r"
+    	   "idTimer2 = setTimeout(\"Timer2()\", 1000); \n\r"
+	   "},1000); \n\r"
+"</script>"
+;
+
 static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
          "\<script\>"
 	  "var xhr\;"
@@ -67,28 +105,11 @@ static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"on
 	   "function onload(){"
 	   "xhr = new (XMLHttpRequest);"
 	   "}"
-//           
-//	   "function swich1(){"
-//           "xhr.open(\"GET\", \"swich?c=1\", true);"
-//	   "xhr.responseType = \"text\";"
-//	   "xhr.send(null);"
-//	   "}"	
-//	  "function swich2(){"
-//	  "xhr.open(\"GET\", \"swich?c=2\", true);"
-//	  "xhr.responseType = \"text\";"
-//	  "xhr.send(null);"
-//	  "}"
-//	  "function swich3(){"
-//	   "xhr.open(\"GET\", \"swich?c=3\", true);"
-//	    "xhr.responseType = \"text\";"
-//	    "xhr.send(null);"
-//	  "}"
+
 "</script>"
 ;
 
-
 static const char http_html_style[] = 
-"<title>NetPing</title>"
 "  <style >"
 "body {"
     "background: #F6FCF9;" /* Цвет фона */
@@ -1080,6 +1101,9 @@ uint32_t costr_page2(char* str1)
 {
   uint32_t len;
   
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
 
 
   memset (str1,0, sizeof(str1)); 
@@ -1088,7 +1112,7 @@ uint32_t costr_page2(char* str1)
   memset (str4,0, sizeof(str4));
   
   
-  strcat(str1,http_html_start_constr);
+ //strcat(str1,http_html_start_constr);
   
 
   strcat(str1,http_html_style);
@@ -1133,7 +1157,8 @@ uint32_t costr_page2(char* str1)
   reset_open_block(str2,"h2");
   strcat(str1,str2);
 
- 
+  
+  
   
   set_open_block(str2,"form action='/' method='POST'");
   strcat(str1,str2);
@@ -1177,12 +1202,22 @@ uint32_t costr_page2(char* str1)
    
      len=strlen(str1);
      while(len>3000){}
+     
+     
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
    
 uint32_t costr_page2_1(char* str1)
 {
+    char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   memset (str1,0, sizeof(str1)); 
   memset (str2,0, sizeof(str2));
@@ -1272,12 +1307,15 @@ uint32_t costr_page2_1(char* str1)
         }
    
     memset(str3,0,128);
-   sprintf(str3,"%dг.  %dм. %dд. %dч. %dм. %dс.",time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
-      
+  // sprintf(str3,"%dг.  %dм. %dд. %dч. %dм. %dс.",time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
+ sprintf(str3,"<pre id=\"information\"></pre>");
+  //strcat(str1,str2);
+
+   
    set_table_string(str2,"Время непрерывной работы",str3);  
    strcat(str1,str2);
   
-   
+   //<pre id="information"></pre> 
    
   reset_open_block(str2,"h3");
   strcat(str1,str2);
@@ -1292,6 +1330,9 @@ uint32_t costr_page2_1(char* str1)
   
   len=strlen(str1);
   while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -1299,8 +1340,13 @@ uint32_t costr_page2_1(char* str1)
 
 uint32_t costr_page4(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
-  uint16_t data;
+//  uint16_t data;
   
   memset (str1,0, sizeof(str1)); 
   memset (str2,0, sizeof(str2));
@@ -1397,16 +1443,17 @@ uint32_t costr_page4(char* str1)
   
    set_open_block(str2,"table border=\"1\" style=\"border-collapse: collapse; width: 78%; border: 1px solid #ffffff;margin: 0 8% 0 12%;\"><tbody");
    strcat(str1,str2);      
-   data= HAL_RTCEx_BKUPRead(&hrtc,1);
-  if (data==0)
-  {
-   sprintf(str3,"%s",FW_data.V_OFF_MESS);
-  }
-   if ((data==1)||(data==2))
-  {
-   sprintf(str3,"%s",FW_data.V_ON_MESS);
-  }
-   
+//////   data= HAL_RTCEx_BKUPRead(&hrtc,1);
+//////  if (data==0)
+//////  {
+//////   sprintf(str3,"%s",FW_data.V_OFF_MESS);
+//////  }
+//////   if ((data==1)||(data==2))
+//////  {
+//////   sprintf(str3,"%s",FW_data.V_ON_MESS);
+//////  }
+    sprintf(str3,"<pre id=\"information1\"></pre>");    
+    
    set_table_string(str2,"Текущее состояние ",str3);  
    strcat(str1,str2);
    
@@ -1447,12 +1494,20 @@ uint32_t costr_page4(char* str1)
   
     len=strlen(str1);
        while(len>3000){}
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);   
   return len;
 };
   
 
 uint32_t costr_page4_1(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
 
   
@@ -1503,12 +1558,38 @@ uint32_t costr_page4_1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+        vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
+  return len;
+};
+uint32_t costr_page2_hdr(char* str1)
+{
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
+  uint32_t len;
+  
+   memset (str1,0, sizeof(str1)); 
+   strcat(str1,http_html_start_constr_dy);
+  len=strlen(str1);
+  
+  while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
-
 uint32_t costr_page3(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -1638,6 +1719,9 @@ uint32_t costr_page3(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -1645,6 +1729,11 @@ uint32_t costr_page3(char* str1)
 
 uint32_t costr_page5(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -1739,13 +1828,21 @@ uint32_t costr_page5(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+  vPortFree(str2);
+  vPortFree(str3);
+  vPortFree(str4);
   return len;
 };
 
 uint32_t costr_page6(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
-1;
+
   
   memset (str1,0, sizeof(str1)); 
   memset (str2,0, sizeof(str2));
@@ -1832,12 +1929,20 @@ uint32_t costr_page6(char* str1)
    
      len=strlen(str1);
           while(len>3000){}
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
    
    uint32_t costr_page6_1(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
 
   
@@ -1919,12 +2024,20 @@ uint32_t costr_page6(char* str1)
   
    
   len=strlen(str1);
-       while(len>3000){}
+  while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 uint32_t costr_page7(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
 
   
@@ -2009,12 +2122,20 @@ uint32_t costr_page7(char* str1)
      
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
    
    uint32_t costr_page7_1 (char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
 
   
@@ -2100,6 +2221,9 @@ uint32_t costr_page7(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);     
   return len;
 };
 
@@ -2107,6 +2231,11 @@ uint32_t costr_page7(char* str1)
 
 uint32_t costr_page8(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2177,12 +2306,20 @@ uint32_t costr_page8(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);     
   return len;
 }  
   
   
 uint32_t costr_page9(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
 
 
@@ -2210,11 +2347,19 @@ uint32_t costr_page9(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);     
   return len;
 };
 
 uint32_t costr_watchdog1(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2334,12 +2479,20 @@ uint32_t costr_watchdog1(char* str1)
    
    len=strlen(str1);
         while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);     
   return len;
 };  
 
 
 uint32_t costr_watchdog2(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2379,6 +2532,10 @@ uint32_t costr_watchdog2(char* str1)
    
      len=strlen(str1);
           while(len>3000){}
+          
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -2386,6 +2543,11 @@ uint32_t costr_watchdog2(char* str1)
 
 uint32_t costr_watchdog3(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2439,11 +2601,19 @@ uint32_t costr_watchdog3(char* str1)
    
      len=strlen(str1);
           while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 uint32_t costr_watchdog4(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2533,11 +2703,19 @@ uint32_t costr_watchdog4(char* str1)
  
      len=strlen(str1);
           while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
    uint32_t costr_watchdog5(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2629,12 +2807,20 @@ uint32_t costr_watchdog4(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
 uint32_t costr_rasp_page1(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2760,11 +2946,19 @@ uint32_t costr_rasp_page1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);     
   return len;
 };
 
  uint32_t costr_rasp_page2(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2850,12 +3044,20 @@ uint32_t costr_rasp_page1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 //Rasp SEC1-3 d1-d7
  uint32_t costr_rasp_page3(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2898,6 +3100,9 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -2906,6 +3111,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page4(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2919,6 +3129,9 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
@@ -2927,6 +3140,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page5(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2941,12 +3159,21 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
+     
   return len;
 };
 
 
  uint32_t costr_rasp_page6(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2961,12 +3188,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page7(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -2981,12 +3216,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page8(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3001,12 +3244,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page9(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3021,11 +3272,19 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
  uint32_t costr_rasp_page10(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3040,12 +3299,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page11(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3093,6 +3360,9 @@ uint32_t costr_rasp_page1(char* str1)
   len=strlen(str1);
 
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -3102,6 +3372,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page12(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3130,6 +3405,9 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -3137,6 +3415,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page13(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3150,6 +3433,9 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
@@ -3158,6 +3444,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page14(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3172,12 +3463,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page15(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3192,12 +3491,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page16(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3212,12 +3519,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page17(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3232,12 +3547,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+       vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page18(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3252,11 +3575,19 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
  uint32_t costr_rasp_page19(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3271,6 +3602,9 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
@@ -3279,6 +3613,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page20(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3325,6 +3664,9 @@ uint32_t costr_rasp_page1(char* str1)
   len=strlen(str1);
 
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -3332,6 +3674,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page21(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3358,12 +3705,20 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page22(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3378,12 +3733,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page23(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3398,12 +3761,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page24(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3418,12 +3789,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page25(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3471,6 +3850,9 @@ uint32_t costr_rasp_page1(char* str1)
   len=strlen(str1);
 
        while(len>3000){}
+     vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -3478,6 +3860,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page26(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3504,12 +3891,20 @@ uint32_t costr_rasp_page1(char* str1)
    
   len=strlen(str1);
        while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);    
   return len;
 };
 
 
  uint32_t costr_rasp_page27(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3524,12 +3919,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page28(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3544,12 +3947,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page29(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3564,12 +3975,21 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+      
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
   
 
  uint32_t costr_rasp_page30(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3618,6 +4038,9 @@ uint32_t costr_rasp_page1(char* str1)
   len=strlen(str1);
 
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
@@ -3627,6 +4050,11 @@ uint32_t costr_rasp_page1(char* str1)
 
  uint32_t costr_rasp_page31(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3665,12 +4093,20 @@ uint32_t costr_rasp_page1(char* str1)
  
    len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
  uint32_t costr_rasp_page32(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3686,11 +4122,19 @@ uint32_t costr_rasp_page1(char* str1)
 
 
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
  uint32_t costr_rasp_page33(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3736,12 +4180,20 @@ uint32_t costr_rasp_page1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 
 uint32_t costr_email_page1(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3847,11 +4299,19 @@ uint32_t costr_email_page1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
  uint32_t costr_email_page2(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -3915,11 +4375,19 @@ uint32_t costr_email_page1(char* str1)
      
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
    
  uint32_t costr_email_page3(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
   memset (str1,0, sizeof(str1)); 
@@ -4001,11 +4469,19 @@ uint32_t costr_email_page1(char* str1)
   
   len=strlen(str1);
        while(len>3000){}
+   vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
   return len;
 };
 
 uint32_t costr_page_boot(char* str1)
 {
+  char* str2=(char*)pvPortMalloc(512); 
+  char* str3=(char*)pvPortMalloc(512); 
+  char* str4=(char*)pvPortMalloc(128); 
+  
+  
   uint32_t len;
   
 
@@ -4079,7 +4555,19 @@ uint32_t costr_page_boot(char* str1)
    set_br(str2,2);
   strcat(str1,str2);
   
-  set_open_block(str2,"b>Запустите утилиту отправки файлов по TFTP протоколу </b");
+  
+  sprintf(str2,"<b>Запустите в командной строке CMD команду 'ping   ");
+  strcat(str1,str2);
+  sprintf(str2,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);
+  strcat(str1,str2);
+  sprintf(str2," -t50' для контроля соединения</b");
+  strcat(str1,str2);
+  
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Запустите утилиту отправки файлов по TFTP протоколу в режим клиента</b");
   strcat(str1,str2);
   
   set_br(str2,2);
@@ -4124,6 +4612,9 @@ uint32_t costr_page_boot(char* str1)
    
      len=strlen(str1);
      while(len>3000){}
+    vPortFree(str2);
+     vPortFree(str3);
+     vPortFree(str4);
      return len;
 };
    

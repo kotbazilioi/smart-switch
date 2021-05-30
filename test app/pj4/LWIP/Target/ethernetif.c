@@ -35,6 +35,7 @@
 #include "LOGS.h"
 #include "smtp.h"
 extern size_t xFreeBytesRemaining;
+uint32_t rx_ct,tx_ct;
 /* Within 'USER CODE' section, code will be kept by default at each generation */
 /* USER CODE BEGIN 0 */
 
@@ -459,7 +460,7 @@ static struct pbuf * low_level_input(struct netif *netif)
       if (xFreeBytesRemaining >MIN_memory)
        {
         p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
-       
+        rx_ct++;
        }
       else
        {
@@ -557,8 +558,10 @@ void ethernetif_input(void const * argument)
           if (netif->input( p, netif) != ERR_OK )
           {
             pbuf_free(p);
+            tx_ct++;
           }
-
+    
+           
         }
         UNLOCK_TCPIP_CORE();
       } while(p!=NULL);

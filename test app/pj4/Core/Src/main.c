@@ -22,6 +22,7 @@
 #include "app.h"
 #include "ntp.h"
 #include <stdio.h>
+
 #define QUEUE_SIZE (uint32_t) 1    
 
 #pragma segment="HEAP"
@@ -43,6 +44,7 @@ int main(void)
   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET;
   sets++;
   FLASH_If_Init();
+   MX_GPIO_Init();
   load_struct_flash_data();
   
   
@@ -55,7 +57,7 @@ int main(void)
   
   HAL_Init();
   SystemClock_Config();
-  MX_GPIO_Init();
+ 
 
   pxHeapRegions_f107.pucStartAddress=(uint8_t*)(__segment_begin( "HEAP"));
   pxHeapRegions_f107.xSizeInBytes= (size_t)((unsigned char *)0x2000ffff - (unsigned char *)__segment_begin( "HEAP")); 
@@ -65,6 +67,7 @@ int main(void)
 
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, DEFAULT_THREAD_STACKSIZE);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  
   osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
   timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL); 
   
