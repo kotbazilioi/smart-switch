@@ -35,7 +35,7 @@
 #include "crc16.h"
 #include <stdio.h>
     
-    
+#define logon 0  
 
 
     
@@ -474,8 +474,8 @@ uint8_t load_def_data(void)
       
      FW_data.V_IP_CONFIG[0]=192;
      FW_data.V_IP_CONFIG[1]=168;
-     FW_data.V_IP_CONFIG[2]=3;
-     FW_data.V_IP_CONFIG[3]=21;
+     FW_data.V_IP_CONFIG[2]=0;
+     FW_data.V_IP_CONFIG[3]=100;
      
      FW_data.V_IP_MASK[0]=255;
      FW_data.V_IP_MASK[1]=255;
@@ -484,7 +484,7 @@ uint8_t load_def_data(void)
      
      FW_data.V_IP_GET[0]=192;
      FW_data.V_IP_GET[1]=168;
-     FW_data.V_IP_GET[2]=3;
+     FW_data.V_IP_GET[2]=0;
      FW_data.V_IP_GET[3]=1; 
        
 
@@ -498,9 +498,9 @@ uint8_t load_def_data(void)
      FW_data.V_CRC_DATA = 0;
      FW_data.V_DHCP = 0;
       memset((uint8_t*)&FW_data.V_LOGIN,0,16);
-     memcpy((uint32_t*)&FW_data.V_LOGIN, (uint32_t *)"admin", 5);
+     memcpy((uint32_t*)&FW_data.V_LOGIN, (uint32_t *)"visor", 5);
       memset((uint8_t*)&FW_data.V_PASSWORD,0,16);
-     memcpy((uint32_t*)&FW_data.V_PASSWORD, (uint32_t *)"admin", 5);
+     memcpy((uint32_t*)&FW_data.V_PASSWORD, (uint32_t *)"ping", 4);
      FW_data.V_IP_DNS[0]=10;
      FW_data.V_IP_DNS[1]=0;
      FW_data.V_IP_DNS[2]=0;
@@ -635,8 +635,11 @@ uint8_t load_struct_flash_data (void)
 uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
 
       
-   if ((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0))   //(uint16_t)(*(uint32_t*)A_CRC_DATA_BOOT)
+   if (((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0)) || (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0))
    {
+     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
+     while (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0){}
+     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
    return  load_def_data();
    
   }

@@ -789,7 +789,7 @@ void param_run(post_data_t* post_data,uint8_t index)
             u_d=post_data->name[4]-0x30;
             n_day=post_data->name[5]-0x30;
             slot=post_data->name[6]-0x30;
-            if ((u_d==0)&&(slot==0)&&(n_day==0))
+            if ((u_d==0)&&((slot==0)||(slot==3))&&(n_day==0))
             {
               FW_data.V_D_TIME[0].set_up_day=0;
               FW_data.V_D_TIME[1].set_up_day=0;
@@ -1589,7 +1589,7 @@ static void http_server_serve(struct netconn *conn1)
 
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
       key_http_len=strlen(buf_page);
-      
+#if (logon)
         if (strncmp(key_http,buf_page,key_http_len) != 0)
           {          
             len_buf_list=costr_pass((char*)buf_page);
@@ -1607,7 +1607,9 @@ static void http_server_serve(struct netconn *conn1)
               page_n=4;
             }
           }
-      
+#else
+ flag_logon=1;        
+#endif      
       
   if (flag_logon==1)    
   {

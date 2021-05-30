@@ -60,6 +60,10 @@ void GET_reple (uint8_t event,log_reple_t* reple)
   reple->month = dates.Month;
   reple->year = 2000+dates.Year;
   reple->dicr = 0x7a;  
+  if (reple->year==2000)
+    {
+    reple->year = 2001;
+    }
 }
 void decode_reple (char* out,log_reple_t* reple)
 {

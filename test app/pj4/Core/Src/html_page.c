@@ -4079,7 +4079,19 @@ uint32_t costr_page_boot(char* str1)
    set_br(str2,2);
   strcat(str1,str2);
   
-  set_open_block(str2,"b>Запустите утилиту отправки файлов по TFTP протоколу </b");
+  
+  sprintf(str2,"<b>Запустите в командной строке CMD команду 'ping   ");
+  strcat(str1,str2);
+  sprintf(str2,"%d\.%d\.%d\.%d",FW_data.V_IP_CONFIG[0],FW_data.V_IP_CONFIG[1],FW_data.V_IP_CONFIG[2],FW_data.V_IP_CONFIG[3]);
+  strcat(str1,str2);
+  sprintf(str2," -t50' для контроля соединения</b");
+  strcat(str1,str2);
+  
+  
+  set_br(str2,2);
+  strcat(str1,str2);
+  
+  set_open_block(str2,"b>Запустите утилиту отправки файлов по TFTP протоколу в режим клиента</b");
   strcat(str1,str2);
   
   set_br(str2,2);
