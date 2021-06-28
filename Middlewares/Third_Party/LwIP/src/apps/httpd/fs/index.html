@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<body onload="onload()">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script>
+	  var xhr;
+	  var idTimer1;
+	  function onload(){
+	     xhr = new(XMLHttpRequest);
+	  }
+	  function Timer1(){
+	  xhr.open("GET", "content.html?r=" + Math.random(), true); //Math.random() - защита от кеширования
+	  xhr.responseType = "text";
+	  xhr.onload = function (oEvent) {
+	     document.getElementById('information').innerHTML = xhr.response;
+	   }
+	    xhr.send(null);
+    	    idTimer1 = setTimeout("Timer1()", 1000);
+	  }
+
+	   function red(){
+           xhr.open("GET", "color.html?c=1", true);
+	   xhr.responseType = "text";
+	   xhr.send(null);
+	   }	
+	  function green(){
+	  xhr.open("GET", "color.html?c=2", true);
+	  xhr.responseType = "text";
+	  xhr.send(null);
+	  }
+	  function blue(){
+	    xhr.open("GET", "color.html?c=3", true);
+	    xhr.responseType = "text";
+	    xhr.send(null);
+	  }
+	  function black(){
+	    xhr.open("GET", "color.html?c=4", true);
+	    xhr.responseType = "text";
+	    xhr.send(null);
+         }
+	function stopstring(){
+	  document.getElementById('butstring').innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;<input class = "butcolor" type="button" style="color: #000000; background-color: #bbbbbb;" onclick="startstring()" value="Connect"/>';
+	  clearTimeout(idTimer1);
+	  document.getElementById('information').innerHTML = "";
+	}
+          function startstring(){
+		document.getElementById('butstring').innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;<input class = "butcolor" type="button" style="color: #000000; background-color: #666666;" onclick="stopstring()" value="STOP read"/>';
+		Timer1();
+	}
+
+        
+
+
+	</script>
+     <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+  <div id="page">
+    <div id="header">
+	<h1 style="text-align: center; color: #fff;">NetPing</h1>
+  	<p></p>
+  	<p></p>
+  	<h2 style="text-align: center; color: #fff;">Test project HTTP Server</h2>
+    </div>
+    <div id="content">
+      <div id="article">
+	<h1 style="text-align: center;">
+    		<strong>Описание задачи</strong>
+  	</h1>
+  	<p style="text-align: justify; margin-left: 8.35pt;">
+    		Описание задачи: разработать прошивку для макета устройства 
+	<h1 style="text-align: center;">
+    		Функционал ПО:
+  	</h1>		      
+
+
+		
+		<li>разработать главную страницу с часами,
+		<li>запустить web сервер
+		<li>имитировать реле DKST 59, миганием светодиода 
+		<li>
+  	</p>
+		.......
+  	<p>
+    		<strong>&nbsp; </strong>
+  	</p>
+
+	</p>
+	<p></p>
+	<p></p>
+
+	<pre><br>Час   Минута    Секунда 
+	  <br>************************<br>
+	<pre id="information"></pre> 
+	<pre><br>************************<br>
+	</pre>
+
+	<p></p>
+	<div id="butstring">
+	&nbsp;&nbsp;&nbsp;&nbsp;<input class = "butcolor" type="button" style="color: #000000; background-color: #bbbbbb;" onclick="startstring()" value="START"/>
+	</div>
+	<p></p>
+	<p></p>
+
+      </div>
+      <div id="sidebar">
+ 	<ul>
+    	<li>Пункт 1</li>
+    	<li>Пункт 2</li>
+    	<li>Пункт 3</li>
+    	<li>Пункт 4</li>
+  	</ul>
+	<p>&nbsp;</p>
+        <div class = "butcenter">
+	    <input class = "butcolor" type="button" style="color: #000000; background-color: #ffffff;" onclick="blue()" value="SET_RELAY"/>
+	    <br><br>
+	    <input class = "butcolor" type="button" style="color: #ffffff; background-color: #000000;" onclick="black()" value="CLR_RELAY"/>	    
+	  </div>
+    </div>
+    <div id="footer">
+	<p>
+   	<strong>Авторские права Иванов К.А. 2020 </strong>
+  	</p> 
+    </div>
+  </div>
+  </body>
+</html>
