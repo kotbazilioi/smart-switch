@@ -1,5 +1,6 @@
-crc16.pbi: D:\ika\development\F107\test\test_app_rev0\Core\Src\crc16.c \
-  D:\ika\development\F107\test\test_app_rev0\IAR\EWARM/../../Core/Inc\crc16.h \
+crc16.pbi: \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\Core\Src\crc16.c \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc\crc16.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\stdint.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\ycheck.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\yvals.h \

@@ -24,6 +24,13 @@ static const char http_logs_area[]="<p><textarea name=\"comment\" align=\"center
 static const char http_logs_end[] ="</textarea></p>  </center>";
 static const char http_html_hdr[] = "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
 
+//const unsigned char PAGE_HEADER_303_OK[] = {
+//  //"HTTP/1.1 200 OK"
+//  0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x30,0x20,0x33,0x30,0x33,0x20,0x4f,0x4b,0x0d,
+//  0x0a,
+//  //zero
+//  0x00
+//};
 
 const char http_html_200[] = {
 /* /404.html (10 chars) */
@@ -58,6 +65,47 @@ const char http_html_200_end[] = {
 };
   //char * data[]="<a href=\"settings.html\" target=\"_self\" rel=\"nofollow\">????????? &emsp; </a>";
 //static const char http_html_start_constr[] = "\<!DOCTYPE html> <body onload=\"onload()\"\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+//static const char http_html_start_constr_dy[] = 
+//          "\<!DOCTYPE HTML>\n\r"
+//          "<body onload=\"onload()\"\>\n\r"
+//          "<html>\n\r"
+//          "<head>\n\r"
+//          "<title>NetPing</title>\n\r"
+//          "<a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a>\n\r"
+//          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+//          "\n\r\<script\>\n\r"
+//	  "var xhr,xhr1\;\n\r "
+//           "let Timer1,Timer2;\n\r"
+//           "var idTimer1,idTimer2\;\n\r "
+//	   "function onload(){\n\r"
+//	   "xhr = new (XMLHttpRequest); \n\r" 
+//           "xhr1 = new (XMLHttpRequest); \n\r"   
+//	   "}\n\r"
+//           
+//             
+//           "setInterval(function Timer1(){\n\r"
+//           "xhr.open(\"GET\", \"content.html?r=\" + Math.random(), true); \n\r"
+//	   "xhr.responseType = \"text\"; \n\r"
+//	   "xhr.onload = function (oEvent){\n\r"
+//	   " document.getElementById('information').innerHTML = xhr.response; \n\r"
+//	   "}\n\r"
+//           "xhr.send(null); \n\r"
+//    	   "idTimer1 = setTimeout(\"Timer1()\", 1000); \n\r"
+//	   "},1000); \n\r"
+//             
+//             
+//           "setInterval(function Timer2(){\n\r"
+//           "xhr1.open(\"GET\", \"content1.html?r=\" + Math.random(), true); \n\r"
+//	   "xhr1.responseType = \"text\"; \n\r"
+//	   "xhr1.onload = function (oEvent){\n\r"
+//	   " document.getElementById('information1').innerHTML = xhr1.response; \n\r"
+//	   "}\n\r"            
+//	   "xhr1.send(null); \n\r"
+//    	   "idTimer2 = setTimeout(\"Timer2()\", 2300); \n\r"
+//	   "},2300); \n\r"
+//"</script>"
+//;
+
 static const char http_html_start_constr_dy[] = 
           "\<!DOCTYPE HTML>\n\r"
           "<body onload=\"onload()\"\>\n\r"
@@ -65,40 +113,40 @@ static const char http_html_start_constr_dy[] =
           "<head>\n\r"
           "<title>NetPing</title>\n\r"
           "<a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a>\n\r"
-          "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+          "<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\" />"
           "\n\r\<script\>\n\r"
 	  "var xhr,xhr1\;\n\r "
+         
            "var idTimer1,idTimer2\;\n\r "
 	   "function onload(){\n\r"
 	   "xhr = new (XMLHttpRequest); \n\r" 
            "xhr1 = new (XMLHttpRequest); \n\r"   
 	   "}\n\r"
-           
              
-           "setInterval(function Timer1(){\n\r"
+           "function Timer1(){\n\r"
            "xhr.open(\"GET\", \"content.html?r=\" + Math.random(), true); \n\r"
 	   "xhr.responseType = \"text\"; \n\r"
 	   "xhr.onload = function (oEvent){\n\r"
 	   " document.getElementById('information').innerHTML = xhr.response; \n\r"
 	   "}\n\r"
            "xhr.send(null); \n\r"
-    	   "idTimer1 = setTimeout(\"Timer1()\", 1000); \n\r"
-	   "},1000); \n\r"
-             
-             
-           "setInterval(function Timer2(){\n\r"
+    	//   "idTimer1 = setTimeout(\"Timer1()\", 1000); \n\r"
+	   "}\n\r"
+           "function Timer2(){\n\r"
            "xhr1.open(\"GET\", \"content1.html?r=\" + Math.random(), true); \n\r"
 	   "xhr1.responseType = \"text\"; \n\r"
 	   "xhr1.onload = function (oEvent){\n\r"
 	   " document.getElementById('information1').innerHTML = xhr1.response; \n\r"
 	   "}\n\r"            
 	   "xhr1.send(null); \n\r"
-    	   "idTimer2 = setTimeout(\"Timer2()\", 2300); \n\r"
-	   "},2300); \n\r"
+    	//   "idTimer2 = setTimeout(\"Timer2()\", 2300); \n\r"
+	   "\n\r}"
+           "idTimer1 =setInterval(Timer1,1000); \n\r"            
+           "idTimer2 =setInterval(Timer2,2300); \n\r"
 "</script>"
 ;
 
-static const char http_html_start_constr[] = "\<!DOCTYPE html> <body /*onload=\"onload()\"*/\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+static const char http_html_start_constr[] = "\<!DOCTYPE html> <body /*onload=\"onload()\"*/\>  <a href=\"http:\/\/www.netping.ru/\"><img src=\"img/netping.gif\" height=\"59\" width=\"169\" border=\"0\" alt=\"netping logo\" title=\"200 OK\"></a> <html><head><meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"utf-8\" />"
 //         "\<script\>"
 //	  "var xhr\;"
 //           "var idTimer1\";"
@@ -165,102 +213,102 @@ void swich_mess_event (uint8_t event,char* mess)
           
           case RESETL:
             {
-              sprintf(mess,"Сброс утройства произведен SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Сброс утройства произведен \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case UPDATE_FW:
             {
-              sprintf(mess,"Произведен перевод в режим загрузки SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен переход в режим загрузки \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_ON_WEB:
             {
-              sprintf(mess,"Включена нагрузка с веб интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включена нагрузка через веб интерфейс \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_OFF_WEB:
             {
-              sprintf(mess,"Выключена нагрузка с веб интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Выключена нагрузка через веб интерфейс \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_TOLG_WEB:
             {
-              sprintf(mess,"Произведен импульсный сброс нагрузка с веб интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен импульсный сброс нагрузки через веб интерфейс \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
            case SWICH_ON_SNMP:
             {
-              sprintf(mess,"Включена нагрузка с SNMP интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включена нагрузка по SNMP интерфейсу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_OFF_SNMP:
             {
-              sprintf(mess,"Выключена нагрузка с SNMP интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Выключена нагрузка по SNMP интерфейсу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_TOLG_SNMP:
             {
-              sprintf(mess,"Произведен импульсный сброс нагрузка с SNMP интерфейса SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен импульсный сброс нагрузки по SNMP интерфейсу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_ON_RASP:
             {
-              sprintf(mess,"Включена нагрузка по расписанию SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включена нагрузка по расписанию \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_OFF_RASP:
             {
-              sprintf(mess,"Выключена нагрузка по расписанию SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Выключена нагрузка по расписанию \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_TOLG_RASP:
             {
-              sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_ON_WATCH:
             {
-              sprintf(mess,"Включена нагрузка по сторожу SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включена нагрузка по сторожу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_OFF_WATCH:
             {
-              sprintf(mess,"Выключена нагрузка по сторожу SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Выключена нагрузка по сторожу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_TOLG_WATCH:
             {
-              sprintf(mess,"Произведен импульсный сброс нагрузки по сторожу SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен импульсный сброс нагрузки по сторожу \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_ON_HTTP:
             {
-              sprintf(mess,"Включена нагрузка по HTTP API SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включена нагрузка по HTTP API S\n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_OFF_HTTP:
             {
-              sprintf(mess,"Выключена нагрузка по HTTP API SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Выключена нагрузка по HTTP API \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SWICH_TOLG_HTTP:
             {
-              sprintf(mess,"Произведен импульсный сброс нагрузки по HTTP API SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Произведен импульсный сброс нагрузки по HTTP API \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;         
           case POWER_ON:
             {
-              sprintf(mess,"Включением питание утройства SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Включение питания устройства \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case LOAD_DEF_DATA:
             {
-              sprintf(mess,"Загружены настройки по умолчанию SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Загружены настройки по умолчанию \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
           case SAVE_DATA_SETT:
             {
-              sprintf(mess,"Сохранение настроек устройства SN:%d %d %d \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Сохранение настроек устройства \n",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
             }
           break;
         }
@@ -444,7 +492,7 @@ uint16_t set_text_area  (char* str1,char* name, uint8_t n,uint8_t c, uint8_t r,u
 }
 uint16_t set_text_input (char* str1,char* name, uint8_t n,uint8_t* dat)
 { 
- sprintf(str1,"<input size=\"%d\" name=\"%s\"  value=\"%s\" maxlength=\"%d\" >",n,name,dat,n);
+ sprintf(str1,"<input size=\"%d\" name=\"%s\" formenctype=\"text/plain\" value=\"%s\" maxlength=\"%d\" >",n,name,dat,n);
  return 0;
 }
 uint16_t set_text_input_PW (char* str1,char* name, uint8_t n,uint8_t* dat)
@@ -1225,13 +1273,13 @@ uint32_t costr_page2_1(char* str1)
   memset (str4,0, sizeof(str4));
    
    memset(str3,0,128);
-   sprintf(str3,"SN:%d %d %d",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+   sprintf(str3,"SN:%02d %02d %03d",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
    
    set_table_string(str2,"Серийный номер",str3);  
    strcat(str1,str2);
    
    memset(str3,0,128);
-   sprintf(str3,"%x:%x:%x:%x:%x:%x",FW_data.V_ID_MAC[0],FW_data.V_ID_MAC[1],FW_data.V_ID_MAC[2],FW_data.V_ID_MAC[3],FW_data.V_ID_MAC[4],FW_data.V_ID_MAC[5]);
+   sprintf(str3,"%02x:%02x:%02x:%02x:%02x:%02x",FW_data.V_ID_MAC[0],FW_data.V_ID_MAC[1],FW_data.V_ID_MAC[2],FW_data.V_ID_MAC[3],FW_data.V_ID_MAC[4],FW_data.V_ID_MAC[5]);
    
    set_table_string(str2,"МАС адрес",str3);  
    strcat(str1,str2);
@@ -1253,58 +1301,58 @@ uint32_t costr_page2_1(char* str1)
    
    
    
-   signed char time_run[6]={0};  
-   uint8_t ct_time;
-   GET_reple(0,&real_time);  
-   
-
-   
-   time_run[0]=real_time.year-start_time.year;
-   time_run[1]=real_time.month-start_time.month;
-   time_run[2]=real_time.day-start_time.day;
-   time_run[3]=real_time.reple_hours-start_time.reple_hours;
-   time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
-   time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
-   
-   ct_time=1;
-      if (time_run[ct_time]<0)
-        {
-          time_run[ct_time-1]--;
-          time_run[ct_time]=time_run[ct_time]+12;          
-        }
-      
-      
-   ct_time++;
-      if (time_run[ct_time]<0)
-        {
-          time_run[ct_time-1]--;
-          time_run[ct_time]=time_run[ct_time]+30;          
-        }
-      
-      
-   ct_time++;
-      if (time_run[ct_time]<0)
-        {
-          time_run[ct_time-1]--;
-          time_run[ct_time]=time_run[ct_time]+24;          
-        }
-      
-      
-      
-   ct_time++;
-      if (time_run[ct_time]<0)
-        {
-          time_run[ct_time-1]--;
-          time_run[ct_time]=time_run[ct_time]+60;          
-        }
-      
-      
-   ct_time++;
-      if (time_run[ct_time]<0)
-        {
-          time_run[ct_time-1]--;
-          time_run[ct_time]=time_run[ct_time]+60;          
-        }
+////   signed char time_run[6]={0};  
+////   uint8_t ct_time;
+////   GET_reple(0,&real_time);  
+////   
+////
+////   
+////   time_run[0]=real_time.year-start_time.year;
+////   time_run[1]=real_time.month-start_time.month;
+////   time_run[2]=real_time.day-start_time.day;
+////   time_run[3]=real_time.reple_hours-start_time.reple_hours;
+////   time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
+////   time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
+////   
+////   ct_time=1;
+////      if (time_run[ct_time]<0)
+////        {
+////          time_run[ct_time-1]--;
+////          time_run[ct_time]=time_run[ct_time]+12;          
+////        }
+////      
+////      
+////   ct_time++;
+////      if (time_run[ct_time]<0)
+////        {
+////          time_run[ct_time-1]--;
+////          time_run[ct_time]=time_run[ct_time]+30;          
+////        }
+////      
+////      
+////   ct_time++;
+////      if (time_run[ct_time]<0)
+////        {
+////          time_run[ct_time-1]--;
+////          time_run[ct_time]=time_run[ct_time]+24;          
+////        }
+////      
+////      
+////      
+////   ct_time++;
+////      if (time_run[ct_time]<0)
+////        {
+////          time_run[ct_time-1]--;
+////          time_run[ct_time]=time_run[ct_time]+60;          
+////        }
+////      
+////      
+////   ct_time++;
+////      if (time_run[ct_time]<0)
+////        {
+////          time_run[ct_time-1]--;
+////          time_run[ct_time]=time_run[ct_time]+60;          
+////        }
    
     memset(str3,0,128);
   // sprintf(str3,"%dг.  %dм. %dд. %dч. %dм. %dс.",time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
@@ -1573,6 +1621,8 @@ uint32_t costr_page2_hdr(char* str1)
   uint32_t len;
   
    memset (str1,0, sizeof(str1)); 
+   
+ 
    strcat(str1,http_html_start_constr_dy);
   len=strlen(str1);
   

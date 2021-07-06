@@ -361,6 +361,7 @@ void jamp_to_boot (void)
   HAL_SuspendTick();
   __disable_irq();
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  HAL_RTCEx_BKUPWrite(&hrtc,2,1);
 // if ((data_met!=0xFFFFFFFF)&&(data_met!=0))
 // {
  
@@ -634,12 +635,12 @@ uint8_t load_struct_flash_data (void)
 uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
 
       
-   if (((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0)) || (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0))
+   if (((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0)) )
    {
      HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
      while (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0){}
      HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
-   return  load_def_data();
+     return  load_def_data();
    
   }
  else

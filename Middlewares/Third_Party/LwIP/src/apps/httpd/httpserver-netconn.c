@@ -84,6 +84,21 @@ static const unsigned char PAGE_HEADER_200_OK[] = {
   //zero
   0x00
 };
+const unsigned char PAGE_HEADER_303_OK[] = 
+"HTTP/1.1 303 See Other\n\r"
+"Location: /index.html\n\r" ;
+const unsigned char PAGE_HEADER_303_settings[] = 
+"HTTP/1.1 303 See Other\n\r"
+"Location: /settings.html\n\r" ;
+const unsigned char PAGE_HEADER_303_rasp[] = 
+"HTTP/1.1 303 See Other\n\r"
+"Location: /rasp.html\n\r" ;
+const unsigned char PAGE_HEADER_303_watchdog[] = 
+"HTTP/1.1 303 See Other\n\r"
+"Location: /watchdog.html\n\r" ;
+const unsigned char PAGE_HEADER_303_email[] = 
+"HTTP/1.1 303 See Other\n\r"
+"Location: /email.html\n\r" ;
 static const unsigned char PAGE_HEADER_SERVER[] = {
   //"Server: lwIP/1.3.1 (http://savannah.nongnu.org/projects/lwip)"
   0x53,0x65,0x72,0x76,0x65,0x72,0x3a,0x20,0x6c,0x77,0x49,0x50,0x2f,0x31,0x2e,0x33,
@@ -1208,8 +1223,10 @@ void param_run(post_data_t* post_data,uint8_t index)
               {
                 form_reple_to_save(SAVE_DATA_SETT);
                // while(flag_global_save_log==1){vTaskDelay(10);};
+                
                 vTaskDelay(100);
                 flag_global_save_data=1;
+                flag_global_reset_mode=1;
               }
           }
     else if (strncmp((char*)post_data->name,"test_email", sizeof("test_email")) == 0)
@@ -1355,7 +1372,7 @@ post_data_t elem_post_data;
                 
             }
           break;
-           case 4:
+           case 4: //index 
             {
                vTaskDelay(delay_send);
                len_buf_list=costr_page2_hdr((char*)buf_list);
@@ -1378,6 +1395,9 @@ post_data_t elem_post_data;
                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);
                      
                vTaskDelay(delay_send);
+               
+              
+               
             }
           break;
            case 5: //settings
@@ -1418,25 +1438,34 @@ post_data_t elem_post_data;
           break;
            case 6:  //logs
             {
-                    
+                uint8_t end_mess=0;    
                vTaskDelay(delay_send);
                 len_buf_list=costr_page8((char*)buf_list);
                 netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
-             vTaskDelay(delay_send);
-                 uint16_t ct_mess;
-                for(ct_mess=0;ct_mess<2048;ct_mess++)
+                vTaskDelay(delay_send);
+                uint16_t ct_mess;
+                 for(ct_mess=0;ct_mess<2048;ct_mess++)
+                  {
+                     if (FW_data.V_logs_struct.log_reple[ct_mess].dicr!=0x7a)
+                      {
+                         end_mess=ct_mess-1;
+                         break;
+                      }
+                  }
+                
+                for(ct_mess=end_mess;ct_mess!=0;ct_mess--)
                     {
-                      if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x7a)
-                          {
+                    //  if (FW_data.V_logs_struct.log_reple[ct_mess].dicr==0x7a)
+                      //  {
                             memset(buf_list,0,sizeof(buf_list));
                             decode_reple(buf_list,&FW_data.V_logs_struct.log_reple[ct_mess]);
                             netconn_write(conn, (char*)(buf_list), (size_t)strlen(buf_list), NETCONN_NOCOPY);       
-                    vTaskDelay(delay_send);
-                          }
-                      else
-                          {
-                            break;
-                          }
+                            vTaskDelay(delay_send);
+                    //    }
+                     // else
+                     //  {
+                    //    break;
+                       //}
      
                     }
                 len_buf_list=costr_page9((char*)buf_list);
@@ -1580,13 +1609,15 @@ post_data_t elem_post_data;
               signed char time_run[6]={0};  
               uint8_t ct_time;
               GET_reple(0,&real_time);  
-              time_run[0]=real_time.year-start_time.year;
-              time_run[1]=real_time.month-start_time.month;
-              time_run[2]=real_time.day-start_time.day;
-              time_run[3]=real_time.reple_hours-start_time.reple_hours;
-              time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
-              time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
-              ct_time=1;
+              if(start_time.year!=2020)
+               {
+                time_run[0]=real_time.year-start_time.year;
+                time_run[1]=real_time.month-start_time.month;
+                time_run[2]=real_time.day-start_time.day;
+                time_run[3]=real_time.reple_hours-start_time.reple_hours;
+                time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
+                time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
+                  ct_time=1;
               if (time_run[ct_time]<0)
                {
                 time_run[ct_time-1]--;
@@ -1618,6 +1649,24 @@ post_data_t elem_post_data;
               }
           //   sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.    %d- %d",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5],xFreeBytesRemaining,xMinimumEverFreeBytesRemaining);
               sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.    ",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
+               }
+              else
+               {
+                  time_run[0]=0;
+                  time_run[1]=0;
+                  time_run[2]=0;
+                  time_run[3]=0;
+                  time_run[4]=0;
+                  time_run[5]=0;
+                  start_time.year=real_time.year;
+                  start_time.month=real_time.month;
+                  start_time.day=real_time.day;
+                  start_time.reple_hours=real_time.reple_hours;
+                  start_time.reple_minuts=real_time.reple_minuts;
+                  start_time.reple_seconds=real_time.reple_seconds;
+                  sprintf(buf_list,"Время не установлено!",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               }
+            
               len_buf_list = strlen(buf_list);
               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
               vTaskDelay(delay_send);             
@@ -1643,6 +1692,61 @@ post_data_t elem_post_data;
 ////              len_buf_list = strlen(buf_list);
 ////              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
 ////              vTaskDelay(delay_send);  
+            }
+          break;
+            case 12:
+            {  
+           
+               
+               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               sprintf(buf_list,"%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_CONTENT_TEXT);
+               len_buf_list = strlen(buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               vTaskDelay(delay_send);
+            }
+          break;
+          case 13:
+            {  
+           
+               
+               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               sprintf(buf_list,"%s%s",PAGE_HEADER_303_settings,PAGE_HEADER_CONTENT_TEXT);
+               len_buf_list = strlen(buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               vTaskDelay(delay_send);
+            }
+          break;
+          case 14:
+            {  
+           
+               
+               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               sprintf(buf_list,"%s%s",PAGE_HEADER_303_rasp,PAGE_HEADER_CONTENT_TEXT);
+               len_buf_list = strlen(buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               vTaskDelay(delay_send);
+            }
+          break;
+          case 15:
+            {  
+           
+               
+               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               sprintf(buf_list,"%s%s",PAGE_HEADER_303_watchdog,PAGE_HEADER_CONTENT_TEXT);
+               len_buf_list = strlen(buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               vTaskDelay(delay_send);
+            }
+          break;
+          case 16:
+            {  
+           
+               
+               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+               sprintf(buf_list,"%s%s",PAGE_HEADER_303_email,PAGE_HEADER_CONTENT_TEXT);
+               len_buf_list = strlen(buf_list);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               vTaskDelay(delay_send);
             }
           break;
           default  :
@@ -1749,45 +1853,39 @@ static void http_server_serve(struct netconn *conn1)
                     {      
                       if (page_sost==1)
                            {
-                             page_n=4;
-                            
-                             parser_post(buf,buflen,page_sost);
-                              page_html_swich(page_n,conn1,buf_page);
-                              vTaskDelay(20);
+                            page_n=12;
+                            page_html_swich(page_n,conn1,buf_page);
+                            parser_post(buf,buflen,page_sost);    
+                            vTaskDelay(20);
                            }         
-                         
-                             if (page_sost==3)
-                              {
-                                page_n=5;
-                               parser_post(buf,buflen,page_sost);
-                               
-                               vTaskDelay(20);
-                               page_html_swich(page_n,conn1,buf_page);
-                              }
-                             if(page_sost==2)
-                               {
-                                 page_n=3;
-                                parser_post(buf,buflen,page_sost);
-                                
-                                vTaskDelay(20);
-                                page_html_swich(page_n,conn1,buf_page);
-                               }
-                              if(page_sost==4)
-                               {
-                                  page_n=7;
-                                parser_post(buf,buflen,page_sost);
-                               
-                                vTaskDelay(20);
-                                page_html_swich(page_n,conn1,buf_page);
-                               }
-                              if(page_sost==5)
-                               {
-                                 page_n=8;
-                                parser_post(buf,buflen,page_sost);
-                                
-                                vTaskDelay(20);
-                                page_html_swich(page_n,conn1,buf_page);
-                               }
+                      if (page_sost==3)
+                           {
+                             page_n=13;
+                             parser_post(buf,buflen,page_sost);
+                             vTaskDelay(20);
+                             page_html_swich(page_n,conn1,buf_page);
+                           }
+                      if(page_sost==2)
+                           {
+                             page_n=15;
+                             parser_post(buf,buflen,page_sost);
+                             vTaskDelay(20);
+                             page_html_swich(page_n,conn1,buf_page);
+                           }
+                      if(page_sost==4)
+                           {
+                            page_n=14;
+                            parser_post(buf,buflen,page_sost);
+                            vTaskDelay(20);
+                            page_html_swich(page_n,conn1,buf_page);
+                           }
+                      if(page_sost==5)
+                           {
+                            page_n=16;
+                            parser_post(buf,buflen,page_sost);
+                            vTaskDelay(20);
+                            page_html_swich(page_n,conn1,buf_page);
+                          }
                                         
                     }
               }
@@ -1851,6 +1949,11 @@ static void http_server_serve(struct netconn *conn1)
               else if (strncmp((char const *)buf,"GET /content1.html",18)==0)
             {
               page_n=11;
+              page_html_swich(page_n,conn1,buf_page);
+            }
+             else if (strncmp((char const *)buf,"GET /?output_set=1&out_swich=1",30)==0)
+            {
+              page_n=4;
               page_html_swich(page_n,conn1,buf_page);
             }
             else  

@@ -337,7 +337,7 @@ void LED_task(void const * argument)
 
 void logs_task(void const * argument)
 {
-  osDelay(5000);
+  //osDelay(5000);
   form_reple_to_save(POWER_ON);
   GET_reple(0,&start_time);
   for(;;)
@@ -370,6 +370,12 @@ void logs_task(void const * argument)
       vTaskDelay(1000);
       jamp_to_boot();
       flag_global_boot_mode=0;
+     }
+     if ((flag_global_reset_mode==1)&&(flag_global_save_log==0))
+     {
+      vTaskDelay(1000);
+      jamp_to_app();
+      flag_global_reset_mode=0;
      }
     osDelay(100);
   }

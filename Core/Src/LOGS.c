@@ -69,7 +69,7 @@ void decode_reple (char* out,log_reple_t* reple)
 {
   char out_small[128]={0};
 //  memset()
-  sprintf(out_small,"%d.%d.%d  %d:%d:%d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
+  sprintf(out_small,"%02d.%02d.%d  %02d:%02d:%02d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
   strcat(out,out_small);
    memset(out_small,0,128);
   swich_mess_event(  reple->type_event,out_small);
@@ -79,7 +79,7 @@ void decode_reple_en (char* out,log_reple_t* reple)
 {
   char out_small[128]={0};
 //  memset()
-  sprintf(out_small,"%d.%d.%d  %d:%d:%d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
+  sprintf(out_small,"%02d.%02d.%d  %02d:%02d:%02d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
   strcat(out,out_small);
    memset(out_small,0,128);
   swich_mess_event_en(  reple->type_event,out_small);

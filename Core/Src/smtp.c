@@ -1572,6 +1572,7 @@ void send_smtp_mess(char * mes)
       mes[len-1]=0;
       mes[len-2]=0;
       smtp_set_server_addr("mail.smtp2go.com");
+      memcpy(FW_data.V_EMAIL_ADDR,"mail.smtp2go.com",sizeof("mail.smtp2go.com"));
       smtp_set_server_port(25);
       smtp_set_auth("sys.microtech@mail.ru","dG40NmJ3MDVmNzAw");
 //      smtp_send_mail("dkst59@smtp.netping.ru","kotbazilioi@ngs.ru","dkst59", (const char *)mes, my_smtp_result_fn,NULL);

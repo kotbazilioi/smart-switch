@@ -14,13 +14,13 @@
     <StLinkDriver>
         <stlinkserialNo>4641110012144D43574D4E00</stlinkserialNo>
         <stlinkfoundProbes />
-        <stlinkResetStyle>0</stlinkResetStyle>
-        <stlinkResetStrategy>2</stlinkResetStrategy>
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <stlinkResetStyle>0</stlinkResetStyle>
+        <stlinkResetStrategy>2</stlinkResetStrategy>
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>80967923</Checksum>
+        <Checksum>3936755557</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -64,6 +64,13 @@
         <Fmt4>day_swich_elem-on_swich_h	3	0</Fmt4>
         <Fmt5>day_swich_elem-on_swich_m	3	0</Fmt5>
         <Fmt6>ip_addr_t-addr	4	0</Fmt6>
+        <Fmt7>log_reple_t-day	3	0</Fmt7>
+        <Fmt8>log_reple_t-dweek	3	0</Fmt8>
+        <Fmt9>log_reple_t-month	3	0</Fmt9>
+        <Fmt10>log_reple_t-reple_hours	3	0</Fmt10>
+        <Fmt11>log_reple_t-reple_minuts	3	0</Fmt11>
+        <Fmt12>log_reple_t-reple_seconds	3	0</Fmt12>
+        <Fmt13>log_reple_t-type_event	3	0</Fmt13>
     </struct_types>
     <array_types>
         <Fmt0>uint8_t[4]	3	0</Fmt0>
@@ -117,6 +124,17 @@
         <ShowTimeSum>1</ShowTimeSum>
         <SumSortOrder>0</SumSortOrder>
     </EventLog>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_3.c}.217.11" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_5.c}.265.25" 0 0 1 "" 0 "" 0</Bp1>
+        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Core\Src\stm32f1xx_it.c}.93.3" 0 0 1 "" 0 "" 0</Bp2>
+        <Bp3>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1274.2" 0 0 1 "" 0 "" 0</Bp3>
+        <Bp4>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1289.6" 0 0 1 "" 0 "" 0</Bp4>
+        <Count>5</Count>
+    </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -126,6 +144,10 @@
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>3</Mode>
@@ -139,20 +161,4 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <DisassembleMode>
-        <mode>0</mode>
-    </DisassembleMode>
-    <Breakpoints2>
-        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_3.c}.217.11" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_5.c}.265.25" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Core\Src\stm32f1xx_it.c}.93.3" 0 0 1 "" 0 "" 0</Bp2>
-        <Bp3>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1743.3" 0 0 1 "" 0 "" 0</Bp3>
-        <Bp4>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1743.3" 0 0 1 "" 0 "" 0</Bp4>
-        <Bp5>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\httpd\httpserver-netconn.c}.1743.3" 0 0 1 "" 0 "" 0</Bp5>
-        <Count>6</Count>
-    </Breakpoints2>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
 </settings>

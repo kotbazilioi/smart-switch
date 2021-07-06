@@ -61,6 +61,7 @@ uint32_t costr_page_boot(char* str1);
 
 //uint32_t costr_rasp_page34(char* str1);
 //uint32_t costr_rasp_page35(char* str1);
+
 extern const char http_html_200[];
 extern const char http_html_200_end[];
 extern uint32_t ct_logoff_time;

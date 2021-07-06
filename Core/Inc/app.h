@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 
-#define IWDT_EN 1
+#define IWDT_EN 0
 void set_relay(uint8_t sost);
 void StartDefaultTask(void const * argument);
 void LED_task(void const * argument);

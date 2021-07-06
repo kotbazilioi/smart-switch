@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\F107\test\test_app_rev0\IAR\EWARM\settings\test_app_rev0.test_app_rev0.general.xcl" --backend -f "D:\ika\development\F107\test\test_app_rev0\IAR\EWARM\settings\test_app_rev0.test_app_rev0.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM\settings\test_app_rev0.test_app_rev0.general.xcl" --backend -f "D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM\settings\test_app_rev0.test_app_rev0.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\F107\test\test_app_rev0\IAR\EWARM\settings\test_app_rev0.test_app_rev0.general.xcl" "--debug_file=%~1" --backend -f "D:\ika\development\F107\test\test_app_rev0\IAR\EWARM\settings\test_app_rev0.test_app_rev0.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.4\common\bin\cspybat" -f "D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM\settings\test_app_rev0.test_app_rev0.general.xcl" "--debug_file=%~1" --backend -f "D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM\settings\test_app_rev0.test_app_rev0.driver.xcl" 
 
 @echo off 
 :end
