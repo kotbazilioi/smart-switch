@@ -1729,15 +1729,15 @@ uint32_t costr_page3(char* str1)
  
    
      
-   set_text_input(str3,"name_dev",16,FW_data.V_Name_dev);  
+   set_text_input(str3,"name_dev",15,FW_data.V_Name_dev);  
    set_table_string(str2,"Имя устройства",str3);
    strcat(str1,str2);
    
-   set_text_input(str3,"geo_place",16,FW_data.V_GEOM_NAME);  
+   set_text_input(str3,"geo_place",15,FW_data.V_GEOM_NAME);  
    set_table_string(str2,"Место установки устройства",str3);  
    strcat(str1,str2);
    
-   set_text_input(str3,"call_data",16,FW_data.V_CALL_DATA);  
+   set_text_input(str3,"call_data",15,FW_data.V_CALL_DATA);  
    set_table_string(str2,"Контактные данные",str3);  
    strcat(str1,str2);
    
