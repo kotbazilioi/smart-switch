@@ -103,7 +103,7 @@
  * SNMP_TRAP_DESTINATIONS: Number of trap destinations. At least one trap
  * destination is required
  */
-   #define SNMP_TRAP_DESTINATIONS          2
+ //  #define SNMP_TRAP_DESTINATIONS          1
 #if !defined SNMP_TRAP_DESTINATIONS || defined __DOXYGEN__
 #define SNMP_TRAP_DESTINATIONS          1
 #endif

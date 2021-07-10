@@ -651,6 +651,7 @@ void param_run(post_data_t* post_data,uint8_t index)
 //            }
              form_reple_to_save(RESETL);
           //   flag_global_reset_mode=1;
+             HAL_RTCEx_BKUPWrite(&hrtc,3,1);
              save_reple_log(reple_to_save);
              flag_global_save_log=0;
              vTaskDelay(100);
@@ -1039,6 +1040,8 @@ void param_run(post_data_t* post_data,uint8_t index)
             FW_data.V_RD_DATA.data[u_d].year = (post_data->data[2]-0x30)*10+(post_data->data[3]-0x30);
             FW_data.V_RD_DATA.data[u_d].month=(post_data->data[5]-0x30)*10+(post_data->data[6]-0x30)-1;
             FW_data.V_RD_DATA.data[u_d].day=(post_data->data[8]-0x30)*10+(post_data->data[9]-0x30)-1;  
+            
+            
             if (FW_data.V_RD_DATA.data[u_d].year>61)
               {
                 FW_data.V_RD_DATA.data[u_d].year =61;
@@ -1404,6 +1407,8 @@ uint8_t ct_post_ch=0;
           }
          }
          start_par=ct_index+1;
+         if ((memcmp(elem_post_data.name,"name_dev",sizeof("name_dev"))==0)||(memcmp(elem_post_data.name,"geo_place",sizeof("geo_place"))==0)||(memcmp(elem_post_data.name,"call_data",sizeof("call_data"))==0))
+         {
          post_size=strlen(elem_post_data.data);
          for (ct_post_ch=0;ct_post_ch<post_size;ct_post_ch++)
             {
@@ -1413,6 +1418,7 @@ uint8_t ct_post_ch=0;
                   break;
                 }
             }
+         }
          param_run(&elem_post_data,index);      
          
        }
@@ -1925,6 +1931,25 @@ static void http_server_serve(struct netconn *conn1)
 
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
       key_http_len=strlen(buf_page);
+      
+      if (strncmp((char const *)buf,"GET /content.html",17)==0)
+            {
+              page_n=10;
+              page_html_swich(page_n,conn1,buf_page);
+            }
+              else if (strncmp((char const *)buf,"GET /content1.html",18)==0)
+            {
+              page_n=11;
+              page_html_swich(page_n,conn1,buf_page);
+            }
+             else if (strncmp((char const *)buf,"GET /?output_set=1&out_swich=1",30)==0)
+            {
+              page_n=4;
+              page_html_swich(page_n,conn1,buf_page);
+            }
+      else
+      {
+      
 #if (logon==0)
         if (strncmp(key_http,buf_page,key_http_len) != 0)
           {          
@@ -2044,21 +2069,21 @@ static void http_server_serve(struct netconn *conn1)
               page_n=1;
               page_html_swich(page_n,conn1,buf_page);
             }
-            else if (strncmp((char const *)buf,"GET /content.html",17)==0)
-            {
-              page_n=10;
-              page_html_swich(page_n,conn1,buf_page);
-            }
-              else if (strncmp((char const *)buf,"GET /content1.html",18)==0)
-            {
-              page_n=11;
-              page_html_swich(page_n,conn1,buf_page);
-            }
-             else if (strncmp((char const *)buf,"GET /?output_set=1&out_swich=1",30)==0)
-            {
-              page_n=4;
-              page_html_swich(page_n,conn1,buf_page);
-            }
+//            else if (strncmp((char const *)buf,"GET /content.html",17)==0)
+//            {
+//              page_n=10;
+//              page_html_swich(page_n,conn1,buf_page);
+//            }
+//              else if (strncmp((char const *)buf,"GET /content1.html",18)==0)
+//            {
+//              page_n=11;
+//              page_html_swich(page_n,conn1,buf_page);
+//            }
+//             else if (strncmp((char const *)buf,"GET /?output_set=1&out_swich=1",30)==0)
+//            {
+//              page_n=4;
+//              page_html_swich(page_n,conn1,buf_page);
+//            }
             else  
              {
               /* Load Error page */
@@ -2073,7 +2098,7 @@ static void http_server_serve(struct netconn *conn1)
         
       
      }
-    
+      }
      vTaskDelay(4*delay_send);
     
      vPortFree(buf_page);

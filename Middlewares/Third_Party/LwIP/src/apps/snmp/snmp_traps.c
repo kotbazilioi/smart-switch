@@ -154,7 +154,7 @@ snmp_get_auth_traps_enabled(void)
  * @param eoid points to enterprise object identifier
  * @param generic_trap is the trap code
  * @param specific_trap used for enterprise traps when generic_trap == 6
- * @param varbinds linked list of varbinds to be sent
+ * @param varbinds linked list of varbinds to be sentc
  * @return ERR_OK when success, ERR_MEM if we're out of memory
  *
  * @note the use of the enterprise identifier field
