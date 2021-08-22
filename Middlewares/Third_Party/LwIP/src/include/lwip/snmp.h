@@ -95,7 +95,7 @@ enum snmp_ifType {
 
 /** This macro has a precision of ~49 days because sys_now returns u32_t. \#define your own if you want ~490 days. */
 #ifndef MIB2_COPY_SYSUPTIME_TO
-#define MIB2_COPY_SYSUPTIME_TO(ptrToVal) (*(ptrToVal) = (sys_now() / 10))
+#define MIB2_COPY_SYSUPTIME_TO(ptrToVal) (*(ptrToVal) = (sys_now() / 500))
 #endif
 
 /**

@@ -1566,6 +1566,7 @@ void send_smtp_mess(char * mes)
   {
    if (FW_data.V_FLAG_EN_EMAIL==1)
    {
+      form_reple_to_save(SEND_EMAIL);
      uint8_t len =strlen(mes);
      if (FW_data.V_FLAG_DEF_EMAIL==1)
      {      
@@ -1574,7 +1575,7 @@ void send_smtp_mess(char * mes)
       smtp_set_server_addr("mail.smtp2go.com");
       memcpy(FW_data.V_EMAIL_ADDR,"mail.smtp2go.com",sizeof("mail.smtp2go.com"));
       smtp_set_server_port(25);
-      smtp_set_auth("sys.microtech@mail.ru","dG40NmJ3MDVmNzAw");
+      smtp_set_auth("sys.microtech@mail.ru","FdfkjeEdjcndhfDs31ddS");
 //      smtp_send_mail("dkst59@smtp.netping.ru","kotbazilioi@ngs.ru","dkst59", (const char *)mes, my_smtp_result_fn,NULL);
      }
      else
@@ -1630,6 +1631,7 @@ void send_smtp_mess(char * mes)
  }
 void my_smtp_test(void)
   {
+   
     char messt[]={"test message \r\n"};
     
     send_smtp_mess(messt);

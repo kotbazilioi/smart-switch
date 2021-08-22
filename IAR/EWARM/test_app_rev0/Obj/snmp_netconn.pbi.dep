@@ -101,4 +101,5 @@ snmp_netconn.pbi: \
   D:\ika\development\NETPING_PROJECT\59\smart-switch\Middlewares\Third_Party\LwIP\src\apps\snmp/snmp_msg.h \
   D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/apps/snmp.h \
   D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/apps/snmp_core.h \
-  D:\ika\development\NETPING_PROJECT\59\smart-switch\Middlewares\Third_Party\LwIP\src\apps\snmp/snmp_pbuf_stream.h
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\Middlewares\Third_Party\LwIP\src\apps\snmp/snmp_pbuf_stream.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc\flash_if.h

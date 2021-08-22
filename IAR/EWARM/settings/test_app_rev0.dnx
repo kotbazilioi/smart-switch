@@ -12,15 +12,15 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <StLinkDriver>
-        <stlinkserialNo>4641110012144D43574D4E00</stlinkserialNo>
-        <stlinkfoundProbes />
         <CStepIntDis>_ 0</CStepIntDis>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <stlinkResetStyle>0</stlinkResetStyle>
         <stlinkResetStrategy>2</stlinkResetStrategy>
+        <stlinkserialNo>4641110012144D43574D4E00</stlinkserialNo>
+        <stlinkfoundProbes />
     </StLinkDriver>
     <DebugChecksum>
-        <Checksum>2036645718</Checksum>
+        <Checksum>2402148307</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>
@@ -62,23 +62,26 @@
         <Fmt2>RTC_DateTypeDef-Month	3	0</Fmt2>
         <Fmt3>RTC_DateTypeDef-WeekDay	3	0</Fmt3>
         <Fmt4>RTC_DateTypeDef-Year	3	0</Fmt4>
-        <Fmt5>SysLog-syslog_cnt	4	0</Fmt5>
-        <Fmt6>data_swich_elem-day	3	0</Fmt6>
-        <Fmt7>data_swich_elem-month	3	0</Fmt7>
-        <Fmt8>data_swich_elem-year	3	0</Fmt8>
-        <Fmt9>day_swich_elem-off_swich_h	3	0</Fmt9>
-        <Fmt10>day_swich_elem-off_swich_m	3	0</Fmt10>
-        <Fmt11>day_swich_elem-on_swich_h	3	0</Fmt11>
-        <Fmt12>day_swich_elem-on_swich_m	3	0</Fmt12>
-        <Fmt13>ip_addr_t-addr	4	0</Fmt13>
-        <Fmt14>log_reple_t-day	3	0</Fmt14>
-        <Fmt15>log_reple_t-dweek	3	0</Fmt15>
-        <Fmt16>log_reple_t-month	3	0</Fmt16>
-        <Fmt17>log_reple_t-reple_hours	3	0</Fmt17>
-        <Fmt18>log_reple_t-reple_minuts	3	0</Fmt18>
-        <Fmt19>log_reple_t-reple_seconds	3	0</Fmt19>
-        <Fmt20>log_reple_t-type_event	3	0</Fmt20>
-        <Fmt21>post_data_t-len_par	3	0</Fmt21>
+        <Fmt5>RTC_TimeTypeDef-Hours	3	0</Fmt5>
+        <Fmt6>RTC_TimeTypeDef-Minutes	3	0</Fmt6>
+        <Fmt7>RTC_TimeTypeDef-Seconds	3	0</Fmt7>
+        <Fmt8>SysLog-syslog_cnt	4	0</Fmt8>
+        <Fmt9>data_swich_elem-day	3	0</Fmt9>
+        <Fmt10>data_swich_elem-month	3	0</Fmt10>
+        <Fmt11>data_swich_elem-year	3	0</Fmt11>
+        <Fmt12>day_swich_elem-off_swich_h	3	0</Fmt12>
+        <Fmt13>day_swich_elem-off_swich_m	3	0</Fmt13>
+        <Fmt14>day_swich_elem-on_swich_h	3	0</Fmt14>
+        <Fmt15>day_swich_elem-on_swich_m	3	0</Fmt15>
+        <Fmt16>ip_addr_t-addr	4	0</Fmt16>
+        <Fmt17>log_reple_t-day	3	0</Fmt17>
+        <Fmt18>log_reple_t-dweek	3	0</Fmt18>
+        <Fmt19>log_reple_t-month	3	0</Fmt19>
+        <Fmt20>log_reple_t-reple_hours	3	0</Fmt20>
+        <Fmt21>log_reple_t-reple_minuts	3	0</Fmt21>
+        <Fmt22>log_reple_t-reple_seconds	3	0</Fmt22>
+        <Fmt23>log_reple_t-type_event	3	0</Fmt23>
+        <Fmt24>post_data_t-len_par	3	0</Fmt24>
     </struct_types>
     <array_types>
         <Fmt0>uint16_t[32]	4	0</Fmt0>
@@ -86,12 +89,13 @@
         <Fmt2>uint8_t[4]	3	0</Fmt2>
     </array_types>
     <watch_formats>
-        <Fmt0>{W}1:GPIO_Pin	4	0</Fmt0>
-        <Fmt1>{W}1:ct_char	3	0</Fmt1>
-        <Fmt2>{W}1:ct_mess	3	0</Fmt2>
-        <Fmt3>{W}1:len_mess	3	0</Fmt3>
-        <Fmt4>{W}1:phyreg	1	0</Fmt4>
-        <Fmt5>{W}1:temp_hex	4	0</Fmt5>
+        <Fmt0>{W}1:FW_data.V_IP_SYSL[0]	3	0</Fmt0>
+        <Fmt1>{W}1:GPIO_Pin	4	0</Fmt1>
+        <Fmt2>{W}1:ct_char	3	0</Fmt2>
+        <Fmt3>{W}1:ct_mess	3	0</Fmt3>
+        <Fmt4>{W}1:len_mess	3	0</Fmt4>
+        <Fmt5>{W}1:phyreg	1	0</Fmt5>
+        <Fmt6>{W}1:temp_hex	4	0</Fmt6>
     </watch_formats>
     <Trace2>
         <Enabled>0</Enabled>
@@ -142,10 +146,9 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_3.c}.217.11" 0 0 1 "" 0 "" 0</Bp0>
-        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_5.c}.265.25" 0 0 1 "" 0 "" 0</Bp1>
-        <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\Core\Src\stm32f1xx_it.c}.93.3" 0 0 1 "" 0 "" 0</Bp2>
-        <Count>3</Count>
+        <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Middlewares\Third_Party\LwIP\src\apps\snmp\snmp_traps.c}.217.11" 0 0 1 "" 0 "" 0</Bp0>
+        <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\Core\Src\main.c}.102.3" 0 0 1 "" 0 "" 0</Bp1>
+        <Count>2</Count>
     </Breakpoints2>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>

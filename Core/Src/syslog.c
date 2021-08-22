@@ -88,12 +88,26 @@ void syslog_setIp(ip_addr_t addr)
  */
 int syslog_printf(const char *fmt, ...)
 {
+  
+ 
+             
+   
   if ((FW_data.V_IP_SYSL[0]!=0)||(FW_data.V_IP_SYSL[1]!=0)||(FW_data.V_IP_SYSL[2]!=0)||(FW_data.V_IP_SYSL[3]!=0))
   {
-	va_list ap;
-	va_start(ap, fmt);
-	int len = vsnprintf(syslog_message, sizeof(syslog_message), fmt, ap);
-	va_end(ap);
+//        char* fmt=pvPortMalloc(300); 
+//  
+//        sprintf(fmt,"%s%s%s","<133>",FW_data.V_Name_dev,mess);
+           
+//	va_list ap;
+//	va_start(ap, fmt);
+//	int len = vsnprintf(syslog_message, sizeof(syslog_message), fmt, ap);
+//	va_end(ap);
+    
+    
+        int len = sprintf(syslog_message,"%s %s %s", "<133>",FW_data.V_Name_dev,fmt);
+    
+    
+    
 	syslog_message[sizeof(syslog_message) - 1] = 0;
 
 	#if CONFIG_SYSLOG_SERIAL
@@ -122,7 +136,9 @@ int syslog_printf(const char *fmt, ...)
 
 	local_syslog_ctx->syslog_cnt++;
 	netconn_delete(local_syslog_ctx->syslog_server);
+      //  vPortFree(fmt);
         return len;
+        
   }
   else
   {

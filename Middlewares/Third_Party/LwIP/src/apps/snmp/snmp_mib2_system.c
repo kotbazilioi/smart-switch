@@ -43,6 +43,7 @@
 #include "flash_if.h"
 #include <string.h>
 #include "LOGS.h"
+#include "app.h"
 #if LWIP_SNMP && SNMP_LWIP_MIB2
 
 #if SNMP_USE_NETCONN
@@ -307,27 +308,48 @@ system_get_value(const struct snmp_scalar_array_node_def *node, void *value)
     var_len = (const s16_t*)(&lens_mes);
    break;
    case 8: /* sysLocation */ ////////////////////////////////////////////////////////////
+    if (flag_runtime_out[1]==0)
+      {
     form_reple_to_save(SWICH_ON_SNMP);
     flag_global_swich_out=SWICH_ON_SNMP;
     HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+      }
+    else
+      {
+       form_reple_to_save(SWICH_ON_SNMP_N);
+      }
     vTaskDelay(100);
     var     = FW_data.V_ON_MESS;
     lens_mes=strlen((char*)(FW_data.V_ON_MESS));
     var_len = (const s16_t*)(&lens_mes);
   break;
   case 9: /* sysLocation */
-    form_reple_to_save(SWICH_OFF_SNMP);
-    flag_global_swich_out=SWICH_OFF_SNMP;
-    HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+     if (flag_runtime_out[1]==1)
+      {
+       form_reple_to_save(SWICH_OFF_SNMP);
+       flag_global_swich_out=SWICH_OFF_SNMP;
+       HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+      }
+     else
+      {
+       form_reple_to_save(SWICH_OFF_SNMP_N);
+      }
     vTaskDelay(100);
     var     = FW_data.V_OFF_MESS;
     lens_mes=strlen((char*)(FW_data.V_OFF_MESS));
     var_len = (const s16_t*)(&lens_mes);
     break;
   case 10: /* sysLocation */
-    form_reple_to_save(SWICH_TOLG_SNMP);
-    flag_global_swich_out=SWICH_TOLG_SNMP;
-    HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+     if (flag_runtime_out[1]==1)
+      {
+       form_reple_to_save(SWICH_TOLG_SNMP);
+       flag_global_swich_out=SWICH_TOLG_SNMP;
+       HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+      }
+     else
+      {
+       form_reple_to_save(SWICH_TOLG_SNMP_N);
+      }
     vTaskDelay(100);
     var     = "Out_Reset_Pulse";
     lens_mes=strlen((char*)("Out_Reset_Pulse"));

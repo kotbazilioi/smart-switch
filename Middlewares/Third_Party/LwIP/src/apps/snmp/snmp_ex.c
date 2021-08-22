@@ -96,13 +96,14 @@ snmp_set_mibs(mibs, LWIP_ARRAYSIZE(mibs));
 }
 void send_mess_trap (uint32_t* OID_TR,char* mess,uint16_t lens_mess)
 {
-  
+   // osDelay(1000);
   vbt_tr.value=mess;
   vbt_tr.value_len=lens_mess;
   vbt_tr.type=SNMP_ASN1_TYPE_OCTET_STRING;
   vbt_tr.oid.len=4;
   memcpy((uint32_t*)vbt_tr.oid.id,(uint32_t*)OID_TR,4*4);
-  snmp_send_trap(0,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
- // snmp_send_trap_specific(6,&vbt_tr);
+ // snmp_send_trap(NULL,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
+
+  snmp_send_trap_specific(SNMP_GENTRAP_ENTERPRISE_SPECIFIC,&vbt_tr);
 
 }

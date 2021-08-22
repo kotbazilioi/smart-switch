@@ -67,18 +67,20 @@ int main(void)
 
  
   MX_RTC_Init();
-
+  page_sost=HAL_RTCEx_BKUPRead(&hrtc,4);
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, DEFAULT_THREAD_STACKSIZE);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
   
   osMessageQDef(timeout_Queue, QUEUE_SIZE, uint16_t);
   timeout_Queue = osMessageCreate(osMessageQ(timeout_Queue), NULL); 
   
+   osThreadDef(logs, logs_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE+50);
+  logs_task_nameHandle = osThreadCreate(osThread(logs), NULL);
+  
   osThreadDef(LED_task, LED_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   LED_taskHandle = osThreadCreate(osThread(LED_task), NULL);
   
-  osThreadDef(logs_task_name, logs_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
-  logs_task_nameHandle = osThreadCreate(osThread(logs_task_name), NULL);
+ 
   
   osThreadDef(IO_CNTRL, IO_CNRL_APP, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   IO_CNTRLHandle = osThreadCreate(osThread(IO_CNTRL), NULL);
@@ -86,13 +88,15 @@ int main(void)
   osThreadDef(rasp_task, rasp_task, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   rasp_task_id = osThreadCreate(osThread(rasp_task), NULL);
   
-#ifdef IWDT_EN  
+#if (IWDT_EN==1)  
   osThreadDef(iwdt_task, iwdt_task, osPriorityRealtime, 0, DEFAULT_THREAD_STACKSIZE);
   iwdt_task_id = osThreadCreate(osThread(iwdt_task), NULL); 
 #endif
 
   osThreadDef(ntp_thread, ntp_thread, osPriorityLow, 0, DEFAULT_THREAD_STACKSIZE);
   ntp_task_id = osThreadCreate(osThread(ntp_thread), NULL);
+  
+  
     
   /* Start scheduler */
   osKernelStart();

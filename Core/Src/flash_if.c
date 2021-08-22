@@ -314,8 +314,8 @@ void jamp_to_app (void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
  if ((data_met!=0xFFFFFFFF)&&(data_met!=0))
  {
- // HAL_ETH_DeInit(&hetho);
- /// HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
+//  HAL_ETH_DeInit(&hetho);
+//  HAL_DMA_DeInit(&hdma_ETHtomem_dma1_channel1);
 
      /*Configure GPIO pin : PHY_RST_Pin */
 //  GPIO_InitStruct.Pin = PHY_RST_Pin;
@@ -352,6 +352,9 @@ void jamp_to_app (void)
   flag_app_start=0;
  }
 }
+
+
+
  extern ETH_HandleTypeDef heth;
 void jamp_to_boot (void)
 {
@@ -508,7 +511,7 @@ uint8_t load_def_data(void)
      FW_data.V_WEB_PORT = 80;
      HTTPD_SERVER_PORT =FW_data.V_WEB_PORT;
      FW_data.V_PORT_SNMP = 162;
-     FW_data.V_HTTP_IP = 81;
+     FW_data.V_HTTP_IP = 80;
      memset((uint8_t*)&FW_data.V_ON_MESS,0,32);
      memcpy((uint8_t*)&FW_data.V_ON_MESS, (uint8_t *)"Power swich ON",14);
      memset((uint8_t*)&FW_data.V_OFF_MESS,0,32);
@@ -562,7 +565,7 @@ uint8_t load_def_data(void)
 
      
      
-     
+      memset((uint8_t*)&FW_data.V_GEOM_NAME,0,85);
      memcpy((uint32_t*)&FW_data.V_GEOM_NAME, (uint32_t *)"Moscow office", 13);    
      
     FW_data.V_ID_MAC[0] =   00;//(uint16_t)idBase0[0];
@@ -573,6 +576,8 @@ uint8_t load_def_data(void)
     FW_data.V_ID_MAC[5] =   ((uint16_t)idBase2[0])>>8;
     FW_data.V_ID_MAC[6] =    0x59;
     FW_data.V_ID_MAC[7] =    0xDC;
+    memset((uint8_t*)&FW_data.V_Name_dev,0,85);
+    memset((uint8_t*)&FW_data.V_CALL_DATA,0,85);
     memcpy((uint8_t*)&FW_data.V_Name_dev,(uint8_t *)"DKSF 59",7);    
     memcpy((uint8_t*)&FW_data.V_CALL_DATA,(uint8_t *)"netping.ru",10);   
     
@@ -637,9 +642,9 @@ uint16_t crc_in=((uint16_t)(*(uint32_t*)A_CRC_DATA));
       
    if (((crc_in!= crc16_ccitt((uint8_t *)&(*(uint32_t*)A_DHCP),2018))||(crc_in==0)) )
    {
-     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
-     while (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0){}
-     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
+//     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
+//     while (HAL_GPIO_ReadPin(IN_SWICH_GPIO_Port,IN_SWICH_Pin)==0){}
+//     HAL_GPIO_WritePin (LED_RED_GPIO_Port, LED_RED_Pin,0);
      return  load_def_data();
    
   }

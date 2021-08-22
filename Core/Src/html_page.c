@@ -236,6 +236,21 @@ void swich_mess_event (uint8_t event,char* mess)
               sprintf(mess,"Произведен импульсный сброс нагрузки через веб интерфейс \n");
             }
           break;
+          case SWICH_ON_WEB_N:
+            {
+              sprintf(mess,"Включена нагрузка через веб интерфейс (неэффективна)\n");
+            }
+          break;
+          case SWICH_OFF_WEB_N:
+            {
+              sprintf(mess,"Выключена нагрузка через веб интерфейс (неэффективна)\n");
+            }
+          break;
+          case SWICH_TOLG_WEB_N:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузки через веб интерфейс (неэффективна)\n");
+            }
+          break;
            case SWICH_ON_SNMP:
             {
               sprintf(mess,"Включена нагрузка по SNMP интерфейсу \n");
@@ -251,6 +266,22 @@ void swich_mess_event (uint8_t event,char* mess)
               sprintf(mess,"Произведен импульсный сброс нагрузки по SNMP интерфейсу \n");
             }
           break;
+           case SWICH_ON_SNMP_N:
+            {
+              sprintf(mess,"Включена нагрузка по SNMP интерфейсу (неэффективна)\n");
+            }
+          break;
+          case SWICH_OFF_SNMP_N:
+            {
+              sprintf(mess,"Выключена нагрузка по SNMP интерфейсу (неэффективна)\n");
+            }
+          break;
+          case SWICH_TOLG_SNMP_N:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузки по SNMP интерфейсу (неэффективна)\n");
+            }
+          break;
+          
           case SWICH_ON_RASP:
             {
               sprintf(mess,"Включена нагрузка по расписанию \n");
@@ -264,6 +295,21 @@ void swich_mess_event (uint8_t event,char* mess)
           case SWICH_TOLG_RASP:
             {
               sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию \n");
+            }
+          break;
+           case SWICH_ON_RASP_N:
+            {
+              sprintf(mess,"Включена нагрузка по расписанию (неэффективна)\n");
+            }
+          break;
+          case SWICH_OFF_RASP_N:
+            {
+              sprintf(mess,"Выключена нагрузка по расписанию (неэффективна)\n");
+            }
+          break;
+          case SWICH_TOLG_RASP_N:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузка по расписанию (неэффективна)\n");
             }
           break;
           case SWICH_ON_WATCH:
@@ -283,7 +329,7 @@ void swich_mess_event (uint8_t event,char* mess)
           break;
           case SWICH_ON_HTTP:
             {
-              sprintf(mess,"Включена нагрузка по HTTP API S\n");
+              sprintf(mess,"Включена нагрузка по HTTP API \n");
             }
           break;
           case SWICH_OFF_HTTP:
@@ -295,7 +341,22 @@ void swich_mess_event (uint8_t event,char* mess)
             {
               sprintf(mess,"Произведен импульсный сброс нагрузки по HTTP API \n");
             }
-          break;         
+          break; 
+           case SWICH_ON_HTTP_N:
+            {
+              sprintf(mess,"Включена нагрузка по HTTP API (неэффективна)\n");
+            }
+          break;
+          case SWICH_OFF_HTTP_N:
+            {
+              sprintf(mess,"Выключена нагрузка по HTTP API (неэффективна)\n");
+            }
+          break;
+          case SWICH_TOLG_HTTP_N:
+            {
+              sprintf(mess,"Произведен импульсный сброс нагрузки по HTTP API (неэффективна)\n");
+            }
+          break; 
           case POWER_ON:
             {
               sprintf(mess,"Включение питания устройства \n");
@@ -310,7 +371,12 @@ void swich_mess_event (uint8_t event,char* mess)
             {
               sprintf(mess,"Сохранение настроек устройства \n");
             }
-          break;
+          break;          
+          case SEND_EMAIL:
+            {
+              sprintf(mess,"Отправлено E-mail сообщение\n");
+            }
+          break; 
         }
 }
 
@@ -325,102 +391,162 @@ void swich_mess_event_en (uint8_t event,char* mess)
           
           case RESETL:
             {
-              sprintf(mess,"A forced device reset has been performed  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"A forced device reset has been performed  \n\r");
             }
           break;
           case UPDATE_FW:
             {
-              sprintf(mess,"Transferred to download mode  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Transferred to download mode  \n\r");
             }
           break;
-          case SWICH_ON_WEB:
+          case SWICH_ON_WEB_N:
             {
-              sprintf(mess,"Load from the web interface is enabled  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Load from the web interface is enabled  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_OFF_WEB_N:
+            {
+              sprintf(mess,"The load from the web interface is turned off  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_TOLG_WEB_N:
+            {
+              sprintf(mess,"Impulse load dump was performed from the web interface  'uneffecrtive'\n\r");
+            }
+          break;
+           case SWICH_ON_SNMP_N:
+            {
+              sprintf(mess,"Load from SNMP interface is enabled  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_OFF_SNMP_N:
+            {
+              sprintf(mess,"Disabled load from SNMP interface  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_TOLG_SNMP_N:
+            {
+              sprintf(mess,"Pulse load shedding from SNMP interface has been performed  'uneffecrtive'\n\r");
+            }
+          break;
+           case SWICH_ON_WEB:
+            {
+              sprintf(mess,"Load from the web interface is enabled  \n\r");
             }
           break;
           case SWICH_OFF_WEB:
             {
-              sprintf(mess,"The load from the web interface is turned off  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"The load from the web interface is turned off  \n\r");
             }
           break;
           case SWICH_TOLG_WEB:
             {
-              sprintf(mess,"Impulse load dump was performed from the web interface  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Impulse load dump was performed from the web interface  \n\r");
             }
           break;
            case SWICH_ON_SNMP:
             {
-              sprintf(mess,"Load from SNMP interface is enabled  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Load from SNMP interface is enabled  \n\r");
             }
           break;
           case SWICH_OFF_SNMP:
             {
-              sprintf(mess,"Disabled load from SNMP interface  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Disabled load from SNMP interface  \n\r");
             }
           break;
           case SWICH_TOLG_SNMP:
             {
-              sprintf(mess,"Pulse load shedding from SNMP interface has been performed  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Pulse load shedding from SNMP interface has been performed  \n\r");
             }
           break;
           case SWICH_ON_RASP:
             {
-              sprintf(mess,"Scheduled load is enabled  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Scheduled load is enabled  \n\r");
             }
           break;
           case SWICH_OFF_RASP:
             {
-              sprintf(mess,"Disabled load on schedule  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Disabled load on schedule  \n\r");
             }
           break;
           case SWICH_TOLG_RASP:
             {
-              sprintf(mess,"Impulse reset of the load according to the schedule \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Impulse reset of the load according to the schedule \n\r");
+            }
+          break;
+           case SWICH_ON_RASP_N:
+            {
+              sprintf(mess,"Scheduled load is enabled  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_OFF_RASP_N:
+            {
+              sprintf(mess,"Disabled load on schedule  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_TOLG_RASP_N:
+            {
+              sprintf(mess,"Impulse reset of the load according to the schedule 'uneffecrtive'\n\r");
             }
           break;
           case SWICH_ON_WATCH:
             {
-              sprintf(mess,"Watchdog load included  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Watchdog load included  \n\r");
             }
           break;
           case SWICH_OFF_WATCH:
             {
-              sprintf(mess,"The watchdog load is turned off  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"The watchdog load is turned off  \n\r");
             }
           break;
           case SWICH_TOLG_WATCH:
             {
-              sprintf(mess,"Impulse load shedding by the watchman  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Impulse load shedding by the watchman  \n\r");
             }
           break;
           case SWICH_ON_HTTP:
             {
-              sprintf(mess,"HTTP API loading enabled  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"HTTP API loading enabled  \n\r");
             }
           break;
           case SWICH_OFF_HTTP:
             {
-              sprintf(mess,"Disabled loading via HTTP API  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Disabled loading via HTTP API  \n\r");
             }
           break;
           case SWICH_TOLG_HTTP:
             {
-              sprintf(mess,"Pulse load shedding via HTTP API has been performed  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Pulse load shedding via HTTP API has been performed  \n\r");
+            }
+          break;         
+           case SWICH_ON_HTTP_N:
+            {
+              sprintf(mess,"HTTP API loading enabled  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_OFF_HTTP_N:
+            {
+              sprintf(mess,"Disabled loading via HTTP API  'uneffecrtive'\n\r");
+            }
+          break;
+          case SWICH_TOLG_HTTP_N:
+            {
+              sprintf(mess,"Pulse load shedding via HTTP API has been performed  'uneffecrtive'\n\r");
             }
           break;         
           case POWER_ON:
             {
-              sprintf(mess,"Power on the device  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Power on the device  \n\r");
             }
           break;
           case LOAD_DEF_DATA:
             {
-              sprintf(mess,"Loaded default settings  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Loaded default settings  \n\r");
             }
           break;
           case SAVE_DATA_SETT:
             {
-              sprintf(mess,"Saving device settings  \n\r",FW_data.V_ID_MAC[5],FW_data.V_ID_MAC[6],FW_data.V_ID_MAC[7]);
+              sprintf(mess,"Saving device settings  \n\r");
             }
           break;
         }
@@ -919,34 +1045,34 @@ strcat(str1,str2);
 
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\"  value=\"%s:%s\">",val_name,0,N,3,dtimeh(time[N].time_data[3].on_swich_h),dtime(time[N].time_data[3].on_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\"  value=\"%s:%s\">",val_name,1,N,3,dtimeh(time[N].time_data[3].off_swich_h),dtime(time[N].time_data[3].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2); 
 
 
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,4,dtimeh(time[N].time_data[4].on_swich_h),dtime(time[N].time_data[4].on_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,4,dtimeh(time[N].time_data[4].off_swich_h),dtime(time[N].time_data[4].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2); 
 
 
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,5,dtimeh(time[N].time_data[5].on_swich_h),dtime(time[N].time_data[5].on_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,5,dtimeh(time[N].time_data[5].off_swich_h),dtime(time[N].time_data[5].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2); 
 
 
@@ -968,34 +1094,34 @@ strcat(str1,str2);
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,0,dtimeh(time[N].time_data[0].on_swich_h),dtime(time[N].time_data[0].on_swich_m));        
 
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,0,dtimeh(time[N].time_data[0].off_swich_h),dtime(time[N].time_data[0].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2);  
 
 
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,1,dtimeh(time[N].time_data[1].on_swich_h),dtime(time[N].time_data[1].on_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,1,dtimeh(time[N].time_data[1].off_swich_h),dtime(time[N].time_data[1].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2); 
 
 
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,0,N,2,dtimeh(time[N].time_data[2].on_swich_h),dtime(time[N].time_data[2].on_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Включение-%s",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: right ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\Вкл.-%s",str_data);
 strcat(str1,str2);  
         
 
 sprintf(str_data,"<input type=\"time\" name=\"%s%d%d%d\" value=\"%s:%s\">",val_name,1,N,2,dtimeh(time[N].time_data[2].off_swich_h),dtime(time[N].time_data[2].off_swich_m));        
-sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выключение",str_data);
+sprintf(str2,"<td style=\"width: 3%; text-align: left ;border-bottom: 1px solid #36BA88; background: #BFE8BB; \">&ensp;\%s-Выкл.",str_data);
 strcat(str1,str2); 
 
 
@@ -2132,7 +2258,7 @@ uint32_t costr_page7(char* str1)
    set_open_block(str2,"h2");
    strcat(str1,str2);
    
-   set_table_string(str2,"НАСТРОЙКИ УПРАВЛЕНИЯ ВЫХОДНОГО ДРАЙВЕРА:","");  
+   set_table_string(str2,"НАСТРОЙКИ УПРАВЛЕНИЯ:","");  
    
    strcat(str1,str2);
    
@@ -2621,7 +2747,7 @@ uint32_t costr_watchdog3(char* str1)
    strcat(str1,str2);
    
    sprintf(str4,"%d",FW_data.V_MAX_RESEND_PACET_RESET);
-   set_intnum(str3,"V_MAX_RESEND_PACET_RESET",3,str4,1,255);  
+   set_intnum(str3,"V_MAX_RESEND_PACET_RESET",3,str4,0,255);  
    set_table_string(str2,"Ограничение числа идущих подряд сбросов 1-255",str3);  
    strcat(str1,str2);
    
@@ -4467,6 +4593,7 @@ uint32_t costr_email_page1(char* str1)
     set_table_string(str2,"Копия №3(cc:)",str3);
     strcat(str1,str2);
     
+   // set_submit(str3,"save_rasp_sec5 ","1","Применить изменения",0);
     set_submit(str3,"save_rasp_sec5 ","1","Применить изменения",0);
     set_table_string(str2,"",str3);  
     strcat(str1,str2);

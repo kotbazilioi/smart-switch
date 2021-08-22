@@ -67,21 +67,21 @@ void GET_reple (uint8_t event,log_reple_t* reple)
 }
 void decode_reple (char* out,log_reple_t* reple)
 {
-  char out_small[128]={0};
+  char out_small[200]={0};
 //  memset()
   sprintf(out_small,"%02d.%02d.%d  %02d:%02d:%02d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
   strcat(out,out_small);
-   memset(out_small,0,128);
+   memset(out_small,0,200);
   swich_mess_event(  reple->type_event,out_small);
   strcat(out,out_small);
 }
 void decode_reple_en (char* out,log_reple_t* reple)
 {
-  char out_small[128]={0};
+  char out_small[200]={0};
 //  memset()
   sprintf(out_small,"%02d.%02d.%d  %02d:%02d:%02d    ",reple->day,reple->month,reple->year,reple->reple_hours,reple->reple_minuts,reple->reple_seconds);    
   strcat(out,out_small);
-   memset(out_small,0,128);
+   memset(out_small,0,200);
   swich_mess_event_en(  reple->type_event,out_small);
   strcat(out,out_small);
 }
@@ -89,7 +89,7 @@ void decode_reple_en (char* out,log_reple_t* reple)
 
 void form_reple_to_save (uint8_t event)
 {
-  char mess_syslog[128]={0};
+  char mess_syslog[200]={0};
 
   GET_reple (event,&reple_to_save);
   decode_reple_en(mess_syslog, &reple_to_save);  

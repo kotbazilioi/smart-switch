@@ -42,7 +42,7 @@
 #include "lwip/udp.h"
 #include "snmp_msg.h"
 #include "lwip/sys.h"
-
+#include "flash_if.h"
 /** SNMP netconn API worker thread */
 static void
 snmp_netconn_thread(void *arg)
@@ -55,10 +55,10 @@ snmp_netconn_thread(void *arg)
   /* Bind to SNMP port with default IP address */
 #if LWIP_IPV6
   conn = netconn_new(NETCONN_UDP_IPV6);
-  netconn_bind(conn, IP6_ADDR_ANY, SNMP_IN_PORT);
+  netconn_bind(conn, IP6_ADDR_ANY, FW_data.V_PORT_SNMP);
 #else /* LWIP_IPV6 */
   conn = netconn_new(NETCONN_UDP);
-  netconn_bind(conn, IP4_ADDR_ANY, SNMP_IN_PORT);
+  netconn_bind(conn, IP4_ADDR_ANY, FW_data.V_PORT_SNMP);
 #endif /* LWIP_IPV6 */
   LWIP_ERROR("snmp_netconn: invalid conn", (conn != NULL), return;);
   

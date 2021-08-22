@@ -23,3 +23,4 @@ void ping_send_now(void);
 #endif /* !PING_USE_SOCKETS */
 
 #endif /* __PING_H__ */
+void ct_res_wdt (void);

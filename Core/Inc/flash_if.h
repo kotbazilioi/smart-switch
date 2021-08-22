@@ -29,7 +29,7 @@
 #define Platform 59
 #define rev 0
 #define Assembly 0
-#define Bild 2
+#define Bild 4
 
 /* Base address of the Flash sectors */
 #define ADDR_START_APP     ((uint32_t)0x08007000) 
@@ -135,9 +135,22 @@ enum logs_events_t {
   SWICH_ON_HTTP,
   SWICH_OFF_HTTP,
   SWICH_TOLG_HTTP,
+  SWICH_ON_HTTP_N,
+  SWICH_OFF_HTTP_N,
+  SWICH_TOLG_HTTP_N,
   POWER_ON,
   LOAD_DEF_DATA, 
-  SAVE_DATA_SETT  
+  SAVE_DATA_SETT,
+  SWICH_ON_WEB_N,
+  SWICH_OFF_WEB_N,
+  SWICH_TOLG_WEB_N,
+  SWICH_ON_SNMP_N,
+  SWICH_OFF_SNMP_N,
+  SWICH_TOLG_SNMP_N,  
+  SWICH_ON_RASP_N,
+  SWICH_OFF_RASP_N,
+  SWICH_TOLG_RASP_N,
+  SEND_EMAIL
 };
 
 
@@ -401,9 +414,9 @@ char V_EMAIL_TO[32];
 char V_EMAIL_CC1[32];
 char V_EMAIL_CC2[32];
 char V_EMAIL_CC3[32];
+uint8_t V_resv[956];
 
 
-uint8_t V_resv[1167];
 
 ////#define A_RESV 0x800413B
 logs_t V_logs_struct;

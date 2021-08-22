@@ -91,4 +91,37 @@ snmp_mib2_system.pbi: \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\string.h \
   C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.4\arm\inc\c\DLib_Product_string.h \
   D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc\LOGS.h \
-  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc/flash_if.h
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc/flash_if.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc\app.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../LWIP/Target\ethernetif.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/netif.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/pbuf.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/stats.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/mem.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/memp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/priv/memp_std.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/priv/memp_priv.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/tcpip.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/timeouts.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../LWIP/Target\httpserver-netconn.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/api.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/netbuf.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../LWIP/App\lwip.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\netif/etharp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/etharp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/ip4.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/prot/ip4.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/prot/ethernet.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/prot/etharp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\netif/ethernet.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/dhcp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/udp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/ip.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/ip6.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/prot/ip.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include\lwip/prot/udp.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Middlewares/Third_Party/LwIP/src/include/lwip\dns.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc/LOGS.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc/html_page.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM\..\..\Middlewares\Third_Party\LwIP\src\apps\ping\ping.h \
+  D:\ika\development\NETPING_PROJECT\59\smart-switch\IAR\EWARM/../../Core/Inc/hard_config.h

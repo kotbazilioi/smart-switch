@@ -78,6 +78,7 @@ void ntp_thread(void const * argument)
           	struct ntp_msg_struct *ntpmsg = (struct ntp_msg_struct *)buf->p->payload;
                 memset(ntpmsg, 0, 48);
                 ntpmsg->li_vn_mode = 0x00 | (4<<3) | 0x03; //version: 4, mode: client
+              
                 old_time_count = osKernelSysTick();
                 ct_sevr_men++;
                 netconn_send(conn,buf);
@@ -153,7 +154,7 @@ void ntp_receive_callback(struct netconn* conn, enum netconn_evt evt, u16_t len)
 {
 	err_t recv_err;
 	struct netbuf *buf;
-	char str[60];
+	//char str[60];
         u8_t mode;
         u32_t receive_timestamp;
 	u32_t rx_secs;
@@ -185,7 +186,7 @@ void ntp_receive_callback(struct netconn* conn, enum netconn_evt evt, u16_t len)
                      
                       if (((uint8_t) timestruct->tm_year % 100)>20)
                         {
-                         user_sTimeStructure.Hours = timestruct->tm_hour+FW_data.V_NTP_CIRCL;
+                         user_sTimeStructure.Hours = timestruct->tm_hour+FW_data.V_NTP_CIRCL-3;
                          user_sTimeStructure.Minutes = timestruct->tm_min;
                          user_sTimeStructure.Seconds = timestruct->tm_sec;
                          if (HAL_RTC_SetTime(&hrtc, &user_sTimeStructure, RTC_FORMAT_BIN) != HAL_OK)

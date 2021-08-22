@@ -191,7 +191,7 @@ snmp_send_trap(const struct snmp_obj_id* eoid, s32_t generic_trap, s32_t specifi
           trap_msg.spc_trap = 0;
         }
 
-     ///   MIB2_COPY_SYSUPTIME_TO(&trap_msg.ts);
+        MIB2_COPY_SYSUPTIME_TO(&trap_msg.ts);
 
         /* pass 0, calculate length fields */
         tot_len = snmp_trap_varbind_sum(&trap_msg, varbinds);
@@ -211,7 +211,7 @@ snmp_send_trap(const struct snmp_obj_id* eoid, s32_t generic_trap, s32_t specifi
           snmp_stats.outpkts++;
 
           /** send to the TRAP destination */
-          snmp_sendto(snmp_traps_handle, p, &td->dip, FW_data.V_PORT_SNMP);
+          snmp_sendto(snmp_traps_handle, p, &td->dip,SNMP_TRAP_PORT);
           pbuf_free(p);
         } else {
           err = ERR_MEM;

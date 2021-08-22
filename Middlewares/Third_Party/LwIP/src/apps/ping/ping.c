@@ -51,7 +51,7 @@
 #include "lwip/sys.h"
 #include "timers.h"
 #include "lwip/inet_chksum.h"
-
+#include "app.h"
 #if PING_USE_SOCKETS
 #include "lwip/sockets.h"
 #include "lwip/inet.h"
@@ -220,23 +220,24 @@ timeout++;
   lwip_setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 // sockets[0]->conn->recv_timeout=1000;
   while (1) {
-      vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
-    if (FW_data.V_EN_WATCHDOG==1)
-    {
-  if ((FW_data.V_EN_WATCHDOG_CN_A==1)&&(en_ping_a==0))
+  //    vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
+ if (FW_data.V_EN_WATCHDOG==1)
   {
+  if ((FW_data.V_EN_WATCHDOG_CN_A==1)&&(en_ping_a==0))
+    {
+    do{
     IP4_ADDR(&ping_target,FW_data.V_IP_WDT_ADDR_CN_A[0],FW_data.V_IP_WDT_ADDR_CN_A[1],FW_data.V_IP_WDT_ADDR_CN_A[2],FW_data.V_IP_WDT_ADDR_CN_A[3]);
     if (ping_send(s, &ping_target) == ERR_OK) {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+  //    LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
       ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, ("\n"));
+  //    LWIP_DEBUGF( PING_DEBUG, ("\n"));
 
       ping_time = sys_now();
       ping_recv(s);
     } else {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+ //     LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
       ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
+    //  LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
     }
     ping_data.timeout[0]=sys_now()-ping_time;
     if (ping_data.timeout[0]<500)
@@ -250,33 +251,36 @@ timeout++;
         if (ct_cn_a<FW_data.V_MAX_REPID_PING)
         {
           ct_cn_a++;
+          vTaskDelay(FW_data.V_TIME_RESEND_PING-500);
         }
         else
         {
          // ct_cn_a=0;
           en_ping_a=1;
-          ping_data.flag_err[0]=1;      
+          ping_data.flag_err[0]=1;   
+          
         }
         
       }
-     
+    }while((ct_cn_a!=0)&&(ct_cn_a<FW_data.V_MAX_REPID_PING-1));
    }
-  vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
+
   
    if ((FW_data.V_EN_WATCHDOG_CN_B==1)&&(en_ping_b==0))
   {
+    do{
      IP4_ADDR(&ping_target,FW_data.V_IP_WDT_ADDR_CN_B[0],FW_data.V_IP_WDT_ADDR_CN_B[1],FW_data.V_IP_WDT_ADDR_CN_B[2],FW_data.V_IP_WDT_ADDR_CN_B[3]);
     if (ping_send(s, &ping_target) == ERR_OK) {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+    //  LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
       ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, ("\n"));
+    //  LWIP_DEBUGF( PING_DEBUG, ("\n"));
 
       ping_time = sys_now();
       ping_recv(s);
     } else {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+    //  LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
       ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
+      //LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
     }
     ping_data.timeout[1]=sys_now()-ping_time;
     if (ping_data.timeout[1]<500)
@@ -290,6 +294,7 @@ timeout++;
         if (ct_cn_b<FW_data.V_MAX_REPID_PING)
         {
           ct_cn_b++;
+           vTaskDelay(FW_data.V_TIME_RESEND_PING-500);
         }
         else
         {
@@ -297,12 +302,15 @@ timeout++;
           en_ping_b=1;
           ping_data.flag_err[1]=1;      
         }
+       
+        
       }
+    }while((ct_cn_b!=0)&&(ct_cn_b<FW_data.V_MAX_REPID_PING-1));
   }
-   vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
+ //  vTaskDelay(FW_data.V_TIME_RESEND_PING/3);
    if ((FW_data.V_EN_WATCHDOG_CN_C==1)&&(en_ping_c==0))
   {
-    
+    do{
        IP4_ADDR(&ping_target,FW_data.V_IP_WDT_ADDR_CN_C[0],FW_data.V_IP_WDT_ADDR_CN_C[1],FW_data.V_IP_WDT_ADDR_CN_C[2],FW_data.V_IP_WDT_ADDR_CN_C[3]);
     if (ping_send(s, &ping_target) == ERR_OK) {
       LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
@@ -329,37 +337,83 @@ timeout++;
        if (ct_cn_c<FW_data.V_MAX_REPID_PING)
         {
           ct_cn_c++;
+          vTaskDelay(FW_data.V_TIME_RESEND_PING-500);
         }
         else
         {
          // ct_cn_c=0;
           en_ping_c=1;
           ping_data.flag_err[2]=1;      
-        }      
+        }   
+       
       }
+     }while((ct_cn_c!=0)&&(ct_cn_c<FW_data.V_MAX_REPID_PING-1));
   }
    
-    if (FW_data.V_CT_RES_ALLSTART<0xffff)
-    {
-    FW_data.V_CT_RES_ALLSTART++;
-    }
-    else
-    {
-    FW_data.V_CT_RES_ALLSTART=0;
-    }
-    }
-    
-    if (flag_delay_ping==0)
-    {
-     vTaskDelay(1000*FW_data.V_T_SEND_PING);
-    }
-    else
-    {
-      vTaskDelay(1000*FW_data.V_PAUSE_RESET_TO_REPID);
-      flag_delay_ping=0;
-    }
 
-   //   sys_msleep(PING_DELAY);
+    }
+// vTaskResume (LED_taskHandle);
+   // if (flag_delay_ping!=0)
+   // {
+  if (FW_data.V_TYPE_LOGIC==0)
+      {
+       if ( (ping_data.flag_err[0]!=0)||(ping_data.flag_err[1]!=0)||(ping_data.flag_err[2]!=0))
+        {
+     
+        vTaskDelay(1000*(FW_data.V_PAUSE_RESET_TO_REPID+FW_data.V_TIME_RESET_PULSE));
+        flag_delay_ping=0;
+        en_ping_a=0;
+        en_ping_b=0;
+        en_ping_c=0;
+        ct_cn_a=0;
+        ct_cn_b=0;
+        ct_cn_c=0;
+   
+      }
+      else
+      {      
+         vTaskDelay(1000*FW_data.V_T_SEND_PING);
+      }
+     }
+  if (FW_data.V_TYPE_LOGIC==1)
+      {
+       if ( (ping_data.flag_err[0]!=0)&&(ping_data.flag_err[1]!=0)&&(ping_data.flag_err[2]!=0))
+        {
+          vTaskDelay(1000*(FW_data.V_PAUSE_RESET_TO_REPID+FW_data.V_TIME_RESET_PULSE));
+        flag_delay_ping=0;
+        en_ping_a=0;
+        en_ping_b=0;
+        en_ping_c=0;
+        ct_cn_a=0;
+        ct_cn_b=0;
+        ct_cn_c=0;
+   
+      }
+      else
+      {      
+         vTaskDelay(1000*FW_data.V_T_SEND_PING);
+      }
+      }
+  if (FW_data.V_TYPE_LOGIC==2)
+      {
+       if ( ((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[1]!=0))||((ping_data.flag_err[0]!=0)&&(ping_data.flag_err[2]!=0)))
+        {
+          vTaskDelay(1000*(FW_data.V_PAUSE_RESET_TO_REPID+FW_data.V_TIME_RESET_PULSE));
+        flag_delay_ping=0;
+        en_ping_a=0;
+        en_ping_b=0;
+        en_ping_c=0;
+        ct_cn_a=0;
+        ct_cn_b=0;
+        ct_cn_c=0;
+   
+      }
+      else
+      {      
+         vTaskDelay(1000*FW_data.V_T_SEND_PING);
+      }
+      }
+ 
   }
 }
 
@@ -465,3 +519,14 @@ ping_init(void)
 }
 
 #endif /* LWIP_RAW */
+void ct_res_wdt (void)
+{
+if (FW_data.V_CT_RES_ALLSTART<0xffff)
+    {
+    FW_data.V_CT_RES_ALLSTART++;
+    }
+    else
+    {
+    FW_data.V_CT_RES_ALLSTART=0;
+    }
+}

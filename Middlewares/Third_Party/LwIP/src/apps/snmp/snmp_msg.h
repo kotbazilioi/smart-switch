@@ -64,9 +64,9 @@ extern "C" {
 #endif
 /* The remote port the SNMP agent sends traps to. Most standard trap sinks won't
    work if you change this! */
-//#ifndef SNMP_TRAP_PORT
-//#define SNMP_TRAP_PORT 162
-//#endif
+#ifndef SNMP_TRAP_PORT
+#define SNMP_TRAP_PORT 162
+#endif
 
 /* version defines used in PDU */
 #define SNMP_VERSION_1  0

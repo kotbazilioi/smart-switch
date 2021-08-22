@@ -60,6 +60,7 @@
 #include "html_page.h"
 #include "base64.h"
 #include "LOGS.h"
+#include "app.h"
 #include "smtp.h"
 #include "heap_5.h"
 #include "utf8_code.h"
@@ -81,7 +82,7 @@ typedef struct post_data_t
 u32_t nPageHits = 0;
 char http_ok[] = {0x48,0x54,0x54,0x50,0x2f,0x31,0x2e,0x31,0x20,0x32,0x30,0x30,0x20,0x4f,0x4b,0x0d,0x0a};
 uint8_t flag_req_logon=0;
-  uint8_t page_n,page_sost=1;
+uint8_t page_n,page_sost=1;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -533,8 +534,8 @@ jamp_to_app();
 
 void param_utf8_dec(post_data_t* post_data)
 {
-  char temp_mess[128]={0};
-  char temp_beakup[128]={0};
+  char temp_mess[256]={0};
+  char temp_beakup[256]={0};
   uint16_t temp_hex={0};
   uint8_t ct_char,ct_mess,temp;
   uint8_t len_mess = strlen(post_data->data);
@@ -578,11 +579,11 @@ void param_utf8_dec(post_data_t* post_data)
       {
         if (temp_beakup[ct_char]==0)
         {
-         if (temp_mess[ct_char]<0x39)
+         if (temp_mess[ct_char]<0x40)
           {
             temp_mess[ct_char]=temp_mess[ct_char]-0x30;
           }
-         if (temp_mess[ct_char]>0x40)
+         if (temp_mess[ct_char]>0x39)
           {
             temp_mess[ct_char]=temp_mess[ct_char]-0x37;
           }
@@ -654,7 +655,7 @@ void param_run(post_data_t* post_data,uint8_t index)
              HAL_RTCEx_BKUPWrite(&hrtc,3,1);
              save_reple_log(reple_to_save);
              flag_global_save_log=0;
-             vTaskDelay(100);
+             vTaskDelay(3000);
              jamp_to_app();
              
           }
@@ -664,22 +665,43 @@ void param_run(post_data_t* post_data,uint8_t index)
             len_mess=strlen(post_data->data);
             if (post_data->data[0]==0x30)
             {
-               form_reple_to_save(SWICH_ON_WEB);
-               flag_global_swich_out=SWICH_ON_WEB;
+              if (flag_runtime_out[1]==1)
+               {
+               form_reple_to_save(SWICH_OFF_WEB);
+               flag_global_swich_out=SWICH_OFF_WEB;
                HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+               }
+              else
+               {
+                 form_reple_to_save(SWICH_OFF_WEB_N);
+               }
             }
             else if (post_data->data[0]==0x31)
               {
-                form_reple_to_save(SWICH_OFF_WEB);
-                flag_global_swich_out=SWICH_OFF_WEB;
+                if (flag_runtime_out[1]==0)
+                {
+                form_reple_to_save(SWICH_ON_WEB);
+                flag_global_swich_out=SWICH_ON_WEB;
                  HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+                } 
+                else
+                {
+                  form_reple_to_save(SWICH_ON_WEB_N);
+                }
               
               }
             else if (post_data->data[0]==0x32)
               {
+                if (flag_runtime_out[1]==1)
+                {
                  form_reple_to_save(SWICH_TOLG_WEB);
                  flag_global_swich_out=SWICH_TOLG_WEB;
                  HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+                }
+                else
+                {
+                 form_reple_to_save(SWICH_TOLG_WEB_N);
+                }
               }
               
           
@@ -1001,6 +1023,7 @@ void param_run(post_data_t* post_data,uint8_t index)
            if (strncmp((char*)post_data->data,"ON", sizeof("ON")) == 0)
             {
               FW_data.V_FLAG_EN_EMAIL=1;
+              
             }
            else
             {
@@ -1012,12 +1035,113 @@ void param_run(post_data_t* post_data,uint8_t index)
            if (strncmp((char*)post_data->data,"1", sizeof("1")) == 0)
             {
               FW_data.V_FLAG_DEF_EMAIL=1;
+               memcpy(FW_data.V_EMAIL_ADDR,"mail.smtp2go.com",sizeof("mail.smtp2go.com"));
+               FW_data.V_FLAG_EMAIL_PORT=25;
+               memcpy(FW_data.V_LOGIN_SMTP,"sys.microtech@mail.ru",sizeof("sys.microtech@mail.ru"));
+               memcpy(FW_data.V_PASSWORD_SMTP,"dG40NmJ3MDVmNzAw",sizeof("dG40NmJ3MDVmNzAw"));
+//               memset(FW_data.V_EMAIL_FROM,0,32);
+//               memset(FW_data.V_EMAIL_TO,0,32);
+//               memset(FW_data.V_EMAIL_CC1,0,32);
+//               memset(FW_data.V_EMAIL_CC2,0,32);
+//               memset(FW_data.V_EMAIL_CC3,0,32);
             }
            else
             {
               FW_data.V_FLAG_DEF_EMAIL=0;
             }
-          }           
+          }  
+         else if (strncmp((char*)post_data->name,"V_LOGIN_SMTP", sizeof("V_LOGIN_SMTP")) == 0)
+          {
+           // FW_data.V_Name_dev
+            if(FW_data.V_FLAG_DEF_EMAIL==0)
+            {
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_LOGIN_SMTP,0,32);
+            memcpy((char*)FW_data.V_LOGIN_SMTP, (char*)post_data->data,len_mess );
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_PASSWORD_SMTP", sizeof("V_PASSWORD_SMTP")) == 0)
+          {
+            if(FW_data.V_FLAG_DEF_EMAIL==0)
+            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_PASSWORD_SMTP,0,32);
+            memcpy((char*)FW_data.V_PASSWORD_SMTP, (char*)post_data->data,len_mess );
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_EMAIL_ADDR", sizeof("V_EMAIL_ADDR")) == 0)
+          {
+            if(FW_data.V_FLAG_DEF_EMAIL==0)
+            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_ADDR,0,32);
+            memcpy((char*)FW_data.V_EMAIL_ADDR, (char*)post_data->data,len_mess );
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_FLAG_EMAIL_PORT", sizeof("V_FLAG_EMAIL_PORT")) == 0)
+          {
+            if(FW_data.V_FLAG_DEF_EMAIL==0)
+            {
+             len_mess=strlen(post_data->data);
+            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
+            {
+              FW_data.V_FLAG_EMAIL_PORT=port_n;
+            }
+            }
+          }
+    else if (strncmp((char*)post_data->name,"V_EMAIL_FROM", sizeof("V_EMAIL_FROM")) == 0)
+          {
+//            if(FW_data.V_FLAG_DEF_EMAIL==0)
+//            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_FROM,0,32);
+            memcpy((char*)FW_data.V_EMAIL_FROM, (char*)post_data->data,len_mess );
+//            }
+          }
+     else if (strncmp((char*)post_data->name,"V_EMAIL_TO", sizeof("V_EMAIL_TO")) == 0)
+          {
+//            if(FW_data.V_FLAG_DEF_EMAIL==0)
+//            {
+           
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_TO,0,32);
+            memcpy((char*)FW_data.V_EMAIL_TO, (char*)post_data->data,len_mess );
+           // }
+          }
+     else if (strncmp((char*)post_data->name,"V_EMAIL_CC1", sizeof("V_EMAIL_CC1")) == 0)
+          {
+//            if(FW_data.V_FLAG_DEF_EMAIL==0)
+//            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_CC1,0,32);
+            memcpy((char*)FW_data.V_EMAIL_CC1, (char*)post_data->data,len_mess );
+          //  }
+          }
+    else if (strncmp((char*)post_data->name,"V_EMAIL_CC2", sizeof("V_EMAIL_CC2")) == 0)
+          {
+//            if(FW_data.V_FLAG_DEF_EMAIL==0)
+//            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_CC2,0,32);
+            memcpy((char*)FW_data.V_EMAIL_CC2, (char*)post_data->data,len_mess );
+       //     }
+          }
+    else if (strncmp((char*)post_data->name,"V_EMAIL_CC3", sizeof("V_EMAIL_CC3")) == 0)
+          {
+//            if(FW_data.V_FLAG_DEF_EMAIL==0)
+//            {
+           // FW_data.V_Name_dev
+            len_mess=strlen(post_data->data);
+            memset((char*)FW_data.V_EMAIL_CC3,0,32);
+            memcpy((char*)FW_data.V_EMAIL_CC3, (char*)post_data->data,len_mess );
+//            }
+          } 
+    
     else if (strncmp((char*)post_data->name,"V_SOST_ERR_RASP", sizeof("V_SOST_ERR_RASP")) == 0)
           {
            if (strncmp((char*)post_data->data,"%D0%91%D0%B3", 11) == 0)
@@ -1120,70 +1244,7 @@ void param_run(post_data_t* post_data,uint8_t index)
             memset((char*)FW_data.V_PASSWORD,0,16);
             memcpy((char*)FW_data.V_PASSWORD, (char*)post_data->data,len_mess );
           }
-     else if (strncmp((char*)post_data->name,"V_LOGIN_SMTP", sizeof("V_LOGIN_SMTP")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_LOGIN_SMTP,0,32);
-            memcpy((char*)FW_data.V_LOGIN_SMTP, (char*)post_data->data,len_mess );
-          }
-    else if (strncmp((char*)post_data->name,"V_PASSWORD_SMTP", sizeof("V_PASSWORD_SMTP")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_PASSWORD_SMTP,0,32);
-            memcpy((char*)FW_data.V_PASSWORD_SMTP, (char*)post_data->data,len_mess );
-          }
-    else if (strncmp((char*)post_data->name,"V_EMAIL_ADDR", sizeof("V_EMAIL_ADDR")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_ADDR,0,32);
-            memcpy((char*)FW_data.V_EMAIL_ADDR, (char*)post_data->data,len_mess );
-          }
-    else if (strncmp((char*)post_data->name,"V_FLAG_EMAIL_PORT", sizeof("V_FLAG_EMAIL_PORT")) == 0)
-          {
-             len_mess=strlen(post_data->data);
-            if (scanf_port ((char*) post_data->data,&port_n,len_mess)==0)
-            {
-              FW_data.V_FLAG_EMAIL_PORT=port_n;
-            }
-          }
-    else if (strncmp((char*)post_data->name,"V_EMAIL_FROM", sizeof("V_EMAIL_FROM")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_FROM,0,32);
-            memcpy((char*)FW_data.V_EMAIL_FROM, (char*)post_data->data,len_mess );
-          }
-     else if (strncmp((char*)post_data->name,"V_EMAIL_TO", sizeof("V_EMAIL_TO")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_TO,0,32);
-            memcpy((char*)FW_data.V_EMAIL_TO, (char*)post_data->data,len_mess );
-          }
-     else if (strncmp((char*)post_data->name,"V_EMAIL_CC1", sizeof("V_EMAIL_CC1")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_CC1,0,32);
-            memcpy((char*)FW_data.V_EMAIL_CC1, (char*)post_data->data,len_mess );
-          }
-    else if (strncmp((char*)post_data->name,"V_EMAIL_CC2", sizeof("V_EMAIL_CC2")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_CC2,0,32);
-            memcpy((char*)FW_data.V_EMAIL_CC2, (char*)post_data->data,len_mess );
-          }
-    else if (strncmp((char*)post_data->name,"V_EMAIL_CC3", sizeof("V_EMAIL_CC3")) == 0)
-          {
-           // FW_data.V_Name_dev
-            len_mess=strlen(post_data->data);
-            memset((char*)FW_data.V_EMAIL_CC3,0,32);
-            memcpy((char*)FW_data.V_EMAIL_CC3, (char*)post_data->data,len_mess );
-          }    
+   
     else if (strncmp((char*)post_data->name,"snmp_addr", sizeof("snmp_addr")) == 0)
           {
              len_mess=strlen(post_data->data);
@@ -1321,7 +1382,17 @@ void param_run(post_data_t* post_data,uint8_t index)
                 
                 vTaskDelay(100);
                 flag_global_save_data=1;
-                flag_global_reset_mode=1;
+                
+               // form_reple_to_save(RESETL);
+              //  flag_global_reset_mode=1;
+              HAL_RTCEx_BKUPWrite(&hrtc,3,1);
+            //    save_reple_log(reple_to_save);
+                flag_global_save_log=0;
+           //     vTaskDelay(1000);
+//                jamp_to_app();
+             
+             
+               // flag_global_reset_mode=1;
               }
           }
     else if (strncmp((char*)post_data->name,"test_email", sizeof("test_email")) == 0)
@@ -1428,6 +1499,179 @@ uint8_t ct_post_ch=0;
 
 
 //uint8_t tempm[256]={0};
+void HTTP_API_swich(struct netconn *conn,char* buf_list)
+ { 
+   uint8_t index=0;
+   uint32_t len_buf_list=0;
+   uint8_t relay_n=0;
+   uint8_t data_s=0;
+   uint8_t data=0;
+   uint8_t delay_time=0;
+   struct fs_file file;
+     
+   if (((buf_list[16]<0x32)&&(buf_list[16]>0x30))||(buf_list[16]=='n'))
+    {
+      relay_n=buf_list[16]-0x30;
+      
+      if (buf_list[17]!=0x20)
+        {
+          if (buf_list[18]==0x30)
+            {
+              data_s=0;
+              index =2; 
+            }
+          if (buf_list[18]==0x31)
+            {
+              data_s=1;
+              index =3; 
+            }
+          if (buf_list[18]=='f')
+          {
+            index=4;
+            
+            if ((buf_list[19]==',')&&(buf_list[20]<0x3a)&&(buf_list[21]<0x3a)&&(buf_list[20]>0x2f)&&(buf_list[21]>0x2f))
+              { 
+                  HTTP_pulse_time=((buf_list[20]-0x30)*10 +(buf_list[21]-0x30));
+                  index =5; 
+                  
+               
+              
+              }
+          }
+        }
+      else
+        {
+          index =1; 
+        }
+      
+        
+    }
+     
+   
+   
+   data= HAL_RTCEx_BKUPRead(&hrtc,1);
+   
+   switch(index) {
+      case 0:
+            {
+              sprintf(buf_list,"%s%s%s relay_result('error')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+              len_buf_list = strlen(buf_list);
+              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+              vTaskDelay(delay_send);                 
+            }
+          break;
+          case 1:
+            { 
+           
+              sprintf(buf_list,"%s%s%s relay_result('%s',%d,%d)\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"ok",flag_runtime_front[1],flag_runtime_out[1]);
+              len_buf_list = strlen(buf_list);
+              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+              vTaskDelay(delay_send);                 
+            }
+          break;
+           case 2:
+            {
+              if (flag_runtime_out[1]==1)
+                {
+                  flag_global_swich_out=SWICH_OFF_HTTP;
+                  form_reple_to_save(SWICH_OFF_HTTP);
+                  HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"ok");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);                 
+                }
+              else
+                {
+                   form_reple_to_save(SWICH_OFF_HTTP_N);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"uneffecrtive");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);       
+                
+                }
+            }
+          break;
+           case 3:
+            {
+              if (flag_runtime_out[1]==0)
+                {
+                  flag_global_swich_out=SWICH_ON_HTTP;
+                   form_reple_to_save(SWICH_ON_HTTP);
+                  HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"ok");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);                 
+                }
+               else
+                {
+                  form_reple_to_save(SWICH_ON_HTTP_N);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"uneffecrtive");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);       
+                
+                }
+            }
+          break;
+           case 4:
+            {
+              if (flag_runtime_out[1]==0)
+                {
+                  form_reple_to_save(SWICH_ON_HTTP);
+                 flag_global_swich_out=SWICH_ON_HTTP;
+                 form_reple_to_save(SWICH_ON_HTTP);
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,1);
+                }
+              else
+              {
+                form_reple_to_save(SWICH_OFF_HTTP);
+                 flag_global_swich_out=SWICH_OFF_HTTP;
+                 form_reple_to_save(SWICH_OFF_HTTP);
+                 HAL_RTCEx_BKUPWrite(&hrtc,1,0);
+              }           
+              
+              sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"ok");
+              len_buf_list = strlen(buf_list);
+              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+              vTaskDelay(delay_send);                 
+            }
+          break;
+             case 5:
+            {
+               if (flag_runtime_out[1]!=0)
+                {
+                  flag_global_swich_out=SWICH_TOLG_HTTP;
+                  form_reple_to_save(SWICH_TOLG_HTTP);
+                  HAL_RTCEx_BKUPWrite(&hrtc,1,2);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"ok");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);                 
+                }
+               else
+                {
+                  form_reple_to_save(SWICH_TOLG_HTTP_N);
+                  sprintf(buf_list,"%s%s%s relay_result('%s')\;",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,"uneffecrtive");
+                  len_buf_list = strlen(buf_list);
+                  netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
+                  vTaskDelay(delay_send);   
+                }
+               
+            }
+          break;
+          
+            default  :
+              {
+              fs_open(&file, "/404.html"); 
+              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+               vTaskDelay(delay_send);
+              fs_close(&file);
+             
+              }
+          }
+ }
 
  void page_html_swich(uint8_t index,struct netconn *conn,char* buf_list)
  {
@@ -1519,11 +1763,11 @@ uint8_t ct_post_ch=0;
              
                vTaskDelay(delay_send);
                len_buf_list=costr_page3((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
              vTaskDelay(delay_send);
                
                len_buf_list=costr_page5((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);
              vTaskDelay(delay_send);
                
                len_buf_list=costr_page6((char*)buf_list);
@@ -1715,64 +1959,15 @@ uint8_t ct_post_ch=0;
           break; 
              case 10:
             {  
-              signed char time_run[6]={0};  
-              uint8_t ct_time;
-              GET_reple(0,&real_time);  
-              if(start_time.year!=2020)
-               {
-                time_run[0]=real_time.year-start_time.year;
-                time_run[1]=real_time.month-start_time.month;
-                time_run[2]=real_time.day-start_time.day;
-                time_run[3]=real_time.reple_hours-start_time.reple_hours;
-                time_run[4]=real_time.reple_minuts-start_time.reple_minuts;
-                time_run[5]=real_time.reple_seconds-start_time.reple_seconds;
-                  ct_time=1;
-              if (time_run[ct_time]<0)
-               {
-                time_run[ct_time-1]--;
-                time_run[ct_time]=time_run[ct_time]+12;          
-               }
-             ct_time++;
-             if (time_run[ct_time]<0)
+                
+
+              if ((time_run[0]!=0)||(time_run[1]!=0)||(time_run[2]!=0)||(time_run[3]!=0)||(time_run[4]!=0)||(time_run[5]!=0))
               {
-               time_run[ct_time-1]--;
-               time_run[ct_time]=time_run[ct_time]+30;          
+               sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.    ",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
               }
-             ct_time++;
-             if (time_run[ct_time]<0)
-              {
-               time_run[ct_time-1]--;
-               time_run[ct_time]=time_run[ct_time]+24;          
-              }
-             ct_time++;
-             if (time_run[ct_time]<0)
-              {
-               time_run[ct_time-1]--;
-               time_run[ct_time]=time_run[ct_time]+60;          
-              }
-             ct_time++;
-             if (time_run[ct_time]<0)
-              {
-               time_run[ct_time-1]--;
-               time_run[ct_time]=time_run[ct_time]+60;          
-              }
-          //   sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.    %d- %d",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5],xFreeBytesRemaining,xMinimumEverFreeBytesRemaining);
-              sprintf(buf_list,"%s%s%s    %dг.  %dм. %dд. %dч. %dм. %dс.    ",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,time_run[0],time_run[1],time_run[2],time_run[3],time_run[4],time_run[5]);
-               }
               else
-               {
-                  time_run[0]=0;
-                  time_run[1]=0;
-                  time_run[2]=0;
-                  time_run[3]=0;
-                  time_run[4]=0;
-                  time_run[5]=0;
-                  start_time.year=real_time.year;
-                  start_time.month=real_time.month;
-                  start_time.day=real_time.day;
-                  start_time.reple_hours=real_time.reple_hours;
-                  start_time.reple_minuts=real_time.reple_minuts;
-                  start_time.reple_seconds=real_time.reple_seconds;
+              {
+
                   sprintf(buf_list,"Время не установлено!",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                }
             
@@ -1785,32 +1980,28 @@ uint8_t ct_post_ch=0;
           case 11:
             {  
               uint8_t data;
-             data= HAL_RTCEx_BKUPRead(&hrtc,1);
+             data= flag_runtime_out[1];
              if (data==0)
               {
                sprintf(buf_list,"%s%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,FW_data.V_OFF_MESS);
               }
-             if ((data==1)||(data==2))
+             if ((data==1))
               {
                sprintf(buf_list,"%s%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT,FW_data.V_ON_MESS);
               }              
               len_buf_list = strlen(buf_list);
               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
               vTaskDelay(delay_send);             
-////              sprintf(buf_list,"%s%s%s",PAGE_HEADER_200_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
-////              len_buf_list = strlen(buf_list);
-////              netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
-////              vTaskDelay(delay_send);  
             }
           break;
             case 12:
             {  
            
                
-               //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
+
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -1821,7 +2012,7 @@ uint8_t ct_post_ch=0;
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_settings,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -1832,7 +2023,7 @@ uint8_t ct_post_ch=0;
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_rasp,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -1843,7 +2034,7 @@ uint8_t ct_post_ch=0;
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_watchdog,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -1854,7 +2045,7 @@ uint8_t ct_post_ch=0;
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_email,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -1932,7 +2123,11 @@ static void http_server_serve(struct netconn *conn1)
       sprintf(buf_page,"%s:%s",FW_data.V_LOGIN,FW_data.V_PASSWORD);
       key_http_len=strlen(buf_page);
       
-      if (strncmp((char const *)buf,"GET /content.html",17)==0)
+          if (strncmp((char const *)buf,"GET /relay.cgi?r",16)==0)
+            {
+              HTTP_API_swich(conn1,buf);
+            }
+              else if (strncmp((char const *)buf,"GET /content.html",17)==0)
             {
               page_n=10;
               page_html_swich(page_n,conn1,buf_page);
@@ -1942,13 +2137,9 @@ static void http_server_serve(struct netconn *conn1)
               page_n=11;
               page_html_swich(page_n,conn1,buf_page);
             }
-             else if (strncmp((char const *)buf,"GET /?output_set=1&out_swich=1",30)==0)
+             
+             else
             {
-              page_n=4;
-              page_html_swich(page_n,conn1,buf_page);
-            }
-      else
-      {
       
 #if (logon==0)
         if (strncmp(key_http,buf_page,key_http_len) != 0)
@@ -1983,37 +2174,52 @@ static void http_server_serve(struct netconn *conn1)
                            {
                             page_n=12;
                             page_html_swich(page_n,conn1,buf_page);
-                            parser_post(buf,buflen,page_sost);    
                             vTaskDelay(20);
+                            parser_post(buf,buflen,page_sost);    
+                            
                            }         
                       if (page_sost==3)
                            {
                              page_n=13;
-                             parser_post(buf,buflen,page_sost);
-                             vTaskDelay(20);
                              page_html_swich(page_n,conn1,buf_page);
+                             vTaskDelay(20);
+                             parser_post(buf,buflen,page_sost);
+                             
                            }
                       if(page_sost==2)
                            {
                              page_n=15;
-                             parser_post(buf,buflen,page_sost);
-                             vTaskDelay(20);
                              page_html_swich(page_n,conn1,buf_page);
+                             vTaskDelay(20);
+                             parser_post(buf,buflen,page_sost);
+                             
+                            
                            }
                       if(page_sost==4)
                            {
                             page_n=14;
-                            parser_post(buf,buflen,page_sost);
-                            vTaskDelay(20);
                             page_html_swich(page_n,conn1,buf_page);
+                            vTaskDelay(20);
+                            parser_post(buf,buflen,page_sost);
+                            
+                            
                            }
                       if(page_sost==5)
                            {
                             page_n=16;
-                            parser_post(buf,buflen,page_sost);
-                            vTaskDelay(20);
                             page_html_swich(page_n,conn1,buf_page);
+                            vTaskDelay(20);                            
+                            parser_post(buf,buflen,page_sost);
                           }
+                          if (flag_global_reset_mode==1)//&&(flag_global_save_log==0))
+     {
+       
+        
+       
+       
+       //vTaskDelete(LED_taskHandle);
+       //jamp_to_app();     
+     }
                                         
                     }
               }
