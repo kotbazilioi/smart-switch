@@ -77,7 +77,7 @@ void StartDefaultTask(void const * argument)
    if (ct_dns_time<DNS_TMR_INTERVAL) 
     {
     
-    dns_tmr();
+   // dns_tmr();
    
     ct_dns_time=0;
     }
@@ -547,7 +547,15 @@ void logs_task(void const * argument)
              if (time_run[ct_time]<0)
               {
                time_run[ct_time-1]--;
+               if(start_time.day==31)
+               {
+               time_run[ct_time]=time_run[ct_time]+31;          
+               }
+               else
+               {
                time_run[ct_time]=time_run[ct_time]+30;          
+               }
+               
               }
              ct_time++;
              if (time_run[ct_time]<0)

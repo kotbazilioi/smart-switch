@@ -1566,7 +1566,7 @@ void send_smtp_mess(char * mes)
   {
    if (FW_data.V_FLAG_EN_EMAIL==1)
    {
-      form_reple_to_save(SEND_EMAIL);
+      form_reple_to_smtp(SEND_EMAIL);
      uint8_t len =strlen(mes);
      if (FW_data.V_FLAG_DEF_EMAIL==1)
      {      

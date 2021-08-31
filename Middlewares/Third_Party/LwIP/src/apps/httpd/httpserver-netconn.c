@@ -64,7 +64,7 @@
 #include "smtp.h"
 #include "heap_5.h"
 #include "utf8_code.h"
-#define delay_send 20
+#define delay_send 5
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define WEBSERVER_THREAD_PRIO    ( osPriorityAboveNormal )
@@ -1665,7 +1665,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
             default  :
               {
               fs_open(&file, "/404.html"); 
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_COPY);
                vTaskDelay(delay_send);
               fs_close(&file);
              
@@ -1689,7 +1689,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
               //memcpy(tempm,(const unsigned char*)(file.data),256);
               //156 - end
               //107 - length  
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_COPY);
                vTaskDelay(delay_send);
               fs_close(&file);
              
@@ -1698,7 +1698,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
           case 2:
             {
               fs_open(&file, "/pass.html"); 
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_COPY);
               vTaskDelay(delay_send);
               fs_close(&file);
               
@@ -1708,19 +1708,19 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
             { //watchdog.html
                vTaskDelay(delay_send);
                len_buf_list=costr_watchdog1((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
                vTaskDelay(delay_send);
                len_buf_list=costr_watchdog2((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
                vTaskDelay(delay_send);
                len_buf_list=costr_watchdog3((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
                vTaskDelay(delay_send);
                 len_buf_list=costr_watchdog4((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);    
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);    
                vTaskDelay(delay_send);
                 len_buf_list=costr_watchdog5((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);       
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);       
                vTaskDelay(delay_send);
                 
             }
@@ -1756,7 +1756,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
            case 5: //settings
             {
 ////               fs_open(&file, "/img/netping.gif");
-////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+////              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_COPY);
 ////              fs_close(&file);
                 
                
@@ -1771,22 +1771,22 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
              vTaskDelay(delay_send);
                
                len_buf_list=costr_page6((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
              vTaskDelay(delay_send);
                len_buf_list=costr_page6_1((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
              vTaskDelay(delay_send);
                
                len_buf_list=costr_page7((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);
                
                
               vTaskDelay(delay_send);
                len_buf_list=costr_page7_1((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);
                vTaskDelay(delay_send);
 //               len_buf_list=costr_page4((char*)buf_list);
-//               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);
+//               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);
             }
           break;
            case 6:  //logs
@@ -1794,7 +1794,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                 uint8_t end_mess=0;    
                vTaskDelay(delay_send);
                 len_buf_list=costr_page8((char*)buf_list);
-                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
                 vTaskDelay(delay_send);
                 uint16_t ct_mess;
                  for(ct_mess=0;ct_mess<2048;ct_mess++)
@@ -1812,7 +1812,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                       //  {
                             memset(buf_list,0,sizeof(buf_list));
                             decode_reple(buf_list,&FW_data.V_logs_struct.log_reple[ct_mess]);
-                            netconn_write(conn, (char*)(buf_list), (size_t)strlen(buf_list), NETCONN_NOCOPY);       
+                            netconn_write(conn, (char*)(buf_list), (size_t)strlen(buf_list), NETCONN_COPY);       
                             vTaskDelay(delay_send);
                     //    }
                      // else
@@ -1822,7 +1822,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
      
                     }
                 len_buf_list=costr_page9((char*)buf_list);
-                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);               
+                netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);               
               vTaskDelay(delay_send);
             }
           break;
@@ -1830,107 +1830,107 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
             {
             vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page1((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page2((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page3((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
              vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page4((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page5((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page6((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page7((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page8((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                  len_buf_list=costr_rasp_page9((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
              vTaskDelay(delay_send);
               
                 len_buf_list=costr_rasp_page10((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page11((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page12((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page13((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                
                 len_buf_list=costr_rasp_page14((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page15((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page16((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page17((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page18((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page19((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page20((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page21((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page22((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page23((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page24((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page25((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page26((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page27((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page28((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page29((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page30((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page31((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_rasp_page32((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
               vTaskDelay(delay_send);
                 len_buf_list=costr_rasp_page33((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
 //               len_buf_list=strlen(http_html_200);               
-//               netconn_write(conn, (char*)(http_html_200), (size_t)len_buf_list, NETCONN_NOCOPY);     
+//               netconn_write(conn, (char*)(http_html_200), (size_t)len_buf_list, NETCONN_COPY);     
               vTaskDelay(delay_send);
                
             }
@@ -1939,13 +1939,13 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
             {
                vTaskDelay(delay_send);
                len_buf_list=costr_email_page1((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
                vTaskDelay(delay_send);
                len_buf_list=costr_email_page2((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
                len_buf_list=costr_email_page3((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);   
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);   
                vTaskDelay(delay_send);
             }
           break;                         
@@ -1953,7 +1953,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
             {
                vTaskDelay(delay_send);
                len_buf_list=costr_page_boot((char*)buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);      
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);      
                vTaskDelay(delay_send);             
             }
           break; 
@@ -2001,7 +2001,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
 
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -2012,7 +2012,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_settings,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -2023,7 +2023,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_rasp,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -2034,7 +2034,7 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_watchdog,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
                vTaskDelay(delay_send);
             }
           break;
@@ -2045,14 +2045,14 @@ void HTTP_API_swich(struct netconn *conn,char* buf_list)
                //sprintf(buf_list,"%s%s%s",PAGE_HEADER_303_OK,PAGE_HEADER_SERVER,PAGE_HEADER_CONTENT_TEXT);
                sprintf(buf_list,"%s%s",PAGE_HEADER_303_email,PAGE_HEADER_CONTENT_TEXT);
                len_buf_list = strlen(buf_list);
-               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_NOCOPY);                     
+               netconn_write(conn, (char*)(buf_list), (size_t)len_buf_list, NETCONN_COPY);                     
                vTaskDelay(delay_send);
             }
           break;
           default  :
               {
               fs_open(&file, "/404.html"); 
-              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_NOCOPY);
+              netconn_write(conn, (const unsigned char*)(file.data), (size_t)file.len, NETCONN_COPY);
                vTaskDelay(delay_send);
               fs_close(&file);
              

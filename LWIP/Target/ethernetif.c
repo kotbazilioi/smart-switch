@@ -59,22 +59,22 @@ extern size_t xFreeBytesRemaining;
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
   #pragma data_alignment=4
 #endif
-__ALIGN_BEGIN ETH_DMADescTypeDef  DMARxDscrTab[ETH_RXBUFNB] __ALIGN_END __attribute__((section(".none_cached")));/* Ethernet Rx MA Descriptor */
- 
+__ALIGN_BEGIN ETH_DMADescTypeDef  DMARxDscrTab[ETH_RXBUFNB] __ALIGN_END;/* Ethernet Rx MA Descriptor */
+
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
   #pragma data_alignment=4
 #endif
-__ALIGN_BEGIN ETH_DMADescTypeDef  DMATxDscrTab[ETH_TXBUFNB] __ALIGN_END __attribute__((section(".none_cached")));/* Ethernet Tx DMA Descriptor */
- 
+__ALIGN_BEGIN ETH_DMADescTypeDef  DMATxDscrTab[ETH_TXBUFNB] __ALIGN_END;/* Ethernet Tx DMA Descriptor */
+
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
   #pragma data_alignment=4
 #endif
-__ALIGN_BEGIN uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __ALIGN_END __attribute__((section(".none_cached"))); /* Ethernet Receive Buffer */
- 
+__ALIGN_BEGIN uint8_t Rx_Buff[ETH_RXBUFNB][ETH_RX_BUF_SIZE] __ALIGN_END; /* Ethernet Receive Buffer */
+
 #if defined ( __ICCARM__ ) /*!< IAR Compiler */
   #pragma data_alignment=4
 #endif
-__ALIGN_BEGIN uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __ALIGN_END __attribute__((section(".none_cached"))); /* Ethernet Transmit Buffer */
+__ALIGN_BEGIN uint8_t Tx_Buff[ETH_TXBUFNB][ETH_TX_BUF_SIZE] __ALIGN_END; /* Ethernet Transmit Buffer */
 
 /* USER CODE BEGIN 2 */
 
@@ -347,7 +347,7 @@ static void low_level_init(struct netif *netif)
  *       to become availale since the stack doesn't retry to send a packet
  *       dropped because of memory failure (except for the TCP timers).
  */
-
+  int ct_o=0;
 static err_t low_level_output(struct netif *netif, struct pbuf *p)
 {
   err_t errval;
@@ -360,12 +360,15 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
   uint32_t payloadoffset = 0;
   DmaTxDesc = heth.TxDesc;
   bufferoffset = 0;
+  
+
 
   /* copy frame from pbufs to driver buffers */
   for(q = p; q != NULL; q = q->next)
     {
       /* Is this buffer available? If not, goto error */
-      if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
+    ct_o++;
+    if((DmaTxDesc->Status & ETH_DMATXDESC_OWN) != (uint32_t)RESET)
       {
         errval = ERR_USE;
         goto error;
@@ -391,6 +394,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
           goto error;
         }
 
+        
         buffer = (uint8_t *)(DmaTxDesc->Buffer1Addr);
 
         byteslefttocopy = byteslefttocopy - (ETH_TX_BUF_SIZE - bufferoffset);
@@ -403,6 +407,11 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p)
       memcpy( (uint8_t*)((uint8_t*)buffer + bufferoffset), (uint8_t*)((uint8_t*)q->payload + payloadoffset), byteslefttocopy );
       bufferoffset = bufferoffset + byteslefttocopy;
       framelength = framelength + byteslefttocopy;
+      
+//       if((uint32_t)DmaTxDesc == (uint32_t)(DmaTxDesc->Buffer2NextDescAddr))
+//        {
+//          DmaTxDesc->Buffer2NextDescAddr = 0;
+//        }  
     }
 
   /* Prepare transmit descriptors to give to DMA */
@@ -459,13 +468,7 @@ static struct pbuf * low_level_input(struct netif *netif)
 //      if (xFreeBytesRemaining >MIN_memory)
 //       {
         p = pbuf_alloc(PBUF_RAW, len, PBUF_POOL);
-//       if (p==0)
-//        {
-//          while(1){
-//          
-//          }
-//        
-//        }
+       
 //       }
 //      else
 //       {

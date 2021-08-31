@@ -97,3 +97,13 @@ void form_reple_to_save (uint8_t event)
   flag_global_save_log=1;
 }
 
+
+void form_reple_to_smtp (uint8_t event)
+{
+  char mess_syslog[200]={0};
+
+  GET_reple (event,&reple_to_save);
+  decode_reple_en(mess_syslog, &reple_to_save);  
+
+  flag_global_save_log=1;
+}
